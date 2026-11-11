@@ -1,11 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ApiError } from '@core/models/api-response';
 import { sessionService } from '@core/session/session.service';
 
 /**
  * RF-7 · Dev 1.
  *
- * Funcional contra POST /auth/login en cuanto el endpoint exista en el backend.
  * PENDIENTE: encadenar el reto de MFA para los roles que lo exigen (Almirante,
  * Director de Inteligencia y Especialista en Seguridad).
  */
@@ -14,15 +14,20 @@ export function LoginPage(): React.ReactElement {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState('');
 
   async function entrar(evento: FormEvent<HTMLFormElement>): Promise<void> {
     evento.preventDefault();
+    setError('');
     setEnviando(true);
     try {
       await sessionService.login(email, password);
       navegar('/criminales', { replace: true });
-    } catch {
-      // El errorInterceptor ya mostro el mensaje al usuario.
+    } catch (fallo) {
+      // Aqui el error SI se muestra en la pagina: las notificaciones globales
+      // las pinta MainLayout y esta pantalla queda fuera de el, asi que sin esto
+      // un login fallido no le dice nada al usuario.
+      setError(fallo instanceof ApiError ? fallo.message : 'No se pudo iniciar sesión.');
     } finally {
       setEnviando(false);
     }
@@ -54,6 +59,12 @@ export function LoginPage(): React.ReactElement {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+        {error && (
+          <p className="login-error" role="alert">
+            {error}
+          </p>
+        )}
 
         <button className="primary-button" type="submit" disabled={enviando}>
           {enviando ? 'Verificando…' : 'Ingresar'}

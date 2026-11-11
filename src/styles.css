@@ -1094,3 +1094,13 @@ button:disabled {
   border-radius: var(--radio);
   font-size: 1rem;
 }
+
+.login-error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radio);
+  border-left: 4px solid var(--amenaza-alto);
+  background: #fdecec;
+  color: #8a1c1c;
+  font-size: 0.875rem;
+}
