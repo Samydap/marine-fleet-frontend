@@ -28,36 +28,38 @@ export const errorInterceptor: Interceptor = async (peticion, siguiente) => {
   }
 
   const cuerpo = (await respuesta.json().catch(() => null)) as ApiErrorBody | null;
-  const mensajeApi = cuerpo?.error?.message;
   const codigo = cuerpo?.error?.codigo ?? 'HTTP';
+  const mensaje = cuerpo?.error?.message ?? mensajePorDefecto(respuesta.status);
 
-  switch (respuesta.status) {
-    case 401:
-      // Token invalido o expirado: no tiene sentido mostrar el error, hay que
-      // reautenticar. Al limpiar la sesion, RequireAuth redirige al login.
-      tokenStore.limpiar();
-      useSessionStore.getState().limpiar();
-      break;
-    case 403:
-      notificar.error(mensajeApi ?? 'Tu rol no tiene autorizacion para esta accion.');
-      break;
-    case 404:
-      notificar.error(mensajeApi ?? 'El registro solicitado no existe.');
-      break;
-    case 409:
-      notificar.error(
-        mensajeApi ?? 'Otro usuario modifico este registro. Recarga y vuelve a intentar.',
-      );
-      break;
-    case 400:
-    case 422:
-      notificar.error(mensajeApi ?? 'Los datos enviados no son validos.');
-      break;
-    default:
-      if (respuesta.status >= 500) {
-        notificar.error('Error del servidor. Intenta de nuevo en unos minutos.');
-      }
+  if (respuesta.status === 401) {
+    // Token invalido o expirado: no se notifica, hay que reautenticar. Al
+    // limpiar la sesion, RequireAuth redirige al login. El mensaje viaja igual
+    // en el ApiError porque la pantalla de login si necesita mostrarlo.
+    tokenStore.limpiar();
+    useSessionStore.getState().limpiar();
+  } else {
+    notificar.error(mensaje);
   }
 
-  throw new ApiError(respuesta.status, codigo, mensajeApi ?? `Error HTTP ${respuesta.status}`);
+  throw new ApiError(respuesta.status, codigo, mensaje);
 };
+
+/**
+ * Mensaje para cuando la API no envio uno (o respondio algo que no es JSON,
+ * como el 500 del proxy de Vite con el backend apagado). El ApiError siempre
+ * lleva un texto presentable: hay pantallas que lo muestran tal cual.
+ */
+function mensajePorDefecto(status: number): string {
+  const porEstado: Record<number, string> = {
+    400: 'Los datos enviados no son validos.',
+    401: 'Tu sesion no es valida. Inicia sesion de nuevo.',
+    403: 'Tu rol no tiene autorizacion para esta accion.',
+    404: 'El registro solicitado no existe.',
+    409: 'Otro usuario modifico este registro. Recarga y vuelve a intentar.',
+    422: 'Los datos enviados no son validos.',
+  };
+
+  if (porEstado[status]) return porEstado[status];
+  if (status >= 500) return 'No se pudo completar la operacion. Verifica que la API este arriba.';
+  return `Error HTTP ${status}`;
+}
