@@ -1,0 +1,26 @@
+{
+  "comun": {
+    "guardar": "Guardar",
+    "cancelar": "Cancelar",
+    "eliminar": "Eliminar",
+    "buscar": "Buscar",
+    "cargando": "Cargando…",
+    "sinResultados": "Sin resultados"
+  },
+  "amenaza": {
+    "BAJO": "Bajo",
+    "MEDIO": "Medio",
+    "ALTO": "Alto",
+    "PENDIENTE": "Sin clasificar"
+  },
+  "estadoCriminal": {
+    "ACTIVO": "En búsqueda",
+    "CAPTURADO": "Capturado",
+    "MUERTO": "Dado de baja"
+  },
+  "errores": {
+    "sinConexion": "Sin conexión con el servidor.",
+    "sinPermiso": "Tu rol no tiene autorización para esta acción.",
+    "conflicto": "Otro usuario modificó este registro. Recarga y vuelve a intentar."
+  }
+}

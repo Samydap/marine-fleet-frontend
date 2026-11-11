@@ -1,0 +1,353 @@
+{
+  "root": true,
+  "ignorePatterns": ["dist/**", "coverage/**", "node_modules/**", "vite.config.ts"],
+  "env": {
+    "browser": true,
+    "es2022": true
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["./tsconfig.app.json", "./tsconfig.node.json"],
+        "ecmaFeatures": {
+          "jsx": true
+        }
+      },
+      "plugins": ["@typescript-eslint", "react-hooks"],
+      "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "error",
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/consistent-type-imports": "warn",
+        "@typescript-eslint/explicit-function-return-type": [
+          "warn",
+          {
+            "allowExpressions": true,
+            "allowTypedFunctionExpressions": true,
+            "allowHigherOrderFunctions": true
+          }
+        ],
+        "no-console": [
+          "error",
+          {
+            "allow": ["warn", "error"]
+          }
+        ],
+        "max-lines": [
+          "warn",
+          {
+            "max": 400,
+            "skipBlankLines": true,
+            "skipComments": true
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/core/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "@shared/*",
+                  "**/features/**",
+                  "**/shared/**",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "core/ no depende de nadie: es la base de la jerarquia."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/shared/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/features/**",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "shared/ solo puede depender de core/, nunca de una feature."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/admin/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/amenaza/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/auth/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/carteles/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/criminales/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/incidentes/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/inteligencia/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/operativos/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/recompensas/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["**/*.test.{ts,tsx}", "src/test-setup.ts"],
+      "rules": {
+        "max-lines": "off",
+        "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    }
+  ]
+}
