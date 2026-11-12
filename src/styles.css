@@ -1054,53 +1054,29 @@ button:disabled {
   }
 }
 
-/* Pantalla de acceso (RF-7). */
-.login-shell {
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  background: linear-gradient(160deg, var(--navy), #0d1726);
-  padding: 24px;
-}
-
-.login-card {
-  display: grid;
-  gap: 14px;
-  width: min(380px, 92vw);
-  padding: 32px;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
-}
-
-.login-card h1 {
-  margin: 0;
-  color: var(--navy);
-}
-.login-sub {
-  margin: 0 0 8px;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-.login-card label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--navy);
-}
-
-.login-card input {
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radio);
-  font-size: 1rem;
-}
-
-.login-error {
-  margin: 0;
-  padding: 10px 12px;
-  border-radius: var(--radio);
-  border-left: 4px solid var(--amenaza-alto);
-  background: #fdecec;
-  color: #8a1c1c;
-  font-size: 0.875rem;
+/* ---------------------------------------------------------------------------
+   Tokens del sistema "Cuartel General de la Marina" (docs/DISENO.md).
+   Los estilos de la pantalla de acceso viven en features/auth/acceso.css.
+   --------------------------------------------------------------------------- */
+:root {
+  --navy-profundo: #0d1726;
+  --gold-tinta: #8b6c37;
+  --tinta: #182337;
+  --tinta-2: #4a5a70;
+  --tinta-3: #66748a;
+  --fondo: #f3f5f8;
+  --superficie: #ffffff;
+  --borde-campo: #8592a5;
+  --error: #9d3833;
+  --error-fondo: #fff0ef;
+  --error-borde: #f4d2cf;
+  --aviso: #7a4f00;
+  --aviso-fondo: #fff6e5;
+  --aviso-borde: #f1dcb2;
+  --radio-sm: 4px;
+  --radio-lg: 14px;
+  --sombra-2: 0 18px 40px -18px rgba(13, 23, 38, 0.45);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-corta: 160ms;
+  --dur-media: 240ms;
 }

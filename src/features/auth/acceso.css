@@ -1,0 +1,500 @@
+/* ---------------------------------------------------------------------------
+   Pantalla de acceso (RF-7): login y verificacion en dos pasos.
+   Solo usa tokens de src/styles.css; referencia en docs/DISENO.md.
+   --------------------------------------------------------------------------- */
+
+.acceso {
+  display: grid;
+  grid-template-columns: minmax(340px, 5fr) 7fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--superficie);
+  color: var(--tinta);
+}
+
+.acceso ::selection {
+  background: var(--navy-2);
+  color: var(--superficie);
+}
+
+/* Panel institucional: navy profundo y liso; el sello es el unico protagonista. */
+.acceso-insignia {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--espacio) * 4);
+  padding: calc(var(--espacio) * 6) clamp(32px, 5vw, 72px);
+  background: var(--navy-profundo);
+  color: var(--superficie);
+}
+
+.acceso-sello {
+  display: block;
+  width: clamp(150px, 17vw, 216px);
+  height: auto;
+  margin-top: auto;
+  color: var(--gold);
+}
+
+.sello-leyenda {
+  font:
+    800 11px Manrope,
+    sans-serif;
+}
+
+.sello-disco {
+  fill: var(--navy-profundo);
+}
+
+/* El anillo siempre tiene su animacion, pausada: al terminar la verificacion se
+   detiene donde esta en lugar de saltar a la posicion inicial. */
+.sello-anillo {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: sello-giro 9s linear infinite paused;
+}
+
+.sello--girando .sello-anillo {
+  animation-play-state: running;
+}
+
+@keyframes sello-giro {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.acceso-institucion {
+  max-width: 12ch;
+  margin: 0;
+  font:
+    800 clamp(30px, 3.4vw, 44px) / 1.08 Manrope,
+    sans-serif;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.acceso-sistema {
+  max-width: 34ch;
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.acceso-mares {
+  margin: auto 0 0;
+  padding-top: calc(var(--espacio) * 2);
+  border-top: 1px solid rgba(201, 157, 76, 0.35);
+  font:
+    700 11px / 1.7 Manrope,
+    sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* Superficie de trabajo. */
+.acceso-panel {
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--espacio) * 6) clamp(24px, 6vw, 96px) calc(var(--espacio) * 4);
+  background: var(--superficie);
+}
+
+.acceso-contenido,
+.acceso-pie {
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+.acceso-contenido {
+  margin-block: auto;
+}
+
+.acceso-pie {
+  margin-top: calc(var(--espacio) * 4);
+  margin-bottom: 0;
+  padding-top: calc(var(--espacio) * 2);
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--tinta-2);
+}
+
+.acceso-titulo {
+  margin: 0;
+  color: var(--navy);
+  font:
+    800 28px / 1.15 Manrope,
+    sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.acceso-intro {
+  margin: 8px 0 calc(var(--espacio) * 4);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--tinta-2);
+}
+
+.acceso-correo {
+  color: var(--tinta);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.acceso-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.acceso-form > * + * {
+  margin-top: 20px;
+}
+
+/* La region del alerta existe siempre; vacia no ocupa espacio. */
+.acceso-form > .acceso-alerta-region:empty {
+  margin-top: 0;
+}
+
+.campo {
+  display: grid;
+  gap: 8px;
+}
+
+.campo label {
+  color: var(--tinta);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.campo input {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--borde-campo);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--tinta);
+  caret-color: var(--navy-2);
+  font-size: 16px;
+  transition:
+    border-color var(--dur-corta) ease,
+    background-color var(--dur-corta) ease;
+}
+
+.campo input::placeholder {
+  color: var(--tinta-3);
+}
+
+.campo input::-ms-reveal {
+  display: none;
+}
+
+.campo input:hover:not(:focus):not([readonly]) {
+  border-color: var(--tinta-2);
+}
+
+.campo input:focus {
+  border-color: var(--navy-2);
+  outline: 2px solid var(--navy-2);
+  outline-offset: 2px;
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+.campo input[readonly] {
+  background: var(--fondo);
+  color: var(--tinta-2);
+}
+
+.campo input.campo-codigo {
+  padding-left: calc(14px + 0.45em);
+  font:
+    700 24px / 1 Manrope,
+    sans-serif;
+  letter-spacing: 0.45em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.campo-con-accion {
+  position: relative;
+}
+
+.campo-con-accion input {
+  padding-right: 52px;
+}
+
+.campo-accion {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  bottom: 4px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  border: 0;
+  border-radius: var(--radio-sm);
+  background: transparent;
+  color: var(--tinta-2);
+  transition:
+    color var(--dur-corta) ease,
+    background-color var(--dur-corta) ease;
+}
+
+.campo-accion:hover {
+  background: var(--fondo);
+  color: var(--navy);
+}
+
+.campo-accion:focus-visible {
+  outline: 2px solid var(--navy-2);
+  outline-offset: 0;
+}
+
+.campo-error,
+.campo-ayuda {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.campo-error {
+  color: var(--error);
+}
+
+.campo-ayuda {
+  color: var(--aviso);
+}
+
+.campo-error .icono {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.acceso-alerta {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid;
+  border-radius: var(--radio);
+  animation: alerta-entra var(--dur-media) var(--ease-out);
+}
+
+.acceso-alerta .icono {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.acceso-alerta--credenciales,
+.acceso-alerta--cuenta {
+  border-color: var(--error-borde);
+  background: var(--error-fondo);
+  color: var(--error);
+}
+
+.acceso-alerta--conexion {
+  border-color: var(--aviso-borde);
+  background: var(--aviso-fondo);
+  color: var(--aviso);
+}
+
+.acceso-alerta-titulo {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.acceso-alerta-detalle {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@keyframes alerta-entra {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.acceso-enviar,
+.acceso-enlace-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 14px 18px;
+  border: 0;
+  border-radius: var(--radio);
+  background: var(--navy);
+  color: var(--superficie);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-corta) ease,
+    transform var(--dur-corta) var(--ease-out);
+}
+
+.acceso-enviar:active:not(:disabled),
+.acceso-enlace-boton:active {
+  transform: scale(0.97);
+}
+
+.acceso-enviar:focus-visible,
+.acceso-enlace-boton:focus-visible {
+  outline: 2px solid var(--navy-2);
+  outline-offset: 3px;
+}
+
+/* Deshabilitado mientras envia: conserva el contraste del texto. */
+.acceso-enviar:disabled {
+  background: var(--navy-2);
+  cursor: progress;
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .acceso-enviar:hover:not(:disabled),
+  .acceso-enlace-boton:hover {
+    background: var(--navy-2);
+  }
+}
+
+.acceso-indicador {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.acceso-alterno {
+  margin: calc(var(--espacio) * 3) 0 0;
+  font-size: 14px;
+  color: var(--tinta-2);
+}
+
+.acceso-alterno a {
+  color: var(--navy-2);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.acceso-alterno a:focus-visible {
+  outline: 2px solid var(--navy-2);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (max-width: 900px) {
+  .acceso {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .acceso-insignia {
+    flex-direction: row;
+    align-items: center;
+    gap: calc(var(--espacio) * 2);
+    padding: 20px 24px;
+  }
+
+  .acceso-sello {
+    flex: 0 0 auto;
+    width: 64px;
+    margin: 0;
+  }
+
+  .acceso-institucion {
+    max-width: none;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+  }
+
+  .acceso-sistema {
+    margin-top: 4px;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .acceso-mares {
+    display: none;
+  }
+
+  .acceso-panel {
+    padding: calc(var(--espacio) * 4) 24px 24px;
+  }
+
+  .acceso-contenido {
+    margin-block: 0;
+  }
+}
+
+@media (max-width: 410px) {
+  .acceso-insignia {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .acceso-sello {
+    width: 52px;
+  }
+
+  .acceso-institucion {
+    font-size: 17px;
+  }
+
+  .acceso-sistema {
+    font-size: 12px;
+  }
+
+  .acceso-panel {
+    padding: calc(var(--espacio) * 3) 16px 16px;
+  }
+
+  .acceso-titulo {
+    font-size: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sello-anillo,
+  .acceso-indicador {
+    animation: none;
+  }
+
+  .acceso-alerta {
+    animation-name: alerta-aparece;
+  }
+
+  .acceso-enviar:active:not(:disabled),
+  .acceso-enlace-boton:active {
+    transform: none;
+  }
+}
+
+@keyframes alerta-aparece {
+  from {
+    opacity: 0;
+  }
+}
