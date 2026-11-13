@@ -189,9 +189,11 @@
 }
 
 /* Mientras llega el cartel: el hueso ya tiene la proporcion del cartel (5/7). */
-.identidad-cartel-hueso {
+/* Doble clase para ganarle al alto fijo de .ui-skeleton--bloque sin depender del orden de carga. */
+.ui-skeleton.identidad-cartel-hueso {
   width: 100%;
   max-width: 280px;
+  height: auto;
   aspect-ratio: 5 / 7;
   justify-self: center;
 }
