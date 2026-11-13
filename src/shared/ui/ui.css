@@ -180,7 +180,8 @@
   padding: 10px var(--esp-15);
   border: 1px solid var(--borde-campo);
   border-radius: var(--radio);
-  background: var(--superficie);
+  /* El campo sigue blanco sobre el papel: se lee donde se escribe. */
+  background: var(--superficie-campo);
   color: var(--tinta);
   caret-color: var(--navy-2);
   /* 16px: iOS no hace zoom al enfocar. */
@@ -211,7 +212,7 @@
 
 .ui-control:disabled,
 .ui-control[readonly] {
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--tinta-2);
 }
 
@@ -301,19 +302,24 @@
   margin-bottom: var(--esp-3);
 }
 
+/* La cabecera va directo sobre el lienzo oscuro: texto claro y foco blanco. */
+.page-header :focus-visible {
+  outline-color: var(--sobre-lienzo);
+}
+
 .page-header-volver {
   display: inline-flex;
   align-items: center;
   gap: var(--esp-05);
   margin-bottom: var(--esp-15);
-  color: var(--tinta-2);
+  color: var(--sobre-navy-texto);
   font-size: var(--texto-sm);
   font-weight: 600;
   text-decoration: none;
 }
 
 .page-header-volver:hover {
-  color: var(--navy);
+  color: var(--sobre-lienzo);
   text-decoration: underline;
 }
 
@@ -332,7 +338,7 @@
 
 .page-header h1 {
   margin: 0;
-  color: var(--navy);
+  color: var(--sobre-lienzo);
   font: 800 var(--titulo-pagina) / 1.2 var(--fuente-titulo);
   letter-spacing: -0.025em;
   overflow-wrap: anywhere;
@@ -341,7 +347,7 @@
 .page-header-descripcion {
   max-width: 68ch;
   margin: 6px 0 0;
-  color: var(--tinta-2);
+  color: var(--sobre-navy-texto);
   font-size: var(--texto-md);
   line-height: 1.5;
 }
@@ -352,14 +358,27 @@
   align-items: center;
   gap: var(--esp-1) var(--esp-15);
   margin-top: var(--esp-15);
-  color: var(--tinta-2);
+  color: var(--sobre-navy-texto);
   font-size: var(--texto-sm);
+}
+
+.page-header-meta .actualizado {
+  color: inherit;
+}
+
+.page-header-meta .actualizado--viejo {
+  color: var(--sobre-navy-aviso);
 }
 
 .page-header-acciones {
   display: flex;
   flex-wrap: wrap;
   gap: var(--esp-15);
+}
+
+.page-header-acciones .ui-boton--fantasma,
+.page-header-acciones .ui-boton-icono {
+  color: var(--sobre-lienzo);
 }
 
 /* === Pestanas de seccion (PestanasSeccion) ================================ */
@@ -370,7 +389,7 @@
   display: flex;
   gap: var(--esp-3);
   margin: calc(var(--esp-1) * -1) 0 var(--esp-3);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--sobre-navy-linea);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
@@ -388,7 +407,7 @@
   min-height: 44px;
   margin-bottom: -1px;
   border-bottom: 2px solid transparent;
-  color: var(--tinta-2);
+  color: var(--sobre-navy-texto);
   font: 600 var(--texto-sm) / 1.3 var(--fuente-texto);
   text-decoration: none;
   white-space: nowrap;
@@ -398,19 +417,20 @@
 }
 
 .ui-pestana:focus-visible {
+  outline-color: var(--sobre-lienzo);
   outline-offset: -2px;
   border-radius: var(--radio-sm);
 }
 
 .ui-pestana[aria-current='page'] {
-  border-bottom-color: var(--navy);
-  color: var(--navy);
+  border-bottom-color: var(--sobre-lienzo);
+  color: var(--sobre-lienzo);
   font-weight: 700;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .ui-pestana:hover {
-    color: var(--navy);
+    color: var(--sobre-lienzo);
   }
 }
 
@@ -426,8 +446,8 @@
 }
 
 .ui-pestana[aria-current='page'] .ui-pestana-contador {
-  background: var(--navy);
-  color: var(--superficie);
+  background: var(--sobre-lienzo);
+  color: var(--navy);
 }
 
 /* === Barra de filtros ===================================================== */
@@ -437,9 +457,10 @@
   gap: var(--esp-15);
   margin-bottom: var(--esp-2);
   padding: var(--esp-2);
-  border: 1px solid var(--line);
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio-lg);
-  background: var(--superficie);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 .barra-filtros-principal {
@@ -487,7 +508,7 @@
 }
 
 .barra-filtros-borrar:hover {
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--tinta);
 }
 
@@ -541,10 +562,10 @@
 
 .ui-tabla-desplazable {
   overflow-x: auto;
-  border: 1px solid var(--line);
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio);
-  background: var(--superficie);
-  box-shadow: var(--sombra);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 .ui-tabla {
@@ -623,6 +644,16 @@
 
 /* === Paginacion =========================================================== */
 
+/* Va bajo la tabla, sobre el lienzo: franja propia de papel para que el
+   resumen se lea. */
+.paginacion,
+.paginacion-resumen--solo {
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
 .paginacion {
   display: flex;
   flex-wrap: wrap;
@@ -630,6 +661,7 @@
   justify-content: space-between;
   gap: var(--esp-15);
   margin-top: var(--esp-2);
+  padding: var(--esp-1) var(--esp-1) var(--esp-1) var(--esp-2);
 }
 
 .paginacion-resumen {
@@ -640,6 +672,7 @@
 
 .paginacion-resumen--solo {
   margin-top: var(--esp-15);
+  padding: var(--esp-15) var(--esp-2);
 }
 
 .paginacion-controles {
@@ -661,9 +694,10 @@
   flex-direction: column;
   align-items: center;
   padding: var(--esp-6) var(--esp-3);
-  border: 1px solid var(--line);
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio);
-  background: var(--superficie);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
   text-align: center;
 }
 
@@ -672,6 +706,7 @@
   border: 0;
   border-radius: 0;
   background: transparent;
+  box-shadow: none;
 }
 
 .estado--pantalla {
@@ -687,7 +722,7 @@
   height: 56px;
   margin-bottom: var(--esp-2);
   border-radius: var(--radio-lg);
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--tinta-2);
 }
 
@@ -697,7 +732,7 @@
 }
 
 .estado-icono--candado {
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--navy);
 }
 
@@ -777,9 +812,10 @@ h1.estado-titulo {
   display: grid;
   gap: var(--esp-2);
   padding: var(--esp-3);
-  border: 1px solid var(--line);
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio);
-  background: var(--superficie);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 /* === Alertas en linea ===================================================== */
@@ -1337,11 +1373,11 @@ h1.estado-titulo {
   max-height: calc(100dvh - var(--esp-4));
   margin: auto;
   padding: 0;
-  border: 0;
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio-lg);
-  background: var(--superficie);
+  background: var(--papel);
   color: var(--tinta);
-  box-shadow: var(--sombra-2);
+  box-shadow: var(--sombra-papel);
 }
 
 .ui-dialogo--amplio {
@@ -1404,7 +1440,7 @@ h1.estado-titulo {
   margin: 0 calc(var(--dialogo-pad-x) * -1) calc(var(--dialogo-pad-b) * -1);
   padding: var(--esp-2) var(--dialogo-pad-x) var(--dialogo-pad-b);
   border-top: 1px solid var(--line);
-  background: var(--superficie);
+  background: var(--papel);
 }
 
 @keyframes dialogo-entra {
@@ -1497,9 +1533,10 @@ h1.estado-titulo {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--esp-1) var(--esp-2);
     padding: var(--esp-15) var(--esp-2);
-    border: 1px solid var(--line);
+    border: 1px solid var(--papel-borde);
     border-radius: var(--radio);
-    background: var(--superficie);
+    background: var(--papel);
+    box-shadow: var(--sombra-papel);
   }
 
   .ui-tabla td {

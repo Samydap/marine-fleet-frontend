@@ -9,6 +9,7 @@
   grid-template-columns: var(--ancho-lateral) minmax(0, 1fr);
   min-height: 100vh;
   min-height: 100dvh;
+  background: var(--lienzo);
 }
 
 .saltar-contenido {
@@ -39,6 +40,9 @@
   height: 100dvh;
   padding: var(--esp-3) var(--esp-15) var(--esp-2);
   overflow-y: auto;
+  z-index: 1;
+  /* Filete dorado: el borde del galon entre el mando y el lienzo. */
+  border-right: 1px solid var(--gold-filete);
   background: var(--navy-profundo);
   color: var(--superficie);
   scrollbar-width: thin;
@@ -346,6 +350,8 @@
 /* --- Contenido ------------------------------------------------------------ */
 
 .contenido {
+  position: relative;
+  z-index: 1;
   min-width: 0;
   padding: var(--esp-4) clamp(var(--esp-3), 3vw, var(--esp-6)) var(--esp-6);
 }
@@ -357,6 +363,69 @@
 .contenido-ancho {
   max-width: var(--ancho-contenido);
   margin-inline: auto;
+}
+
+/* --- Lienzo "Marineford" (LienzoMarina) ----------------------------------- */
+
+/* Capas fijas detras del contenido: no se desplazan con la pagina ni reciben
+   clics. El color base lo pone .shell; aqui solo la profundidad. */
+.lienzo {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 70% 0%, var(--lienzo-2) 0%, var(--lienzo) 60%);
+  pointer-events: none;
+}
+
+.lienzo-carta {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.lienzo-carta * {
+  fill: none;
+  stroke: var(--tinta-carta);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.lienzo-carta-rumbos line {
+  stroke-dasharray: 2 6;
+}
+
+.lienzo-carta-grand-line path {
+  stroke-width: 1.5;
+}
+
+.lienzo-carta-grand-line .lienzo-carta-eje {
+  stroke-width: 1;
+  stroke-dasharray: 10 8;
+}
+
+.lienzo-carta-red-line {
+  stroke-width: 3;
+}
+
+/* Trama de tinta: puntos de manga que solo asoman hacia los bordes. */
+.lienzo-trama {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--trama) 1px, transparent 1.6px);
+  background-size: 7px 7px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, transparent 35%, black 100%);
+  mask-image: radial-gradient(ellipse at 50% 45%, transparent 35%, black 100%);
+}
+
+.lienzo-gaviota {
+  position: absolute;
+  right: clamp(-48px, -2vw, 0px);
+  bottom: clamp(-40px, -2vw, 0px);
+  width: clamp(260px, 32vw, 460px);
+  height: auto;
+  color: var(--marca-agua);
 }
 
 /* --- Barra de carga (peticiones en vuelo) --------------------------------- */
@@ -462,6 +531,7 @@
   grid-template-columns: var(--ancho-lateral) 1fr;
   min-height: 100vh;
   min-height: 100dvh;
+  background: var(--lienzo);
 }
 
 .restaurando-lateral {
@@ -528,6 +598,13 @@
 
   .contenido {
     padding: var(--esp-2) var(--esp-15) var(--esp-4);
+  }
+
+  /* En el telefono el lienzo se queda en color y trama: la carta y la marca de
+     agua compiten con el contenido en tan poco ancho. */
+  .lienzo-carta,
+  .lienzo-gaviota {
+    display: none;
   }
 }
 

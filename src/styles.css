@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+/* Pincel solo para 正義: `text=` descarga unicamente esos dos glifos. */
+@import url('https://fonts.googleapis.com/css2?family=Yuji+Syuku&text=%E6%AD%A3%E7%BE%A9&display=swap');
 
 /* ---------------------------------------------------------------------------
    Tokens del sistema "Cuartel General de la Marina".
@@ -23,14 +25,34 @@
   /* Neutros */
   --tinta: #182337;
   --tinta-2: #4a5a70;
-  --tinta-3: #66748a;
+  --tinta-3: #5a687d;
   --muted: #718096;
   --borde-campo: #8592a5;
   --line: #e4e9f0;
   --fondo: #f3f5f8;
-  --superficie: #ffffff;
-  --superficie-2: #f7f9fc;
+  /* Superficies de datos: papel de orden oficial (marfil). Los campos siguen
+     en blanco sobre el papel para que se lea donde se escribe. */
+  --superficie: var(--papel);
+  --superficie-2: var(--papel-2);
+  --superficie-campo: #ffffff;
   --seleccion: #e6ecf5;
+
+  /* Lienzo "Marineford": navy nocturno detras del contenido del shell. */
+  --lienzo: #0b1424;
+  --lienzo-2: #13223a;
+  /* Lineas de la carta nautica y punto de la trama de tinta (sobre lienzo). */
+  --tinta-carta: rgba(184, 194, 209, 0.14);
+  --trama: rgba(184, 194, 209, 0.07);
+  /* Texto principal directo sobre el lienzo (cabecera de pagina). */
+  --sobre-lienzo: #ffffff;
+  /* Gaviota en marca de agua del lienzo. */
+  --marca-agua: rgba(255, 255, 255, 0.045);
+
+  /* Papel oficial: hojas sobre la mesa de mando. */
+  --papel: #f6f2e8;
+  --papel-2: #ede7d8;
+  --papel-borde: #d3c9b3;
+  --sombra-papel: 0 1px 2px rgba(3, 8, 18, 0.45), 0 14px 28px -16px rgba(3, 8, 18, 0.85);
 
   /* Sobre los paneles navy (barra lateral, panel de acceso) */
   --sobre-navy-texto: #b8c2d1;
@@ -79,6 +101,10 @@
   /* Tipografia */
   --fuente-titulo: 'Manrope', 'Segoe UI', sans-serif;
   --fuente-texto: 'DM Sans', 'Segoe UI', sans-serif;
+  /* Display de orden oficial: titulos de pagina, cifras protagonistas, acceso. */
+  --fuente-display: 'Anton', 'Oswald', 'Arial Narrow', sans-serif;
+  /* Pincel del 正義 (solo esos dos glifos). */
+  --fuente-kanji: 'Yuji Syuku', serif;
   /* Codigos tecnicos que se escriben a mano (el codigo del cartel). */
   --fuente-codigo: ui-monospace, 'Cascadia Mono', Consolas, monospace;
   --texto-xs: 12px;

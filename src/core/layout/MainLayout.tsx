@@ -9,16 +9,20 @@ import { sessionService } from '../session/session.service';
 import { useUsuario } from '../session/session.store';
 import { detenerSincronizacion, iniciarSincronizacion } from '../sync/sincronizacion';
 import { Avisos } from './Avisos';
+import { EmblemaGaviota } from './emblemas/EmblemaGaviota';
 import { IconoCerrar, IconoMenu, IconoSalir } from './iconos-shell';
 import { IndicadorSincronizacion } from './IndicadorSincronizacion';
+import { LienzoMarina } from './LienzoMarina';
 import { Navegacion } from './Navegacion';
-import { SelloMarina } from './SelloMarina';
 import './layout.css';
 
 /**
  * Shell de la aplicacion. Es el padre de TODAS las features, asi que cada una
  * se monta en el <Outlet /> sin preocuparse por la navegacion, el indicador de
  * carga, el canal de sincronizacion ni los avisos.
+ *
+ * El contenido va sobre el lienzo "Marineford" (`LienzoMarina`, capas fijas
+ * detras del <main>); los datos van en papel oficial dentro de cada pantalla.
  *
  * Escritorio (>= 900px): barra lateral navy fija de 232px.
  * Movil: franja superior navy con el boton de menu; el menu se abre en un
@@ -74,6 +78,8 @@ export function MainLayout(): React.ReactElement {
 
       <CajonMenu abierto={menuAbierto} alCerrar={() => setMenuAbierto(false)} />
 
+      <LienzoMarina />
+
       <main id="contenido" className="contenido" tabIndex={-1}>
         <div className="contenido-ancho">
           <Outlet />
@@ -89,7 +95,7 @@ function Marca({ compacta = false }: { readonly compacta?: boolean }): React.Rea
   const usuario = useUsuario();
   return (
     <Link className={compacta ? 'marca marca--compacta' : 'marca'} to={rutaInicio(usuario)}>
-      <SelloMarina simple className="marca-sello" />
+      <EmblemaGaviota className="marca-sello" />
       <span className="marca-texto">
         <strong>Marina</strong>
         <span>Cuartel General</span>
