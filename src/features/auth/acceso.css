@@ -1,6 +1,7 @@
 /* ---------------------------------------------------------------------------
    Pantalla de acceso (RF-7): login y verificacion en dos pasos.
-   Solo usa tokens de src/styles.css; referencia en docs/DISENO.md.
+   Solo usa tokens de src/styles.css; referencia en docs/DISENO.md y en la
+   identidad Marineford (6.4 y 6.8).
    --------------------------------------------------------------------------- */
 
 .acceso {
@@ -8,7 +9,7 @@
   grid-template-columns: minmax(340px, 5fr) 7fr;
   min-height: 100vh;
   min-height: 100dvh;
-  background: var(--superficie);
+  background: var(--lienzo);
   color: var(--tinta);
 }
 
@@ -17,31 +18,44 @@
   color: var(--superficie);
 }
 
-/* Panel institucional: navy profundo y liso; el sello es el unico protagonista. */
+/* Panel institucional: cielo nocturno sobre Marineford. La fortaleza toca el
+   pie, y el pie es el mar: el sello y los mares van sobre el agua. */
 .acceso-insignia {
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: calc(var(--espacio) * 4);
-  padding: calc(var(--espacio) * 6) clamp(32px, 5vw, 72px);
-  background: var(--navy-profundo);
-  color: var(--superficie);
+  min-width: 0;
+  overflow: hidden;
+  border-right: 1px solid var(--sobre-navy-linea);
+  background: linear-gradient(180deg, var(--lienzo) 0%, var(--lienzo-2) 70%);
+  color: var(--sobre-lienzo);
 }
 
-.acceso-sello {
-  display: block;
-  width: clamp(150px, 17vw, 216px);
+.acceso-cabeza {
+  display: grid;
+  gap: calc(var(--espacio) * 4);
+  padding: calc(var(--espacio) * 6) clamp(32px, 5vw, 72px) calc(var(--espacio) * 3);
+}
+
+.acceso-emblemas {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--espacio) * 3);
+}
+
+.acceso-gaviota {
+  flex: 0 0 auto;
+  width: clamp(64px, 6vw, 84px);
   height: auto;
-  margin-top: auto;
-  color: var(--gold);
+  color: var(--sobre-lienzo);
 }
 
 .acceso-institucion {
-  max-width: 12ch;
+  max-width: 14ch;
   margin: 0;
-  font:
-    800 clamp(30px, 3.4vw, 44px) / 1.08 Manrope,
-    sans-serif;
-  letter-spacing: -0.035em;
+  font: 400 clamp(38px, 4.4vw, 60px) / 1.02 var(--fuente-display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
   text-wrap: balance;
 }
 
@@ -53,10 +67,35 @@
   color: var(--sobre-navy-texto);
 }
 
+/* La escena: ocupa el alto sobrante y se apoya en el mar del pie. */
+.acceso-silueta {
+  width: 100%;
+  height: auto;
+  margin-top: auto;
+}
+
+.acceso-insignia-pie {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--espacio) * 2);
+  padding: calc(var(--espacio) * 2) clamp(32px, 5vw, 72px) calc(var(--espacio) * 4);
+  background: var(--mar-noche);
+}
+
+.acceso-sello {
+  display: block;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  color: var(--sobre-navy-texto);
+}
+
+.acceso-mar {
+  white-space: nowrap;
+}
+
 .acceso-mares {
-  margin: auto 0 0;
-  padding-top: calc(var(--espacio) * 2);
-  border-top: 1px solid var(--gold-filete);
+  margin: 0;
   font: 700 11px / 1.7 var(--fuente-titulo);
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -64,33 +103,53 @@
   color: var(--sobre-navy-texto);
 }
 
-/* Superficie de trabajo. */
+/* Superficie de trabajo: el lienzo con su trama y la hoja de papel encima. */
 .acceso-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
+  min-width: 0;
   padding: calc(var(--espacio) * 6) clamp(24px, 6vw, 96px) calc(var(--espacio) * 4);
-  background: var(--superficie);
+  background: radial-gradient(120% 90% at 70% 0%, var(--lienzo-2) 0%, var(--lienzo) 60%);
+}
+
+.acceso-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--trama) 1px, transparent 1.6px);
+  background-size: 7px 7px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, transparent 35%, black 100%);
+  mask-image: radial-gradient(ellipse at 50% 45%, transparent 35%, black 100%);
+  pointer-events: none;
 }
 
 .acceso-contenido,
 .acceso-pie {
+  position: relative;
   width: 100%;
-  max-width: 400px;
+  max-width: 448px;
   margin-inline: auto;
 }
 
+/* La hoja de papel oficial donde se escribe. */
 .acceso-contenido {
   margin-block: auto;
+  padding: calc(var(--espacio) * 4) calc(var(--espacio) * 3);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-lg);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 .acceso-pie {
   margin-top: calc(var(--espacio) * 4);
   margin-bottom: 0;
   padding-top: calc(var(--espacio) * 2);
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--sobre-navy-linea);
   font-size: 13px;
   line-height: 1.55;
-  color: var(--tinta-2);
+  color: var(--sobre-navy-texto);
 }
 
 .acceso-titulo {
@@ -148,7 +207,7 @@
   padding: 12px 14px;
   border: 1px solid var(--borde-campo);
   border-radius: var(--radio);
-  background: var(--superficie);
+  background: var(--superficie-campo);
   color: var(--tinta);
   caret-color: var(--navy-2);
   font-size: 16px;
@@ -180,7 +239,7 @@
 }
 
 .campo input[readonly] {
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--tinta-2);
 }
 
@@ -220,7 +279,7 @@
 }
 
 .campo-accion:hover {
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--navy);
 }
 
@@ -382,23 +441,41 @@
     grid-template-rows: auto 1fr;
   }
 
-  .acceso-insignia {
-    flex-direction: row;
+  /* Franja superior: emblemas y marca en una fila; la fortaleza se queda
+     como una tira baja al pie de la franja. */
+  .acceso-cabeza {
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: calc(var(--espacio) * 2);
-    padding: 20px 24px;
+    padding: 20px 24px 8px;
   }
 
-  .acceso-sello {
-    flex: 0 0 auto;
-    width: 64px;
-    margin: 0;
+  .acceso-emblemas {
+    display: contents;
+  }
+
+  .acceso-gaviota {
+    grid-row: 1;
+    grid-column: 1;
+    width: 52px;
+  }
+
+  .acceso .acceso-justicia[data-tamano] {
+    grid-row: 1;
+    grid-column: 3;
+    --sello-lado: 52px;
+  }
+
+  .acceso-marca {
+    grid-row: 1;
+    grid-column: 2;
+    min-width: 0;
   }
 
   .acceso-institucion {
     max-width: none;
-    font-size: 20px;
-    letter-spacing: -0.02em;
+    font-size: 26px;
+    line-height: 1.05;
   }
 
   .acceso-sistema {
@@ -407,7 +484,17 @@
     line-height: 1.45;
   }
 
-  .acceso-mares {
+  .acceso-silueta {
+    height: 96px;
+    margin-top: 0;
+  }
+
+  .acceso-insignia {
+    border-right: 0;
+    border-bottom: 1px solid var(--sobre-navy-linea);
+  }
+
+  .acceso-insignia-pie {
     display: none;
   }
 
@@ -421,25 +508,37 @@
 }
 
 @media (max-width: 410px) {
-  .acceso-insignia {
+  .acceso-cabeza {
     gap: 12px;
-    padding: 16px;
+    padding: 16px 16px 4px;
   }
 
-  .acceso-sello {
-    width: 52px;
+  .acceso-gaviota {
+    width: 40px;
+  }
+
+  .acceso .acceso-justicia[data-tamano] {
+    --sello-lado: 40px;
   }
 
   .acceso-institucion {
-    font-size: 17px;
+    font-size: 20px;
   }
 
   .acceso-sistema {
     font-size: 12px;
   }
 
+  .acceso-silueta {
+    height: 72px;
+  }
+
   .acceso-panel {
-    padding: calc(var(--espacio) * 3) 16px 16px;
+    padding: calc(var(--espacio) * 2) 12px 16px;
+  }
+
+  .acceso-contenido {
+    padding: calc(var(--espacio) * 3) 16px;
   }
 
   .acceso-titulo {
