@@ -2,10 +2,12 @@ import { Link } from 'react-router-dom';
 import { useCatalogos } from '@core/catalogos/catalogos';
 import { ActualizadoHace } from '@shared/ui/ActualizadoHace';
 import { CartelWanted } from '@shared/ui/CartelWanted';
+import { Skeleton } from '@shared/ui/Estados';
 import { MontoBerries } from '@shared/ui/MontoBerries';
 import { RetratoCriminal } from '@shared/ui/RetratoCriminal';
 import type { DatosCartel } from '@shared/utils/cartel';
 import { formatearSoloFecha } from '@shared/utils/fecha';
+import type { EstadoCartel } from '../data-access/ficha.store';
 import type { CartelVigenteResumen, CriminalDetalle } from '../models/criminal';
 import { useNombreZonaConMar } from '@shared/ui/CampoZona';
 
@@ -24,6 +26,8 @@ interface Props {
   readonly cartel: CartelVigenteResumen | null;
   /** Lo impreso en el cartel vigente; null si no hay cartel emitido o no se pudo leer. */
   readonly instantanea: DatosCartel | null;
+  /** Lectura del cartel: solo con 'listo' se puede afirmar que no hay cartel. */
+  readonly estadoCartel: EstadoCartel;
 }
 
 /**
@@ -35,7 +39,12 @@ interface Props {
  * lo que se ve es lo que circula por las bases. Sin cartel, un hueco que lo
  * dice y lleva a emitirlo; la foto del expediente ocupa su lugar.
  */
-export function FichaIdentidad({ criminal, cartel, instantanea }: Props): React.ReactElement {
+export function FichaIdentidad({
+  criminal,
+  cartel,
+  instantanea,
+  estadoCartel,
+}: Props): React.ReactElement {
   const { nombreBase } = useCatalogos();
   const zonaConMar = useNombreZonaConMar();
   const base = nombreBase(criminal.origenBaseId);
@@ -62,18 +71,22 @@ export function FichaIdentidad({ criminal, cartel, instantanea }: Props): React.
               </Link>
             </figcaption>
           </figure>
+        ) : estadoCartel === 'cargando' ? (
+          <Skeleton forma="bloque" className="identidad-cartel-hueso" />
         ) : (
           <div className="identidad-cartel-hueco">
-            <p className="identidad-cartel-hueco-titulo">Sin cartel emitido</p>
+            <p className="identidad-cartel-hueco-titulo">
+              {estadoCartel === 'error' ? 'No se pudo leer el cartel' : 'Sin cartel emitido'}
+            </p>
             <Link to={`/carteles/${criminal.id}`} className="identidad-enlace">
-              Emitir cartel
+              {estadoCartel === 'error' ? 'Ver cartel y versiones' : 'Emitir cartel'}
             </Link>
           </div>
         )}
       </section>
 
       <div className="identidad-cabeza">
-        {!instantanea && (
+        {!instantanea && estadoCartel !== 'cargando' && (
           <RetratoCriminal fotoUrl={criminal.fotoUrl} nombre={criminal.nombre} tamano="xl" />
         )}
         <div className="identidad-recompensa">

@@ -188,6 +188,14 @@
   display: block;
 }
 
+/* Mientras llega el cartel: el hueso ya tiene la proporcion del cartel (5/7). */
+.identidad-cartel-hueso {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 5 / 7;
+  justify-self: center;
+}
+
 /* Sin cartel emitido: el hueco donde iria, con el camino para emitirlo. */
 .identidad-cartel-hueco {
   display: grid;

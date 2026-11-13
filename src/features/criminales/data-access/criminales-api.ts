@@ -105,12 +105,12 @@ export const criminalesApi = {
       const cartel = await apiClient.get<CartelVigenteResumen & { datos?: unknown }>(
         `/carteles/criminal/${encodeURIComponent(criminalId)}`,
         undefined,
-        { sinAviso: true },
+        { silencioso: true, sinAviso: true },
       );
-      const datos =
-        cartel.datos && typeof cartel.datos === 'object'
-          ? (cartel.datos as Record<string, unknown>)
-          : {};
+      // Sin instantanea legible no hay cartel que mostrar (no se inventa uno).
+      if (!cartel.datos || typeof cartel.datos !== 'object') return null;
+      const datos = cartel.datos as Record<string, unknown>;
+      if (Object.keys(datos).length === 0) return null;
       return {
         resumen: {
           id: cartel.id,

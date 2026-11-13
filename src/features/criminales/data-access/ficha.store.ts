@@ -12,6 +12,8 @@ import { criminalesApi } from './criminales-api';
 
 const POR_PAGINA_HISTORIAL = 20;
 
+export type EstadoCartel = 'cargando' | 'listo' | 'error';
+
 interface FichaState {
   id: string | null;
   criminal: CriminalDetalle | null;
@@ -28,6 +30,8 @@ interface FichaState {
   cartel: CartelVigenteResumen | null;
   /** Lo impreso en el cartel vigente (la instantanea emitida); null si no hay. */
   instantaneaCartel: DatosCartel | null;
+  /** Lectura del cartel: evita anunciar "sin cartel" mientras todavia carga. */
+  cartelEstado: EstadoCartel;
   /** Abre la ficha de un criminal; `silencioso` para refrescos por sincronizacion. */
   abrir: (id: string, silencioso?: boolean) => Promise<void>;
   recargarCriminal: (silencioso?: boolean) => Promise<void>;
@@ -58,6 +62,7 @@ export const useFichaStore = create<FichaState>()((set, get) => ({
   historialError: null,
   cartel: null,
   instantaneaCartel: null,
+  cartelEstado: 'cargando',
 
   abrir: async (id, silencioso = false) => {
     if (get().id !== id) {
@@ -72,6 +77,7 @@ export const useFichaStore = create<FichaState>()((set, get) => ({
         historialError: null,
         cartel: null,
         instantaneaCartel: null,
+        cartelEstado: 'cargando',
       });
     }
     await Promise.all([
@@ -150,13 +156,20 @@ export const useFichaStore = create<FichaState>()((set, get) => ({
   recargarCartel: async () => {
     const id = get().id;
     if (!id) return;
+    // Un refresco con el cartel ya a la vista no vuelve a "cargando": no hay parpadeo.
+    if (get().cartelEstado !== 'listo') set({ cartelEstado: 'cargando' });
     try {
       const vigente = await criminalesApi.cartelVigente(id);
       if (get().id !== id) return;
-      set({ cartel: vigente?.resumen ?? null, instantaneaCartel: vigente?.instantanea ?? null });
+      set({
+        cartel: vigente?.resumen ?? null,
+        instantaneaCartel: vigente?.instantanea ?? null,
+        cartelEstado: 'listo',
+      });
     } catch {
-      // Sin cartel legible: la ficha muestra el hueco (o el ultimo cartel ya
-      // leido, si fue un refresco por sincronizacion) y sigue en pie.
+      // Sin cartel legible: la ficha avisa que no se pudo leer (o mantiene el
+      // ultimo cartel ya leido, si fue un refresco por sincronizacion).
+      if (get().id === id) set({ cartelEstado: 'error' });
     }
   },
 

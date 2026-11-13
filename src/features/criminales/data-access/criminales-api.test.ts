@@ -17,7 +17,10 @@ describe('criminalesApi.cartelVigente', () => {
 
     const vigente = await criminalesApi.cartelVigente('c-7');
 
-    expect(get).toHaveBeenCalledWith('/carteles/criminal/c-7', undefined, { sinAviso: true });
+    expect(get).toHaveBeenCalledWith('/carteles/criminal/c-7', undefined, {
+      silencioso: true,
+      sinAviso: true,
+    });
     expect(vigente?.resumen).toEqual({
       id: 'k-3',
       numeroVersion: 3,
@@ -35,6 +38,20 @@ describe('criminalesApi.cartelVigente', () => {
     vi.spyOn(apiClient, 'get').mockRejectedValue(new ApiError(404, 'NO_ENCONTRADO', 'Sin cartel'));
     await expect(criminalesApi.cartelVigente('c-7')).resolves.toBeNull();
   });
+
+  it.each([[undefined], [null], [{}]])(
+    'sin instantanea legible (datos: %j) se trata como sin cartel',
+    async (datos) => {
+      vi.spyOn(apiClient, 'get').mockResolvedValue({
+        id: 'k-3',
+        numeroVersion: 3,
+        motivoGeneracion: 'REGISTRO',
+        generadoEn: '2026-10-30T09:00:00Z',
+        datos,
+      });
+      await expect(criminalesApi.cartelVigente('c-7')).resolves.toBeNull();
+    },
+  );
 
   it('cualquier otro error se propaga para que la ficha decida', async () => {
     vi.spyOn(apiClient, 'get').mockRejectedValue(new ApiError(500, 'ERROR', 'Caido'));

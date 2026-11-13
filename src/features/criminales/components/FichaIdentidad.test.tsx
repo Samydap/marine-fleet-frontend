@@ -5,7 +5,7 @@ import { useCatalogosStore } from '@core/catalogos/catalogos';
 import { ApiError } from '@core/models/api-response';
 import type { DatosCartel } from '@shared/utils/cartel';
 import { criminalesApi } from '../data-access/criminales-api';
-import { useFichaStore } from '../data-access/ficha.store';
+import { useFichaStore, type EstadoCartel } from '../data-access/ficha.store';
 import type { CartelVigenteResumen, CriminalDetalle } from '../models/criminal';
 import { FichaIdentidad } from './FichaIdentidad';
 
@@ -55,10 +55,16 @@ const RESUMEN: CartelVigenteResumen = {
 function renderizar(
   instantanea: DatosCartel | null,
   cartel: CartelVigenteResumen | null = null,
+  estadoCartel: EstadoCartel = 'listo',
 ): void {
   render(
     <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <FichaIdentidad criminal={CRIMINAL} cartel={cartel} instantanea={instantanea} />
+      <FichaIdentidad
+        criminal={CRIMINAL}
+        cartel={cartel}
+        instantanea={instantanea}
+        estadoCartel={estadoCartel}
+      />
     </MemoryRouter>,
   );
 }
@@ -70,7 +76,12 @@ describe('FichaIdentidad', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    useFichaStore.setState({ id: null, cartel: null, instantaneaCartel: null });
+    useFichaStore.setState({
+      id: null,
+      cartel: null,
+      instantaneaCartel: null,
+      cartelEstado: 'cargando',
+    });
   });
 
   it('muestra el cartel oficial cuando hay instantánea', () => {
@@ -110,11 +121,51 @@ describe('FichaIdentidad', () => {
     await expect(useFichaStore.getState().recargarCartel()).resolves.toBeUndefined();
 
     const { cartel, instantaneaCartel } = useFichaStore.getState();
-    renderizar(instantaneaCartel, cartel);
+    renderizar(instantaneaCartel, cartel, useFichaStore.getState().cartelEstado);
     expect(screen.getByRole('complementary', { name: 'Identificación' })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /Monkey D\. Luffy/ })).toBeInTheDocument();
     expect(screen.getByText('Recompensa vigente')).toBeInTheDocument();
     expect(screen.getByText('19 años')).toBeInTheDocument();
-    expect(screen.getByText('Sin cartel emitido')).toBeInTheDocument();
+    expect(screen.getByText('No se pudo leer el cartel')).toBeInTheDocument();
+    expect(screen.queryByText('Sin cartel emitido')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Ver cartel y versiones' })).toHaveAttribute(
+      'href',
+      '/carteles/c-1',
+    );
+  });
+
+  it('mientras carga el cartel muestra el hueso y no anuncia que falta', () => {
+    const { container } = render(
+      <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <FichaIdentidad
+          criminal={CRIMINAL}
+          cartel={null}
+          instantanea={null}
+          estadoCartel="cargando"
+        />
+      </MemoryRouter>,
+    );
+    expect(container.querySelector('.identidad-cartel-hueso')).not.toBeNull();
+    expect(screen.queryByText('Sin cartel emitido')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Emitir cartel' })).not.toBeInTheDocument();
+    // La foto del expediente no ocupa su lugar para saltar luego al cartel.
+    expect(screen.queryByRole('img', { name: /Monkey D\. Luffy/ })).not.toBeInTheDocument();
+  });
+
+  it('un refresco con el cartel ya visible no vuelve al hueso', async () => {
+    vi.spyOn(criminalesApi, 'cartelVigente').mockResolvedValue({
+      resumen: RESUMEN,
+      instantanea: INSTANTANEA,
+    });
+    useFichaStore.setState({
+      id: 'c-1',
+      cartel: RESUMEN,
+      instantaneaCartel: INSTANTANEA,
+      cartelEstado: 'listo',
+    });
+    const promesa = useFichaStore.getState().recargarCartel();
+    expect(useFichaStore.getState().cartelEstado).toBe('listo');
+    await promesa;
+    expect(useFichaStore.getState().cartelEstado).toBe('listo');
   });
 });

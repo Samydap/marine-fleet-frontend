@@ -39,7 +39,7 @@ type ConCriminal = Partial<Pick<CriminalActualizadoDatos, 'criminalId'>>;
 export function CriminalDetailPage(): React.ReactElement {
   const { id = '' } = useParams<{ id: string }>();
   const ficha = useFichaStore();
-  const { criminal, error, cartel, instantaneaCartel } = ficha;
+  const { criminal, error, cartel, instantaneaCartel, cartelEstado } = ficha;
   const puedeEscribir = useHasPermission(Permiso.CRIMINALES_ESCRIBIR);
 
   const [dialogo, setDialogo] = useState<'baja' | 'reactivar' | null>(null);
@@ -173,7 +173,12 @@ export function CriminalDetailPage(): React.ReactElement {
       </div>
 
       <div className="expediente">
-        <FichaIdentidad criminal={actual} cartel={cartel} instantanea={instantaneaCartel} />
+        <FichaIdentidad
+          criminal={actual}
+          cartel={cartel}
+          instantanea={instantaneaCartel}
+          estadoCartel={cartelEstado}
+        />
 
         <div className="expediente-cuerpo">
           <SeccionAfiliaciones
