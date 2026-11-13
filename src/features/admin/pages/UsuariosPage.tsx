@@ -58,7 +58,7 @@ export function UsuariosPage(): React.ReactElement {
     {
       clave: 'rol',
       encabezado: 'Cargo',
-      celda: (u) => u.rolNombre ?? (u.rol ? etiquetaRol(u.rol) : 'Sin cargo'),
+      celda: (u) => (u.rol ? etiquetaRol(u.rol) : (u.rolNombre ?? 'Sin cargo')),
     },
     {
       clave: 'base',
@@ -67,7 +67,7 @@ export function UsuariosPage(): React.ReactElement {
         u.baseNavalId ? (
           (nombreBase(u.baseNavalId) ?? u.baseNavalId)
         ) : (
-          <span className="texto-apagado">Cuartel General (global)</span>
+          <span className="texto-apagado">Sin base · mando global</span>
         ),
     },
     {
@@ -125,7 +125,7 @@ export function UsuariosPage(): React.ReactElement {
         meta={consultadoEn && <ActualizadoHace fecha={consultadoEn} prefijo="Consultado" />}
       >
         <BotonEnlace variante="principal" to="nuevo" icono={<IconoMas tamano={18} />}>
-          Dar de alta
+          Nuevo usuario
         </BotonEnlace>
       </PageHeader>
       <SeccionesAdmin />
@@ -198,7 +198,7 @@ export function UsuariosPage(): React.ReactElement {
           ) : (
             <EstadoVacio titulo="Aún no hay cuentas registradas">
               <BotonEnlace variante="secundario" to="nuevo">
-                Dar de alta la primera
+                Crear la primera cuenta
               </BotonEnlace>
             </EstadoVacio>
           )

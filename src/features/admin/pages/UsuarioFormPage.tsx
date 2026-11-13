@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCatalogos } from '@core/catalogos/catalogos';
 import { notificar } from '@core/services/notification.store';
-import { ETIQUETA_ROL, Permiso, RolCodigo } from '@core/session/permiso.enum';
+import { ETIQUETA_ROL, etiquetaRol, Permiso, RolCodigo } from '@core/session/permiso.enum';
 import { useUsuario } from '@core/session/session.store';
 import { useHasPermission } from '@shared/hooks/useHasPermission';
 import { ActualizadoHace } from '@shared/ui/ActualizadoHace';
@@ -231,7 +231,7 @@ export function UsuarioFormPage(): React.ReactElement {
             ayuda={autogestion ? 'Tu propio cargo lo cambia otro administrador.' : undefined}
             opciones={roles.map((r) => ({
               valor: r.codigo,
-              etiqueta: r.nombre,
+              etiqueta: etiquetaRol(r.codigo),
               deshabilitada: r.codigo === RolCodigo.ALMIRANTE && !esAlmirante,
             }))}
             onChange={(e) => cambiar('rol', e.target.value as RolCodigo)}
@@ -240,7 +240,7 @@ export function UsuarioFormPage(): React.ReactElement {
             etiqueta="Base naval"
             name="baseNavalId"
             required={requiereBase}
-            opcionVacia="Cuartel General (cargo global)"
+            opcionVacia="Sin base (mando global)"
             value={b.baseNavalId}
             disabled={autogestion}
             error={errores.baseNavalId}
