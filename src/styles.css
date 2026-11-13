@@ -63,6 +63,8 @@
   --papel-2: #ede7d8;
   --papel-borde: #d3c9b3;
   --sombra-papel: 0 1px 2px rgba(3, 8, 18, 0.45), 0 14px 28px -16px rgba(3, 8, 18, 0.85);
+  /* Cartel clavado directo sobre el lienzo (muro de busqueda). */
+  --sombra-clavado: 0 2px 3px rgba(3, 8, 18, 0.6), 0 18px 30px -14px rgba(3, 8, 18, 0.95);
 
   /* Sobre los paneles navy (barra lateral, panel de acceso) */
   --sobre-navy-texto: #b8c2d1;

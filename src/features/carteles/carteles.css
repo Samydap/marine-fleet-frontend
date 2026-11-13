@@ -6,9 +6,9 @@
 .tablon {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
-  gap: var(--esp-3);
-  margin: 0 0 var(--esp-3);
-  padding: 0;
+  gap: var(--esp-4) var(--esp-3);
+  margin: var(--esp-3) 0;
+  padding: var(--esp-1) var(--esp-1) 0;
   list-style: none;
   transition: opacity var(--dur-corta) var(--ease-out);
 }
@@ -19,43 +19,66 @@
 
 .tablon-item {
   display: grid;
-  gap: var(--esp-1);
+  align-content: start;
+  gap: var(--esp-15);
   min-width: 0;
 }
 
+/* Muro de busqueda: el cartel va clavado directo sobre el lienzo, con una leve
+   inclinacion alterna. La rotacion vive en el enlace, asi el anillo de foco y
+   el area de toque la siguen sin desfasarse. */
 .tablon-enlace {
+  --giro: 0.6deg;
+  --alza: 0px;
   display: block;
   border-radius: var(--radio-sm);
+  box-shadow: var(--sombra-clavado);
   color: inherit;
   text-decoration: none;
+  transform: translateY(var(--alza)) rotate(var(--giro));
   transition: transform var(--dur-corta) var(--ease-out);
 }
 
+.tablon-item:nth-child(even) .tablon-enlace {
+  --giro: -0.6deg;
+}
+
 .tablon-enlace:focus-visible {
-  outline-offset: 4px;
+  outline: 3px solid var(--sobre-lienzo);
+  outline-offset: 5px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .tablon-enlace:hover {
-    transform: translateY(-3px);
+    --alza: -3px;
   }
 }
 
 .tablon-enlace:active {
-  transform: scale(0.98);
+  transform: translateY(var(--alza)) rotate(var(--giro)) scale(0.98);
 }
 
+/* Lo que se lee bajo cada cartel va en una etiqueta de papel: nunca texto
+   oscuro directo sobre el lienzo. */
 .tablon-datos {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-self: start;
   gap: var(--esp-1);
+  max-width: 100%;
+  padding: var(--esp-05) var(--esp-1);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-sm);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 .tablon-hueso {
   display: block;
   width: 100%;
   aspect-ratio: 5 / 7;
+  box-shadow: var(--sombra-clavado);
 }
 
 /* ========================================================= vista de un cartel */
@@ -208,7 +231,12 @@
 @media (max-width: 410px) {
   .tablon {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--esp-2);
+    gap: var(--esp-3) var(--esp-2);
+  }
+
+  .tablon-enlace,
+  .tablon-item:nth-child(even) .tablon-enlace {
+    --giro: 0deg;
   }
 }
 
@@ -219,8 +247,14 @@
     transition: none;
   }
 
+  .tablon-enlace,
+  .tablon-item:nth-child(even) .tablon-enlace {
+    --giro: 0deg;
+  }
+
   .tablon-enlace:hover,
   .tablon-enlace:active {
+    --alza: 0px;
     transform: none;
   }
 }
