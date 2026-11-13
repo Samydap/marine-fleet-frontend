@@ -5,6 +5,16 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { inteligenciaApi } from '../data-access/inteligencia-api';
 import { ReporteCiudadanoPage } from './ReporteCiudadanoPage';
 
+const ZORO = {
+  id: 'c-zoro',
+  nombre: 'Roronoa Zoro',
+  alias: ['Cazador de Piratas'],
+  fotoUrl: null,
+  recompensaVigenteMonto: 1111000000,
+  nivelAmenaza: 'ALTO',
+  organizacion: 'Piratas del Sombrero de Paja',
+};
+
 function renderizar(ruta = '/reportar'): void {
   render(
     <MemoryRouter
@@ -30,8 +40,8 @@ describe('ReporteCiudadanoPage', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Enviar reporte' }));
 
     expect(enviar).not.toHaveBeenCalled();
-    expect(screen.getByLabelText(/Código del criminal/)).toHaveAccessibleDescription(
-      /Indica el código/,
+    expect(screen.getByLabelText('Nombre o alias')).toHaveAccessibleDescription(
+      /Busca y elige al criminal/,
     );
     expect(screen.getByLabelText(/Cuéntanos lo que viste/)).toBeInvalid();
   });
@@ -70,6 +80,60 @@ describe('ReporteCiudadanoPage', () => {
     });
     expect(await screen.findByRole('heading', { name: 'Reporte recibido' })).toBeInTheDocument();
     expect(screen.getByText('r-123')).toBeInTheDocument();
+  });
+
+  it('busca por nombre o alias, elige al criminal y envia su codigo', async () => {
+    const buscar = vi.spyOn(inteligenciaApi, 'buscarBuscados').mockResolvedValue([ZORO]);
+    const enviar = vi.spyOn(inteligenciaApi, 'enviarReporteCiudadano').mockResolvedValue({
+      id: 'r-1',
+      estado: 'PENDIENTE',
+      mensaje: 'Gracias.',
+    });
+    const usuario = userEvent.setup();
+    renderizar();
+
+    await usuario.type(screen.getByLabelText('Nombre o alias'), 'zoro');
+    await usuario.click(await screen.findByRole('button', { name: /Roronoa Zoro/ }));
+    expect(buscar).toHaveBeenCalledWith('zoro');
+    expect(screen.queryByLabelText('Nombre o alias')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cambiar' })).toBeInTheDocument();
+
+    await usuario.type(screen.getByLabelText(/Cuéntanos lo que viste/), 'Lo vi en el puerto.');
+    await usuario.type(screen.getByLabelText(/¿Dónde\?/), 'Muelle 3');
+    await usuario.click(screen.getByRole('button', { name: 'Enviar reporte' }));
+
+    expect(enviar).toHaveBeenCalledWith(expect.objectContaining({ criminalId: 'c-zoro' }));
+  });
+
+  it('con una sola letra no consulta y sin resultados ofrece el codigo del cartel', async () => {
+    const buscar = vi.spyOn(inteligenciaApi, 'buscarBuscados').mockResolvedValue([]);
+    const usuario = userEvent.setup();
+    renderizar();
+
+    await usuario.type(screen.getByLabelText('Nombre o alias'), 'z');
+    await new Promise((r) => setTimeout(r, 400));
+    expect(buscar).not.toHaveBeenCalled();
+
+    await usuario.type(screen.getByLabelText('Nombre o alias'), 'x');
+    expect(await screen.findByText(/Nadie con ese nombre/)).toBeInTheDocument();
+
+    await usuario.click(screen.getByRole('button', { name: /código impreso/ }));
+    expect(screen.getByLabelText(/Código del criminal/)).toBeInTheDocument();
+  });
+
+  it('si la busqueda falla lo dice y permite reintentar', async () => {
+    const buscar = vi
+      .spyOn(inteligenciaApi, 'buscarBuscados')
+      .mockRejectedValueOnce(new Error('red'))
+      .mockResolvedValueOnce([ZORO]);
+    const usuario = userEvent.setup();
+    renderizar();
+
+    await usuario.type(screen.getByLabelText('Nombre o alias'), 'zoro');
+    await usuario.click(await screen.findByRole('button', { name: 'Reintentar' }));
+
+    expect(await screen.findByRole('button', { name: /Roronoa Zoro/ })).toBeInTheDocument();
+    expect(buscar).toHaveBeenCalledTimes(2);
   });
 
   it('si el envio falla, conserva lo escrito', async () => {

@@ -6,6 +6,7 @@ import type {
   FiltroAvistamientos,
 } from '../models/avistamiento';
 import type {
+  BuscadoPublico,
   FiltroReportes,
   NuevoReporteCiudadano,
   ReporteCiudadano,
@@ -72,6 +73,14 @@ export const inteligenciaApi = {
 
   revisarReporte(reporteId: string, revision: RevisionReporte): Promise<ReporteRevisado> {
     return apiClient.patch<ReporteRevisado>(`${REPORTES}/${id(reporteId)}/revision`, revision);
+  },
+
+  /**
+   * Publico (GET /buscados, sin sesion): criminales activos por nombre o alias
+   * para que quien reporta encuentre al que vio. El error se pinta en linea.
+   */
+  buscarBuscados(q: string, limit = 8): Promise<BuscadoPublico[]> {
+    return apiClient.get<BuscadoPublico[]>('/buscados', { q, limit }, { sinAviso: true });
   },
 
   /** Publico (@Public, maximo 5 por minuto por IP): lo usa /reportar sin sesion. */

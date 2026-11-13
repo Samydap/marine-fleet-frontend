@@ -6,11 +6,13 @@ import { Boton } from '@shared/ui/Boton';
 import { CampoAreaTexto, CampoTexto } from '@shared/ui/Campo';
 import { IconoExito } from '@shared/ui/iconos';
 import { valorFechaHoraLocal } from '@shared/utils/fecha';
+import { BuscadorBuscados, FichaBuscado } from '../components/BuscadorBuscados';
 import { inteligenciaApi } from '../data-access/inteligencia-api';
 import { aIsoDesdeLocal } from '../models/avistamiento';
 import {
   LIMITES_REPORTE,
   validarReporte,
+  type BuscadoPublico,
   type ErroresReporte,
   type NuevoReporteCiudadano,
   type ReporteRecibido,
@@ -27,6 +29,12 @@ const VACIO: NuevoReporteCiudadano = {
   anonimo: false,
 };
 
+/**
+ * Como se indica al criminal: llegado por el enlace del cartel, buscado por
+ * nombre o alias (lo normal), o escribiendo el codigo impreso en el cartel.
+ */
+type ModoCriminal = 'enlace' | 'buscar' | 'codigo';
+
 const opcional = (valor: string | undefined): string | undefined => valor?.trim() || undefined;
 
 /**
@@ -34,9 +42,9 @@ const opcional = (valor: string | undefined): string | undefined => valor?.trim(
  * sin sesion: POST /reportes-ciudadanos es @Public con limite de 5 por minuto
  * por IP. No usa nada que exija sesion (ni catalogos ni el archivo criminal).
  *
- * El criminal se identifica por su codigo: llega en `?criminal=<id>` desde el
- * enlace del cartel publicado, o lo escribe quien reporta (ver el bloqueo con
- * backend en el reporte de la feature: falta un buscador publico).
+ * El criminal llega en `?criminal=<id>` desde el enlace del cartel publicado;
+ * si no, quien reporta lo busca por nombre o alias (GET /buscados, publico) o
+ * escribe el codigo impreso en el cartel.
  */
 export function ReporteCiudadanoPage(): React.ReactElement {
   const [parametros] = useSearchParams();
@@ -45,7 +53,9 @@ export function ReporteCiudadanoPage(): React.ReactElement {
     ...VACIO,
     criminalId: codigoEnlace,
   });
-  const [editarCodigo, setEditarCodigo] = useState(codigoEnlace === '');
+  const modoInicial: ModoCriminal = codigoEnlace ? 'enlace' : 'buscar';
+  const [modo, setModo] = useState<ModoCriminal>(modoInicial);
+  const [elegido, setElegido] = useState<BuscadoPublico | null>(null);
   const [errores, setErrores] = useState<ErroresReporte>({});
   const [enviando, setEnviando] = useState(false);
   const [recibido, setRecibido] = useState<ReporteRecibido | null>(null);
@@ -64,7 +74,7 @@ export function ReporteCiudadanoPage(): React.ReactElement {
     const encontrados = validarReporte(datos);
     setErrores(encontrados);
     if (Object.values(encontrados).some(Boolean)) {
-      if (encontrados.criminalId) setEditarCodigo(true);
+      if (encontrados.criminalId && modo === 'enlace') setModo('buscar');
       const primero = (['criminalId', 'descripcion', 'ubicacion'] as const).find(
         (c) => encontrados[c],
       );
@@ -92,9 +102,20 @@ export function ReporteCiudadanoPage(): React.ReactElement {
     }
   }
 
+  function elegir(buscado: BuscadoPublico | null): void {
+    setElegido(buscado);
+    cambiar('criminalId', buscado?.id ?? '');
+  }
+
+  function cambiarModo(nuevo: ModoCriminal): void {
+    setModo(nuevo);
+    elegir(null);
+  }
+
   function otroReporte(): void {
     setDatos({ ...VACIO, criminalId: codigoEnlace });
-    setEditarCodigo(codigoEnlace === '');
+    setModo(modoInicial);
+    setElegido(null);
     setErrores({});
     setRecibido(null);
   }
@@ -143,21 +164,7 @@ export function ReporteCiudadanoPage(): React.ReactElement {
             <form className="denuncia-panel" noValidate onSubmit={enviar}>
               <fieldset className="denuncia-seccion">
                 <legend>¿A quién viste?</legend>
-                {editarCodigo ? (
-                  <CampoTexto
-                    etiqueta="Código del criminal"
-                    className="denuncia-codigo-campo"
-                    name="criminalId"
-                    required
-                    autoComplete="off"
-                    spellCheck={false}
-                    maxLength={LIMITES_REPORTE.criminalId}
-                    value={datos.criminalId}
-                    onChange={(e) => cambiar('criminalId', e.target.value)}
-                    error={errores.criminalId}
-                    ayuda="Está impreso al pie del cartel, junto al código para escanear. Si no lo tienes, pídelo en la base naval más cercana."
-                  />
-                ) : (
+                {modo === 'enlace' && (
                   <div className="denuncia-codigo">
                     <p>
                       Reportas sobre el criminal del cartel que escaneaste. No hace falta que
@@ -166,11 +173,58 @@ export function ReporteCiudadanoPage(): React.ReactElement {
                     <Boton
                       variante="fantasma"
                       tamano="compacto"
-                      onClick={() => setEditarCodigo(true)}
+                      onClick={() => cambiarModo('buscar')}
                     >
                       Es otro cartel
                     </Boton>
                   </div>
+                )}
+                {modo === 'buscar' && elegido && (
+                  <div className="denuncia-codigo denuncia-elegido">
+                    <FichaBuscado buscado={elegido} />
+                    <Boton variante="fantasma" tamano="compacto" onClick={() => elegir(null)}>
+                      Cambiar
+                    </Boton>
+                  </div>
+                )}
+                {modo === 'buscar' && !elegido && (
+                  <>
+                    <BuscadorBuscados
+                      onElegir={elegir}
+                      error={errores.criminalId && 'Busca y elige al criminal que viste.'}
+                    />
+                    <button
+                      type="button"
+                      className="denuncia-alterno"
+                      onClick={() => cambiarModo('codigo')}
+                    >
+                      Tengo el código impreso en el cartel
+                    </button>
+                  </>
+                )}
+                {modo === 'codigo' && (
+                  <>
+                    <CampoTexto
+                      etiqueta="Código del criminal"
+                      className="denuncia-codigo-campo"
+                      name="criminalId"
+                      required
+                      autoComplete="off"
+                      spellCheck={false}
+                      maxLength={LIMITES_REPORTE.criminalId}
+                      value={datos.criminalId}
+                      onChange={(e) => cambiar('criminalId', e.target.value)}
+                      error={errores.criminalId}
+                      ayuda="Está impreso al pie del cartel, junto al código para escanear."
+                    />
+                    <button
+                      type="button"
+                      className="denuncia-alterno"
+                      onClick={() => cambiarModo('buscar')}
+                    >
+                      Buscar por nombre o alias
+                    </button>
+                  </>
                 )}
               </fieldset>
 

@@ -283,6 +283,93 @@
   overflow-wrap: anywhere;
 }
 
+.denuncia-alterno {
+  justify-self: start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--navy);
+  font: inherit;
+  font-size: var(--texto-sm);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.denuncia-elegido .ficha-buscado {
+  flex: 1 1 16rem;
+}
+
+.buscador-buscados {
+  display: grid;
+  gap: var(--esp-1);
+}
+
+.buscador-buscados-nota {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.buscador-buscados-reintentar {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--navy);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.buscador-buscados-lista {
+  display: grid;
+  gap: var(--esp-05);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.buscador-buscados-opcion {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--esp-1) var(--esp-15);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.buscador-buscados-opcion:hover {
+  background: var(--superficie-2);
+}
+
+.ficha-buscado {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  min-width: 0;
+}
+
+.ficha-buscado-texto {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.ficha-buscado-texto strong,
+.ficha-buscado-texto small {
+  overflow-wrap: anywhere;
+}
+
+.ficha-buscado-texto small {
+  color: var(--tinta-2);
+}
+
 .denuncia-codigo-campo {
   font-family: var(--fuente-codigo);
   font-size: var(--texto-sm);

@@ -119,3 +119,20 @@ export function validarReporte(r: NuevoReporteCiudadano): ErroresReporte {
   }
   return errores;
 }
+
+/**
+ * Espejo de BuscadoPublicoResponse (criminales/presentation/buscados.controller.ts):
+ * solo lo que ya es publico en un cartel WANTED, y solo de criminales activos.
+ */
+export interface BuscadoPublico {
+  readonly id: string;
+  readonly nombre: string;
+  readonly alias: readonly string[];
+  readonly fotoUrl: string | null;
+  readonly recompensaVigenteMonto: number | null;
+  readonly nivelAmenaza: string;
+  readonly organizacion: string | null;
+}
+
+/** GET /buscados exige al menos 2 letras en `q`. */
+export const MIN_BUSQUEDA_PUBLICA = 2;
