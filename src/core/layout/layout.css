@@ -245,26 +245,54 @@
   display: none;
 }
 
-.sync-punto {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--sobre-navy-exito);
+.sync {
+  --den-ojo: var(--navy);
 }
 
-.sync--conectando .sync-punto {
-  border: 1.5px solid var(--sobre-navy-texto);
-  background: transparent;
+.sync-mushi {
+  flex: 0 0 auto;
+  color: var(--sobre-navy-exito);
+}
+
+.sync--sondeo .sync-mushi,
+.sync--conectando .sync-mushi {
+  color: var(--sobre-navy-texto);
 }
 
 .sync--sin-conexion {
   color: var(--sobre-navy-aviso);
 }
 
-.sync--sin-conexion .sync-punto {
-  border-radius: 1px;
-  background: var(--sobre-navy-aviso);
-  transform: rotate(45deg);
+.sync--sin-conexion .sync-mushi {
+  color: var(--sobre-navy-aviso);
+}
+
+/* Llamada entrante: la concha se sacude y las pupilas se encienden. */
+.den-den-mushi[data-estado='llamando'] {
+  animation: mushi-llama 600ms var(--ease-out);
+}
+
+@keyframes mushi-llama {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  20% {
+    transform: rotate(-9deg);
+  }
+  40% {
+    transform: rotate(8deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+  80% {
+    transform: rotate(4deg);
+  }
+}
+
+.den-den-mushi-z {
+  opacity: 0.9;
 }
 
 /* --- Franja superior (movil) --------------------------------------------- */
@@ -491,6 +519,10 @@
   color: var(--navy-2);
 }
 
+.aviso-mushi {
+  --den-ojo: var(--superficie);
+}
+
 .aviso p {
   flex: 1;
   margin: 0;
@@ -609,6 +641,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .den-den-mushi[data-estado='llamando'] {
+    animation: none;
+  }
+
   .barra-carga {
     animation: none;
     opacity: 0.7;

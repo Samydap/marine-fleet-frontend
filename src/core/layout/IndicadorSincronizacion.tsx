@@ -1,4 +1,13 @@
-import { useEstadoSincronizacion, type EstadoCanal } from '../sync/sincronizacion';
+import { useEffect, useRef, useState } from 'react';
+import {
+  useCambiosSincronizados,
+  useEstadoSincronizacion,
+  type EstadoCanal,
+} from '../sync/sincronizacion';
+import { DenDenMushi } from './emblemas/DenDenMushi';
+
+/** Lo que dura el parpadeo del caracol al llegar un cambio de otra base. */
+const DURACION_LLAMADA_MS = 600;
 
 const TEXTO: Readonly<Record<Exclude<EstadoCanal, 'inactivo'>, string>> = {
   'en-vivo': 'En vivo',
@@ -33,10 +42,21 @@ function hora(iso: string | null): string {
 /**
  * Estado del canal entre bases. Va en el shell porque responde a la pregunta
  * que todo dato sincronizado plantea: "¿esto que veo esta al dia?".
- * El estado se nombra con texto; el punto de color solo lo acompana.
+ * El estado se nombra con texto; el Den Den Mushi solo lo acompana.
  */
 export function IndicadorSincronizacion(): React.ReactElement | null {
   const { estado, ultimaSenal } = useEstadoSincronizacion();
+  const [llamando, setLlamando] = useState(false);
+  const temporizador = useRef<number | undefined>(undefined);
+
+  useEffect(() => () => window.clearTimeout(temporizador.current), []);
+
+  useCambiosSincronizados('*', () => {
+    setLlamando(true);
+    window.clearTimeout(temporizador.current);
+    temporizador.current = window.setTimeout(() => setLlamando(false), DURACION_LLAMADA_MS);
+  });
+
   if (estado === 'inactivo') return null;
 
   const ultima = hora(ultimaSenal);
@@ -44,7 +64,10 @@ export function IndicadorSincronizacion(): React.ReactElement | null {
 
   return (
     <p className={`sync sync--${estado}`} title={titulo} role="status">
-      <span className="sync-punto" aria-hidden="true" />
+      <DenDenMushi
+        className="sync-mushi"
+        estado={estado === 'sin-conexion' ? 'dormido' : llamando ? 'llamando' : 'vivo'}
+      />
       <span className="sync-texto">{TEXTO[estado]}</span>
       <span className="sync-texto-corto" aria-hidden="true">
         {TEXTO_CORTO[estado]}
