@@ -15,6 +15,7 @@ import { EstadoError, EstadoVacio, Skeleton } from '@shared/ui/Estados';
 import { IconoBrujula } from '@shared/ui/iconos';
 import { InsigniaTipoCriminal } from '@shared/ui/InsigniaTipoCriminal';
 import { PageHeader } from '@shared/ui/PageHeader';
+import { CartelWanted } from '@shared/ui/CartelWanted';
 import { Paginacion } from '@shared/ui/Paginacion';
 import { OpcionesZona } from '@shared/ui/CampoZona';
 import {
@@ -23,7 +24,6 @@ import {
   type CategoriaCriminal,
   type EstadoCriminal,
 } from '@shared/utils/criminal';
-import { CartelWanted } from '../components/CartelWanted';
 import { cartelesApi } from '../data-access/carteles-api';
 import { useGaleriaStore } from '../data-access/carteles.store';
 import { datosDesdeCriminal } from '../utils/instantanea';

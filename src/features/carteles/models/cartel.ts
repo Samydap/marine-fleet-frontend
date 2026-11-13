@@ -15,24 +15,6 @@ export type MotivoGeneracion =
 /** Formatos de DescargarCartelDto: PDF para imprimir, SVG como imagen. */
 export type FormatoCartel = 'pdf' | 'svg';
 
-/**
- * Datos congelados que se imprimen en el cartel (DatosCartel del backend, la
- * forma de `carteles.datos_instantanea`). Lo impreso no cambia aunque el
- * criminal cambie despues: por eso el cartel es versionado.
- */
-export interface DatosCartel {
-  readonly criminalId: string;
-  readonly nombre: string;
-  readonly alias: readonly string[];
-  readonly recompensa: number | null;
-  readonly nivelAmenaza: NivelAmenaza | null;
-  readonly estado: EstadoCriminal;
-  readonly organizacion: string | null;
-  readonly categoriaOrganizacion: CategoriaCriminal | null;
-  readonly fotoUrl: string | null;
-  readonly textoLegal: string | null;
-}
-
 /** Espejo de CartelResponse (carteles/presentation/mappers/cartel.mapper.ts). */
 export interface Cartel {
   readonly id: string;

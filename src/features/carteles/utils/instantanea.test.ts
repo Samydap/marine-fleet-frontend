@@ -1,80 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import {
-  cifraCartel,
-  escalaCifra,
-  escalaAlias,
-  escalaNombre,
-  etiquetaMotivo,
-  leerInstantanea,
-  nombreArchivo,
-} from './instantanea';
+import type { CriminalEnCartel } from '../models/cartel';
+import { datosDesdeCriminal, etiquetaMotivo, nombreArchivo } from './instantanea';
 
-describe('leerInstantanea', () => {
-  it('lee una instantanea completa del backend', () => {
-    const datos = leerInstantanea(
-      {
-        criminalId: 'c-1',
-        nombre: 'Monkey D. Luffy',
-        alias: ['Sombrero de Paja'],
-        recompensa: 3_000_000_000,
-        moneda: 'BERRIES',
-        nivelAmenaza: 'ALTO',
-        estado: 'CAPTURADO',
-        organizacion: 'Piratas del Sombrero de Paja',
-        categoriaOrganizacion: 'PIRATA',
-        fotoUrl: '/api/v1/archivos/fotos/c-1.png',
-        textoLegal: 'Por orden del Gobierno Mundial.',
-      },
-      'c-1',
-    );
-    expect(datos).toMatchObject({
-      nombre: 'Monkey D. Luffy',
-      recompensa: 3_000_000_000,
-      estado: 'CAPTURADO',
-      categoriaOrganizacion: 'PIRATA',
-    });
-  });
-
-  it('tolera versiones antiguas con campos faltantes o invalidos', () => {
-    const datos = leerInstantanea(
-      { nombre: '', alias: ['a', 3, ''], recompensa: '1200', estado: 'DESCONOCIDO' },
-      'c-9',
-    );
-    expect(datos).toMatchObject({
-      criminalId: 'c-9',
-      nombre: 'Nombre desconocido',
-      alias: ['a'],
-      recompensa: 1200,
-      estado: 'ACTIVO',
-      nivelAmenaza: null,
-      categoriaOrganizacion: null,
+describe('datosDesdeCriminal', () => {
+  it('arma la vista previa de la galeria con los datos actuales', () => {
+    const c: CriminalEnCartel = {
+      id: 'c-1',
+      nombre: 'Nico Robin',
+      alias: ['Niña Demonio'],
       fotoUrl: null,
+      estado: 'ACTIVO',
+      nivelAmenaza: 'ALTO',
+      recompensaVigenteMonto: 930_000_000,
+      organizacion: { organizacionNombre: 'Piratas del Sombrero de Paja', categoria: 'PIRATA' },
+      updatedAt: '2026-11-01T10:00:00Z',
+    };
+    expect(datosDesdeCriminal(c)).toMatchObject({
+      criminalId: 'c-1',
+      recompensa: 930_000_000,
+      organizacion: 'Piratas del Sombrero de Paja',
+      categoriaOrganizacion: 'PIRATA',
+      textoLegal: null,
     });
-  });
-});
-
-describe('cifra y escalas del cartel', () => {
-  it('pone puntos de miles y el guion final', () => {
-    expect(cifraCartel(1_500_000_000)).toBe(`${(1_500_000_000).toLocaleString('es-CO')}-`);
-    expect(cifraCartel(null)).toBe('SIN RECOMPENSA');
-  });
-
-  it('baja de cuerpo los montos y nombres largos', () => {
-    expect(escalaCifra(cifraCartel(30_000_000))).toBe('larga');
-    expect(escalaCifra(cifraCartel(5_000_000_000))).toBe('larga');
-    expect(escalaCifra(cifraCartel(500_000_000_000))).toBe('muy-larga');
-    expect(escalaCifra(cifraCartel(8000))).toBe('normal');
-    expect(escalaNombre('Luffy')).toBe('normal');
-    expect(escalaNombre('Charlotte Linlin la Gran Madre')).toBe('largo');
-    expect(escalaNombre('Donquixote Doflamingo, el Demonio Celestial de Dressrosa')).toBe(
-      'muy-largo',
-    );
-  });
-
-  it('el alias baja de cuerpo en lugar de recortarse', () => {
-    expect(escalaAlias('«Sombrero de Paja»')).toBe('normal');
-    expect(escalaAlias('«El Cirujano de la Muerte del Mar del Norte»')).toBe('largo');
-    expect(escalaAlias(`«${'Capitán '.repeat(9)}»`)).toBe('muy-largo');
   });
 });
 

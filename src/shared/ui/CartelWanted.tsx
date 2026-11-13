@@ -3,8 +3,14 @@ import { urlArchivo } from '@core/http/api-url.interceptor';
 import { formatearBerries } from '@shared/utils/berries';
 import { etiquetaCategoria } from '@shared/utils/criminal';
 import { formatearSoloFecha } from '@shared/utils/fecha';
-import type { DatosCartel } from '../models/cartel';
-import { cifraCartel, escalaAlias, escalaCifra, escalaNombre } from '../utils/instantanea';
+import {
+  cifraCartel,
+  escalaAlias,
+  escalaCifra,
+  escalaNombre,
+  type DatosCartel,
+} from '@shared/utils/cartel';
+import './cartel.css';
 
 interface Props {
   readonly datos: DatosCartel;

@@ -13,12 +13,13 @@ import { EstadoError, EstadoVacio, Skeleton } from '@shared/ui/Estados';
 import { IconoDescargar, IconoImprimir, IconoRecargar } from '@shared/ui/iconos';
 import { InsigniaEstado } from '@shared/ui/InsigniaEstado';
 import { PageHeader } from '@shared/ui/PageHeader';
+import { CartelWanted } from '@shared/ui/CartelWanted';
 import { guardarArchivo } from '@shared/utils/archivo';
+import { leerInstantanea } from '@shared/utils/cartel';
 import { aIso, formatearFecha } from '@shared/utils/fecha';
-import { CartelWanted } from '../components/CartelWanted';
 import { cartelesApi } from '../data-access/carteles-api';
 import type { Cartel, FormatoCartel } from '../models/cartel';
-import { etiquetaMotivo, leerInstantanea, nombreArchivo } from '../utils/instantanea';
+import { etiquetaMotivo, nombreArchivo } from '../utils/instantanea';
 import '../carteles.css';
 
 const CLASE_IMPRESION = 'imprimiendo-cartel';

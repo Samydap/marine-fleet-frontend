@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import type { DatosCartel } from '../models/cartel';
+import type { DatosCartel } from '@shared/utils/cartel';
 import { CartelWanted } from './CartelWanted';
 
 const DATOS: DatosCartel = {
