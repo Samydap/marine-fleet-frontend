@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { recargarCatalogos, useCatalogos } from '@core/catalogos/catalogos';
 import { Boton } from '@shared/ui/Boton';
 import { EstadoCargando, EstadoError, EstadoVacio } from '@shared/ui/Estados';
 import { IconoEditar, IconoMas } from '@shared/ui/iconos';
@@ -7,6 +6,10 @@ import { InsigniaEstado } from '@shared/ui/InsigniaEstado';
 import { PageHeader } from '@shared/ui/PageHeader';
 import { SeccionesAdmin } from '../components/SeccionesAdmin';
 import { DialogoCatalogo, type ObjetivoCatalogo } from '../components/DialogoCatalogo';
+import {
+  recargarCatalogoCompleto,
+  useCatalogoCompleto,
+} from '../data-access/catalogo-completo.store';
 import { etiquetaTipoMar } from '../models/catalogo';
 
 /**
@@ -15,7 +18,7 @@ import { etiquetaTipoMar } from '../models/catalogo';
  * como el mapa: mar, zona, base.
  */
 export function CatalogosPage(): React.ReactElement {
-  const { mares, zonasDeMar, bases, estado } = useCatalogos();
+  const { mares, zonasDeMar, bases, estado } = useCatalogoCompleto();
   const [objetivo, setObjetivo] = useState<ObjetivoCatalogo | null>(null);
 
   // La cabecera cuenta lo que esta en servicio; lo inactivo se ve atenuado en el mapa.
@@ -32,7 +35,7 @@ export function CatalogosPage(): React.ReactElement {
       <EstadoError
         variante="pantalla"
         titulo="No se pudo cargar el catálogo geográfico"
-        onReintentar={() => void recargarCatalogos()}
+        onReintentar={() => void recargarCatalogoCompleto()}
       />
     );
   } else if (mares.length === 0 && estado !== 'listo') {

@@ -1,6 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import {
-  recargarCatalogos,
   useCatalogos,
   type BaseNaval,
   type Mar,
@@ -19,6 +18,7 @@ import {
   type BorradorCatalogo,
   type ErroresCatalogo,
 } from '../models/catalogo';
+import { recargarCatalogoCompleto } from '../data-access/catalogo-completo.store';
 
 /** Que se edita: un registro existente o el alta dentro de su padre. */
 export type ObjetivoCatalogo =
@@ -88,7 +88,7 @@ async function guardar(o: ObjetivoCatalogo, b: BorradorCatalogo): Promise<void> 
   }
 }
 
-/** Alta y edicion de un mar, una zona o una base. Al guardar, recarga el catalogo compartido. */
+/** Alta y edicion de un mar, una zona o una base. Al guardar, recarga el catalogo completo y el compartido. */
 export function DialogoCatalogo({ objetivo, onCerrar }: Props): React.ReactElement {
   const { mares, zonasDeMar } = useCatalogos();
   const [b, setB] = useState<BorradorCatalogo>({ nombre: '', activo: true });
@@ -134,7 +134,7 @@ export function DialogoCatalogo({ objetivo, onCerrar }: Props): React.ReactEleme
     setGuardando(true);
     try {
       await guardar(objetivo, b);
-      await recargarCatalogos();
+      await recargarCatalogoCompleto();
       notificar.exito(editando ? 'Catálogo actualizado.' : `${b.nombre.trim()} registrado.`);
       onCerrar();
     } catch (error) {
@@ -178,7 +178,7 @@ export function DialogoCatalogo({ objetivo, onCerrar }: Props): React.ReactEleme
         {conflicto && (
           <AlertaConflicto
             onRecargar={() => {
-              void recargarCatalogos();
+              void recargarCatalogoCompleto();
               onCerrar();
             }}
           />
