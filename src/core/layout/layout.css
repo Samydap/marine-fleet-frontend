@@ -592,8 +592,10 @@
   color: var(--navy);
 }
 
+/* Sobre el papel el dorado tinta no llega a AA cuando el sello se reduce en el
+   telefono: el galon en papel es el dorado oscuro. */
 .estado--oficial .sello-justicia[data-tono='dorado'] {
-  color: var(--gold-tinta);
+  color: var(--gold-oscuro);
 }
 
 .estado-orden {
