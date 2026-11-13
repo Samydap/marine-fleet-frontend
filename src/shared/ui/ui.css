@@ -296,13 +296,57 @@
   border-top: 1px solid var(--line);
 }
 
-/* === Cabecera de pagina =================================================== */
+/* === Sello 正義 (SelloJusticia, core/layout/emblemas) ====================== */
 
+/* Global porque lo pintan la cabecera, el acceso y el acceso denegado. Sello
+   cuadrado de doble filete, los dos kanji en columna y un giro leve de timbre
+   puesto a mano. Estatico: no anima. */
+.sello-justicia {
+  --sello-lado: 52px;
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: var(--sello-lado);
+  height: var(--sello-lado);
+  border: 2px solid currentColor;
+  border-radius: var(--radio-sm);
+  color: var(--sobre-lienzo);
+  transform: rotate(-3deg);
+}
+
+.sello-justicia::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+  opacity: 0.55;
+}
+
+.sello-justicia[data-tamano='lg'] {
+  --sello-lado: 76px;
+}
+
+/* Regla del galon: dorado solo para el Almirante. */
+.sello-justicia[data-tono='dorado'] {
+  color: var(--gold);
+}
+
+.sello-justicia-kanji {
+  font: 400 calc(var(--sello-lado) * 0.38) / 1 var(--fuente-kanji);
+  letter-spacing: 0;
+  writing-mode: vertical-rl;
+}
+
+/* === Cabecera de pagina: orden del Cuartel General ======================== */
+
+/* Va directo sobre el lienzo oscuro (DISENO 6.3): titulo blanco en display,
+   descripcion y meta en --sobre-navy-texto, acciones y foco en blanco. */
 .page-header {
   margin-bottom: var(--esp-3);
 }
 
-/* La cabecera va directo sobre el lienzo oscuro: texto claro y foco blanco. */
 .page-header :focus-visible {
   outline-color: var(--sobre-lienzo);
 }
@@ -331,22 +375,36 @@
   gap: var(--esp-2) var(--esp-3);
 }
 
-.page-header-texto {
-  min-width: 0;
+.page-header-orden {
+  display: flex;
   flex: 1 1 28rem;
+  align-items: flex-start;
+  gap: var(--esp-2);
+  min-width: 0;
+}
+
+/* El sello se alinea con la primera linea del titulo, no con el bloque. */
+.page-header-sello {
+  margin-top: var(--esp-05);
+}
+
+.page-header-texto {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .page-header h1 {
   margin: 0;
   color: var(--sobre-lienzo);
-  font: 800 var(--titulo-pagina) / 1.2 var(--fuente-titulo);
-  letter-spacing: -0.025em;
+  font: 400 var(--titulo-orden) / 1.1 var(--fuente-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   overflow-wrap: anywhere;
 }
 
 .page-header-descripcion {
   max-width: 68ch;
-  margin: 6px 0 0;
+  margin: var(--esp-1) 0 0;
   color: var(--sobre-navy-texto);
   font-size: var(--texto-md);
   line-height: 1.5;
@@ -370,10 +428,45 @@
   color: var(--sobre-navy-aviso);
 }
 
+/* Las insignias y badges de la meta traen su propio fondo de papel; la
+   prioridad no, asi que en la cabecera pasa a los tonos del lienzo. */
+.page-header-meta .prioridad,
+.page-header-meta .prioridad-texto {
+  color: var(--sobre-lienzo);
+}
+
+.page-header-meta .prioridad--critica,
+.page-header-meta .prioridad--critica .prioridad-texto {
+  color: var(--peligro-sobre-lienzo);
+}
+
+.page-header-meta .prioridad-galon--vacio {
+  color: var(--sobre-navy-pista);
+}
+
 .page-header-acciones {
   display: flex;
   flex-wrap: wrap;
   gap: var(--esp-15);
+}
+
+/* Acciones sobre el lienzo. Solo dentro de la cabecera: en el papel y en los
+   dialogos los botones conservan su aspecto. */
+.page-header-acciones .ui-boton--principal {
+  background: var(--sobre-lienzo);
+  color: var(--navy);
+}
+
+.page-header-acciones .ui-boton--secundario {
+  border-color: var(--sobre-lienzo);
+  background: transparent;
+  color: var(--sobre-lienzo);
+}
+
+.page-header-acciones .ui-boton--peligro-sutil {
+  border-color: var(--peligro-sobre-lienzo);
+  background: transparent;
+  color: var(--peligro-sobre-lienzo);
 }
 
 .page-header-acciones .ui-boton--fantasma,
@@ -381,9 +474,28 @@
   color: var(--sobre-lienzo);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .page-header-acciones .ui-boton--principal:hover:not(:disabled) {
+    background: var(--papel);
+  }
+
+  .page-header-acciones .ui-boton--secundario:hover:not(:disabled),
+  .page-header-acciones .ui-boton--fantasma:hover:not(:disabled),
+  .page-header-acciones .ui-boton-icono:hover:not(:disabled) {
+    background: var(--sobre-navy-hover);
+    color: var(--sobre-lienzo);
+  }
+
+  .page-header-acciones .ui-boton--peligro-sutil:hover:not(:disabled) {
+    border-color: var(--peligro-sobre-lienzo);
+    background: var(--peligro-sobre-lienzo-fondo);
+  }
+}
+
 /* === Pestanas de seccion (PestanasSeccion) ================================ */
 
-/* Siempre bajo el PageHeader. En el telefono la fila se desplaza en horizontal
+/* Siempre bajo el PageHeader y, como el, directo sobre el lienzo: texto claro,
+   foco blanco y subrayado dorado en la activa (DISENO 6.3). En el telefono la fila se desplaza en horizontal
    (sin envolver): una pestana en segunda linea parece otra cosa. */
 .ui-pestanas {
   display: flex;
@@ -423,7 +535,7 @@
 }
 
 .ui-pestana[aria-current='page'] {
-  border-bottom-color: var(--sobre-lienzo);
+  border-bottom-color: var(--gold);
   color: var(--sobre-lienzo);
   font-weight: 700;
 }
@@ -1667,6 +1779,15 @@ h1.estado-titulo {
 
   .paginacion-pagina {
     display: none;
+  }
+
+  /* El sello cede ancho al titulo en el telefono angosto. */
+  .page-header-orden {
+    gap: var(--esp-15);
+  }
+
+  .sello-justicia[data-tamano='md'] {
+    --sello-lado: 42px;
   }
 }
 

@@ -41,6 +41,11 @@
   font-size: var(--texto-sm);
 }
 
+/* En la meta de la cabecera va sobre el lienzo: toma el tono de la meta. */
+.page-header-meta .ficha-meta-texto {
+  color: inherit;
+}
+
 .ficha-avisos:not(:empty) {
   display: grid;
   gap: var(--esp-15);

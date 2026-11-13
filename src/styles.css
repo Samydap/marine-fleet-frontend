@@ -45,6 +45,10 @@
   --trama: rgba(184, 194, 209, 0.07);
   /* Texto principal directo sobre el lienzo (cabecera de pagina). */
   --sobre-lienzo: #ffffff;
+  /* Accion de peligro directo sobre el lienzo (cabecera): rojo claro legible
+     sobre el navy nocturno; su fondo al pasar el puntero. */
+  --peligro-sobre-lienzo: #f28b82;
+  --peligro-sobre-lienzo-fondo: rgba(242, 139, 130, 0.12);
   /* Gaviota en marca de agua del lienzo. */
   --marca-agua: rgba(255, 255, 255, 0.045);
 
@@ -113,6 +117,8 @@
   --texto-lg: 17px;
   --titulo-panel: 19px;
   --titulo-pagina: 1.5rem;
+  /* Titulo de la orden oficial (cabecera de pagina, en display condensada). */
+  --titulo-orden: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
   /* La cifra protagonista de una pantalla (total del reporte, criminales por nivel). */
   --texto-cifra: clamp(30px, 4vw, 43px);
 

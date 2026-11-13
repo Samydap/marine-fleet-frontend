@@ -73,9 +73,14 @@ describe('contraste de los tokens', () => {
       ['--tinta-2', '--papel'],
       ['--tinta-3', '--papel'],
       ['--tinta', '--superficie-campo'],
-      // Interinos de la cabecera sobre el lienzo (titulo y "actualizado" viejo).
+      // Cabecera de pagina y pestanas sobre el lienzo: titulo, descripcion,
+      // "actualizado" viejo y el texto de los botones de la cabecera.
       ['--sobre-lienzo', '--lienzo'],
       ['--sobre-navy-aviso', '--lienzo'],
+      ['--peligro-sobre-lienzo', '--lienzo'],
+      ['--peligro-sobre-lienzo', '--lienzo-2'],
+      // Boton principal de la cabecera: blanco con texto navy.
+      ['--navy', '--sobre-lienzo'],
     ];
     for (const [texto, fondo] of paresTexto) {
       expect(contraste(texto, fondo), `${texto} sobre ${fondo}`).toBeGreaterThanOrEqual(4.5);
