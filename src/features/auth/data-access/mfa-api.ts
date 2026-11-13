@@ -23,15 +23,23 @@ export function esRetoMfa(valor: unknown): valor is RetoMfa {
 }
 
 /**
- * MOCK AISLADO. El backend ya define VerifyMfaDto, pero todavia no expone el
- * endpoint de verificacion ni devuelve un `challengeToken` desde /auth/login
- * (ver el PENDIENTE de login.use-case.ts). Hasta entonces esta funcion responde
- * lo mismo que responderia un servidor sin el segundo factor habilitado, para
+ * MOCK AISLADO (revisado contra el backend en develop, modulo auth completo).
+ *
+ * El backend define VerifyMfaDto y el puerto MFA_PROVIDER, pero el
+ * AuthController solo expone POST /auth/login, POST /auth/refresh y
+ * GET /auth/me: NO hay endpoint de verificacion, y /auth/login nunca devuelve
+ * un `challengeToken` (PENDIENTE de login.use-case.ts y auth.module.ts:
+ * verify-mfa.use-case.ts + totp-mfa.adapter.ts). Hasta entonces esta funcion
+ * responde lo mismo que un servidor sin el segundo factor habilitado, para
  * que la pantalla muestre un estado honesto en lugar de aceptar cualquier
  * codigo.
  *
- * Cuando exista el endpoint, se sustituye el cuerpo por la llamada real con
- * `apiClient.post` y se guarda la sesion como en sessionService.login.
+ * Cuando exista el endpoint (contrato esperado: POST /auth/mfa/verify con
+ * VerifyMfaDto -> LoginResponseDto), el cuerpo se reemplaza por:
+ *
+ *   const respuesta = await apiClient.post<RespuestaLogin>('/auth/mfa/verify', peticion);
+ *   sessionService.iniciar(respuesta);
+ *   return respuesta.usuario;
  */
 export const mfaApi = {
   async verificar(peticion: VerificarMfaPeticion): Promise<UsuarioSesion> {

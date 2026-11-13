@@ -7,6 +7,10 @@ interface CriminalesState {
   criminales: Criminal[];
   meta: PageMeta;
   cargando: boolean;
+  /** Error de la ultima carga (null si fue bien). La pagina decide como mostrarlo. */
+  error: unknown;
+  /** Hora de la ultima respuesta, para "Consultado hace…". */
+  consultadoEn: string | null;
   filtro: FiltroCriminales;
   cargar: (parcial?: Partial<FiltroCriminales>) => Promise<void>;
   buscar: (q: string) => Promise<void>;
@@ -26,6 +30,8 @@ export const useCriminalesStore = create<CriminalesState>()((set, get) => ({
   criminales: [],
   meta: PAGINA_VACIA,
   cargando: false,
+  error: null,
+  consultadoEn: null,
   filtro: { page: 1, limit: 20, order: 'DESC' },
 
   cargar: async (parcial = {}) => {
@@ -34,10 +40,16 @@ export const useCriminalesStore = create<CriminalesState>()((set, get) => ({
 
     try {
       const pagina = await criminalesApi.listar(filtro);
-      set({ criminales: pagina.data, meta: pagina.meta, cargando: false });
-    } catch {
-      // El errorInterceptor ya notifico: aqui solo se apaga el indicador.
-      set({ cargando: false });
+      set({
+        criminales: pagina.data,
+        meta: pagina.meta,
+        cargando: false,
+        error: null,
+        consultadoEn: new Date().toISOString(),
+      });
+    } catch (error) {
+      // El errorInterceptor ya notifico; el error queda para el estado de la tabla.
+      set({ cargando: false, error });
     }
   },
 

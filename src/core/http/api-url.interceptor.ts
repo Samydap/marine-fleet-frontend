@@ -21,3 +21,14 @@ export const apiUrlInterceptor: Interceptor = (peticion, siguiente) => {
   const ruta = peticion.url.startsWith('/') ? peticion.url : `/${peticion.url}`;
   return siguiente({ ...peticion, url: `${PREFIJO_API}${ruta}` });
 };
+
+/**
+ * URL de un archivo servido por la API (foto de un criminal, cartel). El
+ * backend las devuelve relativas (`/api/v1/archivos/fotos/...`); con
+ * VITE_API_URL apuntando a otro origen hay que anteponerle la raiz.
+ */
+export function urlArchivo(ruta: string | null | undefined): string | null {
+  if (!ruta) return null;
+  if (/^(https?:|data:|blob:)/i.test(ruta)) return ruta;
+  return `${RAIZ}${ruta.startsWith('/') ? ruta : `/${ruta}`}`;
+}

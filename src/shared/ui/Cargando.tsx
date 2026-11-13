@@ -1,13 +1,13 @@
+import { EstadoCargando } from './Estados';
+
 interface Props {
   readonly mensaje?: string;
 }
 
-/** Fallback de los Suspense de cada ruta lazy. */
+/**
+ * Fallback de los Suspense de cada ruta lazy: el esqueleto de una pagina de
+ * listado (cabecera, filtros y filas), no un spinner.
+ */
 export function Cargando({ mensaje = 'Cargando…' }: Props): React.ReactElement {
-  return (
-    <div className="empty-state">
-      <div className="loader" />
-      <strong>{mensaje}</strong>
-    </div>
-  );
+  return <EstadoCargando mensaje={mensaje} />;
 }

@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { rutaInicio } from '@core/session/navegacion';
 import { AccesoLayout } from '../components/AccesoLayout';
 import { AlertaAcceso } from '../components/AlertaAcceso';
 import { BotonEnviar } from '../components/BotonEnviar';
@@ -73,8 +74,8 @@ function FormularioMfa({
     setFallo(null);
     setEnviando(true);
     try {
-      await mfaApi.verificar({ challengeToken, codigo });
-      navegar('/criminales', { replace: true });
+      const usuario = await mfaApi.verificar({ challengeToken, codigo });
+      navegar(rutaInicio(usuario), { replace: true });
     } catch (fallido) {
       const descrito = describirFalloMfa(fallido);
       setFallo(descrito);

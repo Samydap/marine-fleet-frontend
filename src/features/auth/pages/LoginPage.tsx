@@ -1,5 +1,7 @@
 import { useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { rutaInicio } from '@core/session/navegacion';
+import type { UsuarioSesion } from '@core/session/permiso.enum';
 import { sessionService } from '@core/session/session.service';
 import { AccesoLayout } from '../components/AccesoLayout';
 import { AlertaAcceso } from '../components/AlertaAcceso';
@@ -8,18 +10,19 @@ import { IconoAlerta, IconoOjo, IconoOjoTachado } from '../components/iconos';
 import { describirFalloAcceso, type FalloAcceso } from '../models/fallo-acceso';
 import { validarContrasena, validarCorreo } from '../models/validacion-acceso';
 
-const DESTINO_POR_DEFECTO = '/criminales';
-
 interface ErroresCampo {
   email?: string | null;
   password?: string | null;
 }
 
 /**
+ * A donde ir tras entrar: la ruta protegida que el usuario intentaba abrir o,
+ * si no hay, la pantalla de llegada de su cargo (core/session/navegacion.ts).
+ *
  * Solo se vuelve a rutas internas de la aplicacion: un `redirectTo` externo
  * (`//otro-sitio`) o de vuelta al propio acceso se ignora.
  */
-function destinoTrasLogin(estado: unknown): string {
+function destinoTrasLogin(estado: unknown, usuario: UsuarioSesion): string {
   const destino = (estado as { redirectTo?: unknown } | null)?.redirectTo;
   if (
     typeof destino === 'string' &&
@@ -29,7 +32,7 @@ function destinoTrasLogin(estado: unknown): string {
   ) {
     return destino;
   }
-  return DESTINO_POR_DEFECTO;
+  return rutaInicio(usuario);
 }
 
 /**
@@ -39,8 +42,10 @@ function destinoTrasLogin(estado: unknown): string {
  * notificaciones globales las pinta MainLayout y esta pantalla queda fuera de
  * el, asi que sin esto un login fallido no le diria nada al usuario.
  *
- * PENDIENTE (backend): cuando /auth/login devuelva el reto del segundo factor,
- * navegar a /auth/mfa con `{ challengeToken, email }` en el state.
+ * PENDIENTE (backend): POST /auth/login todavia no devuelve el reto del
+ * segundo factor (no existe POST /auth/mfa/verify). Cuando exista, si la
+ * respuesta trae `challengeToken`, navegar a /auth/mfa con
+ * `{ challengeToken, email, redirectTo }` en el state.
  */
 export function LoginPage(): React.ReactElement {
   const navegar = useNavigate();
@@ -88,8 +93,8 @@ export function LoginPage(): React.ReactElement {
     setFallo(null);
     setEnviando(true);
     try {
-      await sessionService.login(email.trim(), password);
-      navegar(destinoTrasLogin(location.state), { replace: true });
+      const usuario = await sessionService.login(email.trim(), password);
+      navegar(destinoTrasLogin(location.state, usuario), { replace: true });
     } catch (error) {
       const descrito = describirFalloAcceso(error);
       setFallo(descrito);

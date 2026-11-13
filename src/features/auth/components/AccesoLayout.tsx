@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import '../acceso.css';
-import { SelloMarina } from './SelloMarina';
+import { SelloMarina } from '@core/layout/SelloMarina';
 
 interface Props {
   /** Hay una verificacion en curso: el sello lo indica girando su anillo. */

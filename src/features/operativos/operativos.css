@@ -1,0 +1,669 @@
+/* Estilos propios de features/operativos. Solo tokens de src/styles.css. */
+
+/* === Tablero de despliegue ================================================= */
+
+.despliegue {
+  display: grid;
+  gap: var(--esp-3);
+  transition: opacity var(--dur-corta) ease;
+}
+
+.despliegue--actualizando {
+  opacity: 0.6;
+}
+
+.despliegue-grupo {
+  display: grid;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.despliegue-grupo-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-1);
+  margin: 0;
+  color: var(--tinta-2);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Lo que esta pasando manda: el grupo en curso habla mas alto que el archivo. */
+.despliegue-grupo--activos .despliegue-grupo-titulo {
+  color: var(--navy);
+  font-size: var(--titulo-panel);
+}
+
+.despliegue-grupo-cuenta {
+  color: var(--tinta-2);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.despliegue-encabezado,
+.despliegue-fila {
+  display: grid;
+  grid-template-columns:
+    6.5rem minmax(0, 2.3fr) minmax(0, 1.4fr) minmax(0, 2fr)
+    8.5rem;
+  gap: var(--esp-2);
+  align-items: center;
+}
+
+.despliegue-encabezado {
+  padding: 0 var(--esp-2);
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.despliegue-encabezado span:last-child {
+  text-align: right;
+}
+
+.despliegue-lista {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+  list-style: none;
+}
+
+.despliegue-fila {
+  padding: var(--esp-15) var(--esp-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.despliegue-fila:last-child {
+  border-bottom: 0;
+}
+
+.despliegue-ident,
+.despliegue-estado {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  justify-items: start;
+}
+
+.despliegue-codigo {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.despliegue-nombre {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-md);
+  font-weight: 800;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.despliegue-nombre:hover {
+  text-decoration: underline;
+}
+
+.despliegue-sub {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.despliegue-bases ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-05);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.base-chip {
+  max-width: 14rem;
+  overflow: hidden;
+  padding: 2px var(--esp-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-sm);
+  background: var(--superficie-2);
+  color: var(--tinta);
+  font-size: var(--texto-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* La base lider va primero, con trazo navy y peso: manda el despliegue. */
+.base-chip--lider {
+  border-color: var(--navy-2);
+  background: var(--seleccion);
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.base-chip--mas {
+  border-style: dashed;
+  background: transparent;
+  color: var(--tinta-2);
+}
+
+.despliegue-hora {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+  font-size: var(--texto-xs);
+  text-align: right;
+}
+
+.despliegue-senal {
+  color: var(--aviso);
+  font-weight: 700;
+}
+
+/* El archivo (completados y abortados) se lee en segundo plano. */
+.despliegue-grupo--archivo .despliegue-nombre {
+  color: var(--tinta-2);
+}
+
+/*
+ * Unica animacion de autor del modulo: una fila que cambio en otra base se
+ * enciende en tono aviso y se apaga sola. Indica estado, no decora.
+ */
+.despliegue-fila--reciente {
+  animation: despliegue-senal 6s var(--ease-out) both;
+}
+
+@keyframes despliegue-senal {
+  0%,
+  35% {
+    background: var(--aviso-fondo);
+  }
+  100% {
+    background: var(--superficie);
+  }
+}
+
+/* === Formulario de alta ==================================================== */
+
+.operativo-form {
+  display: grid;
+  gap: var(--esp-3);
+}
+
+.operativo-form-seccion {
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.operativo-form-seccion h2 {
+  margin: 0 0 var(--esp-2);
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+}
+
+/* Insignias del objetivo en la ficha y notas de los dialogos. */
+.objetivo-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+  align-items: center;
+}
+
+.objetivo-nota {
+  margin: 0;
+  padding: var(--esp-15);
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* === Ficha del operativo =================================================== */
+
+.ficha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 20rem;
+  gap: var(--esp-3);
+  align-items: start;
+  transition: opacity var(--dur-corta) ease;
+}
+
+.ficha--actualizando {
+  opacity: 0.6;
+}
+
+.ficha-principal {
+  display: grid;
+  gap: var(--esp-3);
+  min-width: 0;
+}
+
+.ficha-seccion {
+  display: grid;
+  gap: var(--esp-15);
+  min-width: 0;
+}
+
+.ficha-seccion-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-1);
+}
+
+.ficha-seccion-titulo,
+.ficha-bloque-titulo {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-1);
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-lg);
+  font-weight: 800;
+}
+
+.ficha-seccion-titulo .cifra {
+  color: var(--tinta-2);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.ficha-superficie {
+  padding: var(--esp-2) var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: var(--sombra);
+}
+
+.objetivo-ficha {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1) var(--esp-2);
+  padding-bottom: var(--esp-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.objetivo-ficha-nombre {
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+}
+
+.ficha-texto {
+  display: grid;
+  gap: var(--esp-05);
+  max-width: 70ch;
+  margin: var(--esp-2) 0 0;
+}
+
+.ficha-texto dt {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.ficha-texto dd {
+  margin: 0 0 var(--esp-15);
+  white-space: pre-line;
+}
+
+.ficha-nota {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.base-celda {
+  display: grid;
+  min-width: 0;
+}
+
+.base-celda small {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+}
+
+.responsables {
+  display: grid;
+  margin: 0;
+  padding-block: var(--esp-05);
+  list-style: none;
+}
+
+.responsables li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--esp-05) var(--esp-2);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.responsables li:last-child {
+  border-bottom: 0;
+}
+
+.responsables span {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* Columna lateral: UNA superficie con bloques separados por filetes. */
+.ficha-lateral {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.ficha-bloque {
+  display: grid;
+  gap: var(--esp-15);
+  padding: var(--esp-2) var(--esp-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.ficha-bloque:last-child {
+  border-bottom: 0;
+}
+
+.ficha-bloque-titulo {
+  font-size: var(--texto-md);
+}
+
+.prioridad-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--esp-1);
+  align-items: center;
+}
+
+.cronologia {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cronologia li {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  padding: 0 0 var(--esp-15) var(--esp-3);
+  font-size: var(--texto-sm);
+}
+
+/* Linea de tiempo: punto lleno en lo ocurrido, hueco en lo pendiente. */
+.cronologia li::before {
+  position: absolute;
+  top: 5px;
+  left: 3px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--navy-2);
+  border-radius: 50%;
+  background: var(--navy-2);
+  content: '';
+}
+
+.cronologia li::after {
+  position: absolute;
+  top: 18px;
+  bottom: 2px;
+  left: 7px;
+  width: 1px;
+  background: var(--line);
+  content: '';
+}
+
+.cronologia li:last-child::after {
+  display: none;
+}
+
+.cronologia li > span:first-child {
+  color: var(--tinta-2);
+  font-weight: 600;
+}
+
+.cronologia-pendiente {
+  color: var(--tinta-2);
+}
+
+.cronologia li.cronologia-pendiente::before {
+  border-color: var(--borde-campo);
+  background: var(--superficie);
+}
+
+.cierre-resumen {
+  display: grid;
+  gap: var(--esp-1);
+  justify-items: start;
+}
+
+.cierre-resumen p {
+  margin: 0;
+  font-size: var(--texto-sm);
+  white-space: pre-line;
+}
+
+.ficha-cifra {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.ficha-cifra strong {
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+}
+
+/* === Dialogos ============================================================== */
+
+.asignacion-lista {
+  display: grid;
+  gap: var(--esp-2);
+  margin: 0 0 var(--esp-15);
+  padding: 0;
+  list-style: none;
+}
+
+.asignacion-fila {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) 6rem minmax(0, 2fr) 40px;
+  gap: var(--esp-15);
+  align-items: end;
+  padding-bottom: var(--esp-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.asignacion-fila > .ui-boton-icono {
+  margin-bottom: 2px;
+}
+
+.responsables-lista,
+.cierre-resultados {
+  display: grid;
+  gap: var(--esp-1);
+  min-width: 0;
+  margin: var(--esp-2) 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.cierre-resultados {
+  margin: 0 0 var(--esp-2);
+}
+
+.cierre-resultados legend {
+  margin-bottom: var(--esp-1);
+  padding: 0;
+}
+
+.responsable-opcion {
+  display: grid;
+  gap: var(--esp-1);
+  padding: 10px var(--esp-15);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+}
+
+.responsable-check,
+.cierre-resultado {
+  display: flex;
+  gap: var(--esp-15);
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.responsable-check input,
+.cierre-resultado input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  flex: none;
+  accent-color: var(--navy-2);
+}
+
+.responsable-check span,
+.cierre-resultado span {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+}
+
+.responsable-check small,
+.cierre-resultado small {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.cierre-resultado {
+  padding: 10px var(--esp-15);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+}
+
+.cierre-resultado:has(input:checked) {
+  border-color: var(--navy-2);
+  background: var(--seleccion);
+}
+
+/* Alerta de conflicto (409) sobre la ficha: separada del contenido. */
+.aviso-ficha:not(:empty) {
+  margin-bottom: var(--esp-2);
+}
+
+/* === Responsive ============================================================ */
+
+@media (max-width: 1000px) {
+  .ficha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .despliegue-encabezado,
+  .despliegue-fila {
+    grid-template-columns: 6.5rem minmax(0, 2fr) minmax(0, 1.3fr) minmax(0, 1.6fr);
+  }
+
+  .despliegue-encabezado span:last-child {
+    display: none;
+  }
+
+  .despliegue-hora {
+    grid-column: 2 / -1;
+    justify-items: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 760px) {
+  .despliegue-encabezado {
+    display: none;
+  }
+
+  /* Cada operativo, una ficha: nombre arriba, despues estado y prioridad, bases y hora. */
+  .despliegue-fila {
+    grid-template-areas:
+      'ident ident'
+      'estado prioridad'
+      'bases bases'
+      'hora hora';
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--esp-1) var(--esp-15);
+  }
+
+  .despliegue-ident {
+    grid-area: ident;
+  }
+
+  .despliegue-nombre {
+    white-space: normal;
+  }
+
+  .despliegue-estado {
+    grid-area: estado;
+  }
+
+  .despliegue-prioridad {
+    grid-area: prioridad;
+    align-self: start;
+  }
+
+  .despliegue-bases {
+    grid-area: bases;
+  }
+
+  .despliegue-hora {
+    grid-area: hora;
+    grid-column: auto;
+  }
+
+  .operativo-form-seccion,
+  .ficha-superficie {
+    padding: var(--esp-2);
+  }
+
+  .asignacion-fila {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .asignacion-fila > .ui-campo:first-child,
+  .asignacion-fila > .ui-campo:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+
+  .asignacion-fila > .ui-boton-icono {
+    justify-self: end;
+    grid-column: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Sin barrido: la fila cambiada queda marcada en tono aviso mientras dure. */
+  .despliegue-fila--reciente {
+    animation: none;
+    background: var(--aviso-fondo);
+  }
+}

@@ -1,20 +1,40 @@
 import { lazy } from 'react';
 import type { RouteObject } from 'react-router-dom';
 import { RequirePermiso } from '@core/guards/RequirePermiso';
+import { permisosDeFeature } from '@core/session/navegacion';
 import { Permiso } from '@core/session/permiso.enum';
 import { conSuspense } from '@shared/ui/conSuspense';
 
-const OperativosPage = lazy(() =>
-  import('./pages/OperativosPage').then((m) => ({ default: m.OperativosPage })),
+const TableroPage = lazy(() =>
+  import('./pages/TableroPage').then((m) => ({ default: m.TableroPage })),
+);
+const OperativoFormPage = lazy(() =>
+  import('./pages/OperativoFormPage').then((m) => ({ default: m.OperativoFormPage })),
+);
+const OperativoDetailPage = lazy(() =>
+  import('./pages/OperativoDetailPage').then((m) => ({ default: m.OperativoDetailPage })),
 );
 
-/** RF-4 Coordinacion de operativos · Dueno: Dev 6. */
+/**
+ * RF-4 Operativos: tablero de despliegue, alta y ficha.
+ * Los cambios de otras bases llegan por useCambiosSincronizados (core/sync).
+ */
 export const operativosRoutes: RouteObject[] = [
-  { index: true, element: conSuspense(<OperativosPage />) },
   {
-    path: 'nuevo',
-    element: <RequirePermiso permisos={[Permiso.OPERATIVOS_COORDINAR]} />,
-    children: [{ index: true, element: conSuspense(<OperativosPage />) }],
+    element: <RequirePermiso permisos={permisosDeFeature('operativos')} recurso="los operativos" />,
+    children: [
+      { index: true, element: conSuspense(<TableroPage />) },
+      {
+        path: 'nuevo',
+        element: (
+          <RequirePermiso
+            permisos={[Permiso.OPERATIVOS_COORDINAR]}
+            recurso="la creación de operativos"
+          />
+        ),
+        children: [{ index: true, element: conSuspense(<OperativoFormPage />) }],
+      },
+      { path: ':id', element: conSuspense(<OperativoDetailPage />) },
+    ],
   },
-  { path: ':id', element: conSuspense(<OperativosPage />) },
 ];

@@ -1,0 +1,357 @@
+/* Estilos propios de features/admin. Solo tokens de src/styles.css. */
+
+/* === Usuarios ============================================================== */
+
+.usuario-celda,
+.usuario-estado,
+.bitacora-accion {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  justify-items: start;
+}
+
+.usuario-celda small,
+.usuario-estado small,
+.bitacora-accion small {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.texto-apagado {
+  color: var(--tinta-2);
+}
+
+.usuario-fila--inactivo .usuario-celda a {
+  color: var(--tinta-2);
+}
+
+.admin-form {
+  display: grid;
+  gap: var(--esp-3);
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.admin-form .ui-form-acciones {
+  margin: 0;
+}
+
+.admin-contrasena {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--esp-2);
+  align-items: start;
+}
+
+.requisitos {
+  display: grid;
+  gap: var(--esp-05);
+  margin: var(--esp-1) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--texto-sm);
+}
+
+.admin-contrasena .requisitos {
+  margin-top: 30px;
+}
+
+.requisito {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  color: var(--tinta-2);
+}
+
+.requisito--ok {
+  color: var(--exito);
+}
+
+/* Pendiente: circulo hueco; cumplido: visto (IconoExito). Se lee sin color. */
+.requisito-marca {
+  width: 16px;
+  height: 16px;
+  padding: 3px;
+  background: content-box var(--superficie);
+  border: 1.5px solid var(--borde-campo);
+  border-radius: 50%;
+  flex: none;
+}
+
+/* === Catalogo geografico ================================================== */
+
+.mapa {
+  display: grid;
+  gap: var(--esp-3);
+}
+
+.mapa-mar {
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.mapa-mar-cabecera,
+.mapa-zona-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-1) var(--esp-2);
+}
+
+.mapa-mar-cabecera {
+  padding: var(--esp-2) var(--esp-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.mapa-mar-cabecera h2 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+}
+
+.mapa-mar-cabecera p,
+.mapa-zona-cabecera p {
+  max-width: 70ch;
+  margin: 2px 0 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.mapa-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+}
+
+.mapa-zona {
+  padding: var(--esp-2) var(--esp-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.mapa-zona:last-child {
+  border-bottom: 0;
+}
+
+.mapa-zona-cabecera h3 {
+  margin: 0;
+  color: var(--tinta);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-md);
+  font-weight: 800;
+}
+
+.mapa-bases {
+  display: grid;
+  margin: var(--esp-15) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.mapa-base {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr) minmax(0, 1.4fr) auto;
+  gap: var(--esp-2);
+  align-items: center;
+  padding: var(--esp-1) 0;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--texto-sm);
+}
+
+/* Fuera de servicio: atenuado (sin bajar del contraste de texto) y con su
+   insignia "Inactiva", nunca solo por el tono. */
+.mapa-mar-cabecera h2,
+.mapa-zona-cabecera h3,
+.mapa-base strong {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.mapa-zona--inactiva,
+.mapa-base--inactiva {
+  background: var(--superficie-2);
+}
+
+.mapa-zona--inactiva .mapa-zona-cabecera h3,
+.mapa-base--inactiva strong,
+.mapa-base--inactiva > span,
+.mapa-mar--inactivo .mapa-mar-cabecera h2 {
+  color: var(--tinta-2);
+}
+
+.mapa-base:last-child {
+  border-bottom: 0;
+}
+
+.mapa-base strong {
+  color: var(--navy);
+  font-size: var(--texto-md);
+}
+
+.mapa-base > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.mapa-base-etiqueta {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.mapa-vacio {
+  margin: var(--esp-1) 0 0;
+  padding: var(--esp-2) var(--esp-3);
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.mapa-zona .mapa-vacio {
+  padding: 0;
+}
+
+.catalogo-form {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.catalogo-nota {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* === Bitacora ============================================================== */
+
+.bitacora-enlace {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--navy-2);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.bitacora-enlace:focus-visible {
+  outline: 2px solid var(--navy-2);
+  outline-offset: 2px;
+  border-radius: var(--radio-sm);
+}
+
+.bitacora-id {
+  font-variant-numeric: tabular-nums;
+}
+
+.bitacora-fila--fallida .bitacora-enlace {
+  color: var(--error);
+}
+
+.bitacora-datos {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--esp-1) var(--esp-2);
+  margin: 0 0 var(--esp-2);
+  font-size: var(--texto-sm);
+}
+
+.bitacora-datos dt {
+  color: var(--tinta-2);
+  font-weight: 600;
+}
+
+.bitacora-datos dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.bitacora-nota {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.bitacora-cambios {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--texto-sm);
+  table-layout: fixed;
+}
+
+.bitacora-cambios th,
+.bitacora-cambios td {
+  padding: var(--esp-1) var(--esp-15);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.bitacora-cambios thead th {
+  background: var(--superficie-2);
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.bitacora-cambios tbody th {
+  font-weight: 600;
+}
+
+/* Alerta de conflicto (409) sobre la ficha: separada del contenido. */
+.aviso-ficha:not(:empty) {
+  margin-bottom: var(--esp-2);
+}
+
+/* === Responsive ============================================================ */
+
+@media (max-width: 760px) {
+  .admin-form {
+    padding: var(--esp-2);
+  }
+
+  .admin-contrasena {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-contrasena .requisitos {
+    margin-top: 0;
+  }
+
+  .mapa-mar-cabecera,
+  .mapa-zona {
+    padding: var(--esp-2);
+  }
+
+  .mapa-base {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px var(--esp-15);
+    padding: var(--esp-15) 0;
+  }
+
+  .mapa-base > span {
+    grid-column: 1;
+  }
+
+  .mapa-base > .ui-boton {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+  }
+}

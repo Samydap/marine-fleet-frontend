@@ -1,0 +1,551 @@
+/* ---------------------------------------------------------------------------
+   Shell de la aplicacion (core/layout). Solo tokens de src/styles.css.
+   Escritorio: barra lateral navy de 232px. Por debajo de 900px: franja
+   superior navy y menu en cajon (<dialog>).
+   --------------------------------------------------------------------------- */
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--ancho-lateral) minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.saltar-contenido {
+  position: fixed;
+  top: var(--esp-1);
+  left: var(--esp-1);
+  z-index: var(--z-avisos);
+  padding: var(--esp-1) var(--esp-2);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  color: var(--navy);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+
+.saltar-contenido:focus {
+  transform: none;
+}
+
+/* --- Barra lateral ------------------------------------------------------- */
+
+.lateral {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  padding: var(--esp-3) var(--esp-15) var(--esp-2);
+  overflow-y: auto;
+  background: var(--navy-profundo);
+  color: var(--superficie);
+  scrollbar-width: thin;
+  scrollbar-color: var(--navy-2) transparent;
+}
+
+.lateral :focus-visible,
+.cajon :focus-visible,
+.franja :focus-visible {
+  outline-color: var(--gold);
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  padding: 0 var(--esp-15);
+  color: var(--superficie);
+  text-decoration: none;
+  border-radius: var(--radio);
+}
+
+.marca-sello {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+}
+
+.marca-texto {
+  display: grid;
+  line-height: 1.2;
+}
+
+.marca-texto strong {
+  font: 800 15px / 1.2 var(--fuente-titulo);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.marca-texto span {
+  margin-top: 2px;
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-xs);
+}
+
+.marca--compacta .marca-sello {
+  width: 32px;
+  height: 32px;
+}
+
+.marca--compacta {
+  padding: 0;
+}
+
+/* --- Navegacion ---------------------------------------------------------- */
+
+.nav {
+  margin-top: var(--esp-3);
+}
+
+.nav-grupo + .nav-grupo {
+  margin-top: var(--esp-2);
+}
+
+.nav-grupo-titulo {
+  margin: 0 0 var(--esp-05);
+  padding: 0 var(--esp-15);
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.nav ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-enlace {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  min-height: 40px;
+  padding: var(--esp-1) var(--esp-15);
+  border-radius: var(--radio);
+  color: var(--sobre-navy-texto);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--dur-corta) ease,
+    color var(--dur-corta) ease;
+}
+
+.nav-enlace .icono {
+  flex: 0 0 auto;
+}
+
+.nav-enlace--activo {
+  background: var(--navy-2);
+  color: var(--superficie);
+  font-weight: 600;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-enlace:not(.nav-enlace--activo):hover {
+    background: var(--sobre-navy-hover);
+    color: var(--superficie);
+  }
+}
+
+/* --- Pie de la barra: canal, usuario y salida ----------------------------- */
+
+.lateral-pie {
+  display: grid;
+  /* minmax(0, 1fr): sin esto la columna crece con el nombre mas largo y el
+     pie se sale de los 232px de la barra en vez de recortar con elipsis. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-15);
+  margin-top: auto;
+  padding: var(--esp-2) var(--esp-15) 0;
+  border-top: 1px solid var(--sobre-navy-linea);
+}
+
+.lateral .lateral-pie {
+  margin-top: var(--esp-4);
+}
+
+.lateral > .nav {
+  flex: 1 0 auto;
+}
+
+.usuario {
+  min-width: 0;
+}
+
+.usuario p {
+  margin: 0;
+}
+
+.usuario-nombre {
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.usuario-cargo {
+  margin-top: 2px;
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-xs);
+  line-height: 1.4;
+}
+
+.salir {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-1);
+  min-height: 40px;
+  border: 1px solid var(--sobre-navy-linea);
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--superficie);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  transition:
+    background-color var(--dur-corta) ease,
+    transform var(--dur-corta) var(--ease-out);
+}
+
+.salir:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .salir:hover {
+    background: var(--sobre-navy-hover);
+  }
+}
+
+/* --- Indicador del canal entre bases -------------------------------------- */
+
+.sync {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  margin: 0;
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sync-texto-corto {
+  display: none;
+}
+
+.sync-punto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--sobre-navy-exito);
+}
+
+.sync--conectando .sync-punto {
+  border: 1.5px solid var(--sobre-navy-texto);
+  background: transparent;
+}
+
+.sync--sin-conexion {
+  color: var(--sobre-navy-aviso);
+}
+
+.sync--sin-conexion .sync-punto {
+  border-radius: 1px;
+  background: var(--sobre-navy-aviso);
+  transform: rotate(45deg);
+}
+
+/* --- Franja superior (movil) --------------------------------------------- */
+
+.franja {
+  display: none;
+}
+
+.franja-menu,
+.cajon-cerrar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--superficie);
+}
+
+/* --- Cajon de menu (movil) ------------------------------------------------ */
+
+.cajon {
+  width: min(320px, 86vw);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--superficie);
+}
+
+.cajon::backdrop {
+  background: var(--velo);
+}
+
+.cajon[open] {
+  animation: cajon-entra var(--dur-media) var(--ease-out);
+}
+
+.cajon[open]::backdrop {
+  animation: velo-entra var(--dur-media) var(--ease-out);
+}
+
+.cajon-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: var(--esp-15) var(--esp-15) calc(var(--esp-2) + env(safe-area-inset-bottom));
+  background: var(--navy-profundo);
+}
+
+.cajon-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: var(--esp-15);
+}
+
+.cajon .nav {
+  margin-top: var(--esp-2);
+}
+
+.cajon .lateral-pie {
+  margin-top: var(--esp-3);
+}
+
+@keyframes cajon-entra {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
+
+@keyframes velo-entra {
+  from {
+    opacity: 0;
+  }
+}
+
+/* --- Contenido ------------------------------------------------------------ */
+
+.contenido {
+  min-width: 0;
+  padding: var(--esp-4) clamp(var(--esp-3), 3vw, var(--esp-6)) var(--esp-6);
+}
+
+.contenido:focus {
+  outline: none;
+}
+
+.contenido-ancho {
+  max-width: var(--ancho-contenido);
+  margin-inline: auto;
+}
+
+/* --- Barra de carga (peticiones en vuelo) --------------------------------- */
+
+.barra-carga {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: var(--z-barra);
+  height: 2px;
+  overflow: hidden;
+  background: var(--gold);
+  transform-origin: left;
+  animation: barra-avanza 1.2s var(--ease-out) infinite;
+}
+
+@keyframes barra-avanza {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* --- Avisos flotantes ------------------------------------------------------ */
+
+.avisos {
+  position: fixed;
+  right: var(--esp-2);
+  bottom: calc(var(--esp-2) + env(safe-area-inset-bottom));
+  z-index: var(--z-avisos);
+  display: grid;
+  gap: var(--esp-1);
+  width: min(420px, calc(100vw - var(--esp-4)));
+}
+
+.aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-15);
+  padding: var(--esp-15) var(--esp-15) var(--esp-15) var(--esp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: var(--sombra-2);
+  animation: aviso-entra var(--dur-media) var(--ease-out);
+}
+
+.aviso .icono {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.aviso--error .icono {
+  color: var(--error);
+}
+
+.aviso--exito .icono {
+  color: var(--exito);
+}
+
+.aviso--info .icono {
+  color: var(--navy-2);
+}
+
+.aviso p {
+  flex: 1;
+  margin: 0;
+  color: var(--tinta);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.aviso-cerrar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  margin: -4px -4px 0 0;
+  border: 0;
+  border-radius: var(--radio-sm);
+  background: transparent;
+  color: var(--tinta-2);
+}
+
+.aviso-cerrar:hover {
+  background: var(--fondo);
+  color: var(--tinta);
+}
+
+@keyframes aviso-entra {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* --- Restaurando la sesion (F5) ------------------------------------------- */
+
+.restaurando {
+  display: grid;
+  grid-template-columns: var(--ancho-lateral) 1fr;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.restaurando-lateral {
+  background: var(--navy-profundo);
+}
+
+/* --- Responsive ------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .lateral {
+    display: none;
+  }
+
+  .franja {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-barra);
+    display: flex;
+    align-items: center;
+    gap: var(--esp-1);
+    min-height: 56px;
+    padding: 0 var(--esp-2) 0 max(var(--esp-05), env(safe-area-inset-left));
+    background: var(--navy-profundo);
+    color: var(--superficie);
+  }
+
+  .franja .marca {
+    margin-right: auto;
+  }
+
+  .contenido {
+    padding: var(--esp-3) var(--esp-2) var(--esp-4);
+  }
+
+  .restaurando {
+    grid-template-columns: 1fr;
+    grid-template-rows: 56px 1fr;
+  }
+
+  .avisos {
+    right: var(--esp-2);
+    left: var(--esp-2);
+    width: auto;
+  }
+}
+
+@media (max-width: 410px) {
+  /* Solo "En vivo" se reduce al punto: un canal caido o en sondeo se nombra
+     siempre (en version corta); la forma sola no avisa que el dato puede
+     estar viejo. */
+  .franja .sync-texto,
+  .franja .sync--en-vivo .sync-texto-corto {
+    display: none;
+  }
+
+  .franja .sync-texto-corto {
+    display: inline;
+  }
+
+  .contenido {
+    padding: var(--esp-2) var(--esp-15) var(--esp-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-carga {
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .cajon[open] {
+    animation-name: velo-entra;
+  }
+
+  .aviso {
+    animation-name: velo-entra;
+  }
+
+  .salir:active {
+    transform: none;
+  }
+}

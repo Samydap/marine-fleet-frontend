@@ -1,0 +1,696 @@
+/* Estilos propios de features/criminales. Solo tokens de src/styles.css. */
+
+/* ---------------------------------------------------------------- listado */
+
+.criminal-celda {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  min-width: 0;
+}
+
+.criminal-celda-texto {
+  display: grid;
+  min-width: 0;
+}
+
+.criminal-celda-texto small {
+  overflow: hidden;
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Capturados y fallecidos: siguen en el archivo, pero ya no son objetivo. */
+.criminal-fila--baja .criminal-celda-texto a,
+.criminal-fila--baja .ui-tabla-celda--principal a {
+  color: var(--tinta-2);
+}
+
+/* ------------------------------------------------------------ ficha: marco */
+
+.ficha-alias {
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.ficha-meta-texto {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.ficha-avisos:not(:empty) {
+  display: grid;
+  gap: var(--esp-15);
+  margin-bottom: var(--esp-3);
+}
+
+.ficha-cargando-cabecera {
+  display: grid;
+  gap: var(--esp-15);
+  margin-bottom: var(--esp-3);
+}
+
+/* Expediente: hoja de filiacion a la izquierda, secciones a la derecha. */
+.expediente {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: var(--esp-3);
+  align-items: start;
+}
+
+.expediente-cuerpo {
+  display: grid;
+  gap: var(--esp-3);
+  min-width: 0;
+}
+
+/* ------------------------------------------------- ficha: identificacion */
+
+.expediente-identidad {
+  position: sticky;
+  top: var(--esp-3);
+  display: grid;
+  gap: var(--esp-3);
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.identidad-cabeza {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.identidad-recompensa {
+  display: grid;
+  gap: var(--esp-05);
+  padding-top: var(--esp-2);
+  border-top: 1px solid var(--line);
+}
+
+.identidad-recompensa .monto {
+  overflow-wrap: anywhere;
+}
+
+.identidad-etiqueta {
+  margin: 0;
+  color: var(--tinta-2);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.identidad-datos {
+  display: grid;
+  gap: var(--esp-15);
+  margin: 0;
+}
+
+.identidad-datos div {
+  display: grid;
+  gap: 2px;
+}
+
+.identidad-datos dt {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.identidad-datos dd {
+  margin: 0;
+  color: var(--tinta);
+  font-size: var(--texto-md);
+  overflow-wrap: anywhere;
+}
+
+.identidad-secundario {
+  color: var(--tinta-2);
+}
+
+.identidad-bloque {
+  display: grid;
+  gap: var(--esp-05);
+  padding-top: var(--esp-2);
+  border-top: 1px solid var(--line);
+}
+
+.identidad-bloque p {
+  margin: 0;
+  font-size: var(--texto-sm);
+  line-height: 1.55;
+}
+
+.identidad-descripcion {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.identidad-cartel .actualizado {
+  display: block;
+}
+
+.identidad-enlace {
+  justify-self: start;
+  margin-top: var(--esp-05);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------ ficha: secciones */
+
+.expediente-seccion {
+  display: grid;
+  gap: var(--esp-2);
+  min-width: 0;
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.expediente-seccion-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-15);
+}
+
+.expediente-seccion-cabecera h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.expediente-contador {
+  min-width: 24px;
+  padding: 1px var(--esp-1);
+  border-radius: var(--radio-sm);
+  background: var(--seleccion);
+  color: var(--navy-2);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-align: center;
+}
+
+.expediente-seccion-meta {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* Afiliaciones: filas separadas por filete, no tarjetas. */
+.afiliaciones,
+.antecedentes,
+.historial {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.afiliacion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  padding: var(--esp-15) 0;
+  border-top: 1px solid var(--line);
+}
+
+.afiliacion:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.afiliacion-texto {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.afiliacion-texto a {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.afiliacion-texto span {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* Antecedentes: registro cronologico con una linea de tiempo sobria. */
+.antecedente {
+  position: relative;
+  display: grid;
+  gap: var(--esp-05);
+  padding: 0 0 var(--esp-2) var(--esp-3);
+  border-left: 1px solid var(--line);
+}
+
+.antecedente:last-child {
+  padding-bottom: 0;
+}
+
+.antecedente::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: -5px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--navy-2);
+  border-radius: var(--radio-sm);
+  transform: rotate(45deg);
+  background: var(--superficie);
+}
+
+.antecedente-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-05) var(--esp-2);
+}
+
+.antecedente h3 {
+  margin: 0;
+  color: var(--tinta);
+  font-size: var(--texto-md);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.antecedente time,
+.antecedente-lugar {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.antecedente-lugar,
+.antecedente-descripcion {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.antecedente-descripcion {
+  max-width: 70ch;
+  font-size: var(--texto-sm);
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+/* Historial: que cambio (izquierda) y quien y cuando (derecha). */
+.historial-entrada {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--esp-05) var(--esp-2);
+  padding: var(--esp-15) 0;
+  border-top: 1px solid var(--line);
+  font-size: var(--texto-sm);
+}
+
+.historial-entrada:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.historial-que {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.historial-que strong {
+  color: var(--tinta);
+  font-weight: 700;
+}
+
+.historial-valores {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-05) var(--esp-1);
+  color: var(--tinta);
+  overflow-wrap: anywhere;
+}
+
+.historial-valores del {
+  color: var(--tinta-2);
+  text-decoration-color: var(--borde-campo);
+}
+
+.historial-valores ins {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.historial-flecha {
+  flex: none;
+  color: var(--tinta-2);
+}
+
+.historial-quien {
+  display: grid;
+  justify-items: end;
+  gap: 2px;
+  color: var(--tinta-2);
+  text-align: right;
+}
+
+.historial-quien span {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+.historial-mas {
+  display: flex;
+  justify-content: center;
+}
+
+.historial-esqueleto {
+  display: grid;
+  gap: var(--esp-15);
+}
+
+/* ------------------------------------------------------------- dialogos */
+
+.dialogo-form {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.baja-opciones {
+  display: grid;
+  gap: var(--esp-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.baja-opciones legend {
+  margin-bottom: var(--esp-1);
+  padding: 0;
+  color: var(--tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.baja-opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-15);
+  padding: var(--esp-15);
+  border: 1px solid var(--borde-campo);
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-corta) var(--ease-out),
+    border-color var(--dur-corta) var(--ease-out);
+}
+
+.baja-opcion:has(input:checked) {
+  border-color: var(--navy-2);
+  background: var(--seleccion);
+}
+
+.baja-opcion:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.baja-opcion input {
+  width: 18px;
+  height: 18px;
+  margin: 2px 0 0;
+  accent-color: var(--navy);
+}
+
+.baja-opcion span {
+  display: grid;
+  gap: 2px;
+}
+
+.baja-opcion small {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* ----------------------------------------------------------- formulario */
+
+.expediente-form {
+  display: grid;
+  gap: var(--esp-4);
+  max-width: 880px;
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.expediente-form-grupo {
+  display: grid;
+  gap: var(--esp-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.expediente-form-grupo legend {
+  margin-bottom: var(--esp-2);
+  padding: 0;
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+}
+
+.expediente-form-nota {
+  max-width: 65ch;
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.expediente-form .ui-form-acciones {
+  margin-top: 0;
+}
+
+.alias-campo {
+  display: grid;
+  gap: var(--esp-1);
+}
+
+.alias-lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alias-ficha {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-05);
+  max-width: 100%;
+  padding: 2px 2px 2px var(--esp-15);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-sm);
+  background: var(--superficie-2);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.alias-ficha span {
+  overflow-wrap: anywhere;
+}
+
+.alias-entrada {
+  display: flex;
+  gap: var(--esp-1);
+}
+
+.alias-entrada .ui-control {
+  flex: 1;
+  min-width: 0;
+}
+
+.foto-campo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2);
+}
+
+.foto-campo-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.foto-campo-nombre {
+  max-width: 22ch;
+  overflow: hidden;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------- organizacion */
+
+.org-mando {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1.4fr);
+  margin-bottom: var(--esp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.org-mando > div {
+  display: grid;
+  align-content: start;
+  gap: var(--esp-05);
+  min-width: 0;
+  padding: var(--esp-3);
+}
+
+.org-mando > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.org-mando-nombre {
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.org-mando-nombre--vacio {
+  color: var(--tinta-2);
+  font-weight: 700;
+}
+
+.org-mando-numero {
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-pagina);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.org-miembros-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-15);
+  margin-bottom: var(--esp-15);
+}
+
+.org-miembros-cabecera h2 {
+  margin: 0;
+  color: var(--navy);
+  font-family: var(--fuente-titulo);
+  font-size: var(--titulo-panel);
+  font-weight: 800;
+}
+
+.casilla {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-1);
+  min-height: 44px;
+  color: var(--tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.casilla input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--navy);
+}
+
+/* ---------------------------------------------------------------- movil */
+
+@media (max-width: 1000px) {
+  .expediente {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .expediente-identidad {
+    position: static;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .identidad-bloque {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .expediente-identidad,
+  .expediente-seccion,
+  .expediente-form {
+    padding: var(--esp-2);
+  }
+
+  .expediente-identidad {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .org-mando {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .org-mando > div {
+    padding: var(--esp-2);
+  }
+
+  .org-mando > div + div {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .historial-entrada {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .historial-quien {
+    justify-items: start;
+    text-align: left;
+  }
+
+  .alias-entrada {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .baja-opcion {
+    transition: none;
+  }
+}

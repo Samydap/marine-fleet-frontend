@@ -26,6 +26,7 @@ function renderizar(estado?: unknown): void {
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/criminales" element={<p>Pantalla de criminales</p>} />
         <Route path="/operativos/7" element={<p>Operativo 7</p>} />
+        <Route path="/operativos" element={<p>Tablero de operativos</p>} />
       </Routes>
     </MemoryRouter>,
   );
@@ -51,6 +52,19 @@ describe('LoginPage', () => {
 
     expect(login).toHaveBeenCalledWith('capitan@marina.gov', 'Marina.2026');
     expect(await screen.findByText('Pantalla de criminales')).toBeInTheDocument();
+  });
+
+  it('sin destino previo lleva a cada cargo a su pantalla de llegada', async () => {
+    vi.spyOn(sessionService, 'login').mockResolvedValue({
+      ...USUARIO,
+      rol: RolCodigo.COORDINADOR_OPERACIONES,
+      permisos: [Permiso.CRIMINALES_LEER, Permiso.OPERATIVOS_LEER],
+    });
+    renderizar();
+
+    await escribirCredenciales('coordinador_operaciones@marina.gov', 'Marina.2026');
+
+    expect(await screen.findByText('Tablero de operativos')).toBeInTheDocument();
   });
 
   it('vuelve a la ruta protegida que el usuario intentaba abrir', async () => {

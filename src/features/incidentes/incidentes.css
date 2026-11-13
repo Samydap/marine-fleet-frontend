@@ -1,0 +1,295 @@
+/* Estilos propios de features/incidentes. Solo tokens de src/styles.css. */
+
+/* --- Celdas del historial ------------------------------------------------ */
+
+.inc-celda-doble {
+  display: grid;
+  min-width: 0;
+}
+
+.inc-celda-doble small {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.inc-texto-largo {
+  overflow-wrap: anywhere;
+}
+
+.inc-codigo {
+  color: var(--navy);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.inc-sin-dato {
+  color: var(--tinta-2);
+}
+
+/* --- Paneles (formulario y ficha) ---------------------------------------- */
+
+.inc-panel {
+  display: grid;
+  gap: var(--esp-2);
+  min-width: 0;
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+/* El cierre es lo que falta por hacer: lleva el filete navy de la accion principal. */
+.inc-panel--cierre {
+  border-color: var(--navy-2);
+  box-shadow: var(--sombra);
+}
+
+.inc-panel-titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  margin: 0;
+  color: var(--navy);
+  font: 800 var(--titulo-panel) / 1.3 var(--fuente-titulo);
+}
+
+.inc-subtitulo {
+  margin: var(--esp-1) 0 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.inc-cuenta {
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: var(--radio-sm);
+  background: var(--seleccion);
+  color: var(--navy-2);
+  font: 700 var(--texto-xs) / 1.5 var(--fuente-texto);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.inc-relato {
+  max-width: 72ch;
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.inc-nota {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* --- Formulario de registro ---------------------------------------------- */
+
+.inc-formulario {
+  gap: 0;
+}
+
+.inc-seccion {
+  display: grid;
+  gap: var(--esp-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 var(--esp-3);
+  border: 0;
+}
+
+.inc-seccion + .inc-seccion {
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--line);
+}
+
+.inc-seccion legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--esp-2);
+  padding: 0;
+  color: var(--navy);
+  font: 800 var(--titulo-panel) / 1.3 var(--fuente-titulo);
+}
+
+.inc-seccion legend + * {
+  clear: both;
+}
+
+.inc-filas {
+  display: grid;
+  gap: var(--esp-15);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inc-fila {
+  display: grid;
+  align-items: start;
+  gap: var(--esp-15);
+  padding: var(--esp-15);
+  border-radius: var(--radio);
+  background: var(--superficie-2);
+}
+
+.inc-fila--criminal {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 40px;
+}
+
+.inc-fila--criminal-final {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) 40px;
+}
+
+.inc-fila--marino {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) 40px;
+}
+
+/* El boton de quitar se alinea con el control, no con la etiqueta. */
+.inc-fila-quitar {
+  margin-top: 26px;
+}
+
+.inc-grilla-resultado {
+  align-items: start;
+}
+
+@media (min-width: 761px) {
+  .inc-grilla-resultado {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* --- Ficha ---------------------------------------------------------------- */
+
+.inc-ficha {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  align-items: start;
+  gap: var(--esp-3);
+}
+
+.inc-ficha-principal,
+.inc-ficha-lateral {
+  display: grid;
+  gap: var(--esp-3);
+  min-width: 0;
+}
+
+.inc-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.inc-lista-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-1) var(--esp-2);
+  padding: var(--esp-15) 0;
+  border-top: 1px solid var(--line);
+}
+
+.inc-lista-fila:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.inc-lista-fila a {
+  color: var(--navy);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.inc-lista-fila > .inc-celda-doble {
+  flex: 1 1 12rem;
+}
+
+.inc-rango {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.inc-desenlace {
+  flex: 0 1 12rem;
+}
+
+.inc-cierre-acciones {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.inc-datos {
+  display: grid;
+  gap: var(--esp-15);
+  margin: 0;
+}
+
+.inc-datos dt {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.inc-datos dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.inc-operativo {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+}
+
+.inc-vinculo {
+  display: grid;
+  gap: var(--esp-15);
+}
+
+@media (max-width: 1000px) {
+  .inc-ficha {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .inc-panel {
+    padding: var(--esp-2);
+  }
+
+  /* Una columna: el primer campo comparte fila con "quitar"; el resto ocupa todo. */
+  .inc-fila--criminal,
+  .inc-fila--criminal-final,
+  .inc-fila--marino {
+    grid-template-columns: minmax(0, 1fr) 40px;
+  }
+
+  .inc-fila > .ui-campo {
+    grid-column: 1 / -1;
+  }
+
+  .inc-fila > .ui-campo:first-child {
+    grid-column: 1;
+  }
+
+  .inc-fila-quitar {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .inc-desenlace {
+    flex-basis: 100%;
+  }
+
+  .inc-cierre-acciones .ui-boton,
+  .inc-formulario .ui-form-acciones .ui-boton {
+    flex: 1 1 auto;
+  }
+}

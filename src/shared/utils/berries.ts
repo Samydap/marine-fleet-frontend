@@ -23,3 +23,13 @@ export function formatearBerries(valor: number | null | undefined, abreviado = f
 
   return `${valor.toLocaleString('es-CO')} ฿`;
 }
+
+/**
+ * Lo que el usuario escribe en un campo de monto ("150.000.000", "1 000 000")
+ * a numero entero; null si no son solo cifras (con separadores de miles).
+ */
+export function leerMonto(texto: string): number | null {
+  const limpio = texto.replace(/[\s.,'_]/g, '');
+  if (!limpio || !/^\d+$/.test(limpio)) return null;
+  return Number(limpio);
+}

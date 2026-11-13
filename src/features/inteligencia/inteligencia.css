@@ -1,0 +1,363 @@
+/* Estilos propios de features/inteligencia. Solo tokens de src/styles.css. */
+
+/* --- Celdas -------------------------------------------------------------- */
+
+.intel-celda-doble {
+  display: grid;
+  min-width: 0;
+}
+
+.intel-celda-doble small,
+.intel-datos small {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+}
+
+.intel-texto-largo {
+  overflow-wrap: anywhere;
+}
+
+/* El relato del ciudadano en la bandeja: dos lineas, el resto en la revision. */
+.intel-relato-corto {
+  max-width: 46ch;
+}
+
+.intel-anonimo {
+  color: var(--tinta-2);
+  font-style: italic;
+}
+
+.intel-acciones-fila {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.intel-sin-acciones {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  white-space: nowrap;
+}
+
+/* Descartado: sigue en el archivo como rastro, pero ya no es inteligencia util. */
+.intel-fila--descartada .ui-tabla-celda--principal a,
+.intel-fila--descartada td {
+  color: var(--tinta-2);
+}
+
+/* Boton con aspecto de enlace: abre la revision del reporte (no navega). */
+.intel-enlace {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--navy);
+  font: inherit;
+  font-weight: 600;
+  text-align: start;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.intel-enlace:hover {
+  text-decoration: underline;
+}
+
+/* En el pie del dialogo, eliminar va separado a la izquierda de Cancelar/Guardar. */
+.intel-dialogo-eliminar {
+  margin-inline-end: auto;
+  color: var(--error);
+}
+
+/* --- Revision de un reporte ---------------------------------------------- */
+
+.intel-revision {
+  display: grid;
+  gap: var(--esp-2);
+}
+
+.intel-revision-estado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-15);
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.intel-revision-relato {
+  margin: 0;
+  padding: var(--esp-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  background: var(--superficie-2);
+  color: var(--tinta);
+  font-size: var(--texto-md);
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.intel-datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--esp-15) var(--esp-3);
+  margin: 0;
+}
+
+.intel-datos div {
+  min-width: 0;
+}
+
+.intel-datos dt {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.intel-datos dd {
+  display: grid;
+  margin: 2px 0 0;
+  color: var(--tinta);
+  overflow-wrap: anywhere;
+}
+
+.intel-datos-ancho {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 410px) {
+  .intel-datos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --- Formulario publico (/reportar) -------------------------------------- */
+
+.denuncia {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--fondo);
+}
+
+.denuncia-franja {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  padding: var(--esp-15) clamp(var(--esp-2), 4vw, var(--esp-6));
+  padding-top: max(var(--esp-15), env(safe-area-inset-top));
+  background: var(--navy-profundo);
+  color: var(--superficie);
+}
+
+.denuncia-sello {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+}
+
+.denuncia-marca {
+  display: grid;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.denuncia-marca strong {
+  font: 800 15px / 1.2 var(--fuente-titulo);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.denuncia-marca span {
+  margin-top: 2px;
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-xs);
+}
+
+.denuncia-contenido {
+  max-width: 720px;
+  margin-inline: auto;
+  padding: var(--esp-4) var(--esp-2) var(--esp-6);
+  padding-bottom: max(var(--esp-6), env(safe-area-inset-bottom));
+}
+
+.denuncia-intro {
+  margin-bottom: var(--esp-3);
+}
+
+.denuncia-intro h1,
+.denuncia-recibido h1 {
+  margin: 0 0 var(--esp-1);
+  color: var(--navy);
+  font: 800 var(--titulo-pagina) / 1.2 var(--fuente-titulo);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.denuncia-intro p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--tinta-2);
+}
+
+.denuncia-panel {
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.denuncia-seccion {
+  display: grid;
+  gap: var(--esp-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0 0 var(--esp-3);
+  border: 0;
+}
+
+.denuncia-seccion + .denuncia-seccion {
+  padding-top: var(--esp-3);
+  border-top: 1px solid var(--line);
+}
+
+.denuncia-seccion legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--esp-2);
+  padding: 0;
+  color: var(--navy);
+  font: 800 var(--titulo-panel) / 1.3 var(--fuente-titulo);
+}
+
+.denuncia-seccion legend + * {
+  clear: both;
+}
+
+.denuncia-codigo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-1) var(--esp-2);
+  padding: var(--esp-15) var(--esp-2);
+  border-radius: var(--radio);
+  background: var(--superficie-2);
+}
+
+.denuncia-codigo p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.denuncia-codigo-campo {
+  font-family: var(--fuente-codigo);
+  font-size: var(--texto-sm);
+  letter-spacing: 0.02em;
+}
+
+.denuncia-anonimo {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-15);
+  min-height: 44px;
+  padding: var(--esp-15) var(--esp-2);
+  border: 1px solid var(--borde-campo);
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+
+.denuncia-anonimo:has(input:checked) {
+  border-color: var(--navy-2);
+  background: var(--seleccion);
+}
+
+.denuncia-anonimo input {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--navy);
+}
+
+.denuncia-anonimo span {
+  display: grid;
+  gap: 2px;
+}
+
+.denuncia-anonimo small {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.denuncia-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  padding-top: var(--esp-2);
+  border-top: 1px solid var(--line);
+}
+
+.denuncia-acciones p {
+  max-width: 40ch;
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.denuncia-recibido {
+  display: grid;
+  justify-items: start;
+  gap: var(--esp-15);
+}
+
+.denuncia-recibido h1:focus {
+  outline: none;
+}
+
+.denuncia-recibido p {
+  max-width: 60ch;
+  margin: 0;
+}
+
+.denuncia-recibido-icono {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radio);
+  background: var(--exito-fondo);
+  color: var(--exito);
+}
+
+.denuncia-folio {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.denuncia-folio .cifra {
+  display: block;
+  color: var(--tinta);
+  font-size: var(--texto-md);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.denuncia-nota {
+  color: var(--tinta-2);
+}
+
+@media (max-width: 760px) {
+  .denuncia-panel {
+    padding: var(--esp-2);
+  }
+
+  .denuncia-acciones .ui-boton {
+    width: 100%;
+  }
+}

@@ -1,126 +1,274 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Permiso } from '@core/session/permiso.enum';
+import { EVENTOS } from '@core/sync/eventos';
+import { useCambiosSincronizados } from '@core/sync/sincronizacion';
 import { useHasPermission } from '@shared/hooks/useHasPermission';
+import { useValorDiferido } from '@shared/hooks/useValorDiferido';
+import { ActualizadoHace } from '@shared/ui/ActualizadoHace';
 import { BadgeAmenaza } from '@shared/ui/BadgeAmenaza';
-import { EmptyState } from '@shared/ui/EmptyState';
+import { BarraFiltros } from '@shared/ui/BarraFiltros';
+import { BotonEnlace } from '@shared/ui/Boton';
+import { CampoSelect } from '@shared/ui/Campo';
+import { EstadoVacio } from '@shared/ui/Estados';
+import { IconoBrujula, IconoMas } from '@shared/ui/iconos';
+import { InsigniaEstado } from '@shared/ui/InsigniaEstado';
+import { InsigniaTipoCriminal } from '@shared/ui/InsigniaTipoCriminal';
+import { MontoBerries } from '@shared/ui/MontoBerries';
 import { PageHeader } from '@shared/ui/PageHeader';
-import { formatearBerries } from '@shared/utils/berries';
+import { Paginacion } from '@shared/ui/Paginacion';
+import { RetratoCriminal } from '@shared/ui/RetratoCriminal';
+import { TablaDatos, type ColumnaTabla } from '@shared/ui/TablaDatos';
+import {
+  etiquetaEstadoCriminal,
+  opcionesCategoria,
+  opcionesEstadoCriminal,
+  tonoEstadoCriminal,
+} from '@shared/utils/criminal';
+import { opcionesNivelAmenaza, type NivelAmenaza } from '@shared/utils/nivel-amenaza';
+import { TextoRecortado } from '@shared/ui/TextoRecortado';
+import { SelectorOrganizacion } from '../components/SelectorOrganizacion';
+import { CampoZona } from '@shared/ui/CampoZona';
 import { useCriminalesStore } from '../data-access/criminales.store';
+import { claveDeRango, RANGOS_RECOMPENSA, rangoPorClave } from '../utils/rangos-recompensa';
+import '../criminales.css';
+import type {
+  CategoriaOrganizacion,
+  Criminal,
+  EstadoCriminal,
+  FiltroCriminales,
+} from '../models/criminal';
+
+const COLUMNAS: readonly ColumnaTabla<Criminal>[] = [
+  {
+    clave: 'nombre',
+    encabezado: 'Criminal',
+    principal: true,
+    celda: (c) => (
+      <span className="criminal-celda">
+        <RetratoCriminal fotoUrl={c.fotoUrl} nombre={c.nombre} tamano="sm" />
+        <span className="criminal-celda-texto">
+          <Link to={c.id}>{c.nombre}</Link>
+          {c.alias.length > 0 && (
+            <TextoRecortado como="small" texto={`«${c.alias.join('», «')}»`} />
+          )}
+        </span>
+      </span>
+    ),
+  },
+  {
+    clave: 'tipo',
+    encabezado: 'Tipo',
+    celda: (c) => <InsigniaTipoCriminal categoria={c.organizacion?.categoria ?? null} />,
+  },
+  {
+    clave: 'afiliacion',
+    encabezado: 'Afiliación',
+    ocultarEnMovil: true,
+    celda: (c) => c.organizacion?.organizacionNombre ?? '—',
+  },
+  {
+    clave: 'recompensa',
+    encabezado: 'Recompensa',
+    numerica: true,
+    celda: (c) => <MontoBerries valor={c.recompensaVigenteMonto} abreviado />,
+  },
+  {
+    clave: 'amenaza',
+    encabezado: 'Amenaza',
+    celda: (c) => <BadgeAmenaza nivel={c.nivelAmenaza} />,
+  },
+  {
+    clave: 'estado',
+    encabezado: 'Estado',
+    celda: (c) => (
+      <InsigniaEstado
+        etiqueta={etiquetaEstadoCriminal(c.estado)}
+        tono={tonoEstadoCriminal(c.estado)}
+      />
+    ),
+  },
+];
+
+type FiltrosVisibles = Pick<
+  FiltroCriminales,
+  | 'estado'
+  | 'categoria'
+  | 'nivelAmenaza'
+  | 'zonaInfluenciaId'
+  | 'organizacionId'
+  | 'recompensaMin'
+  | 'recompensaMax'
+>;
 
 /**
- * PAGINA DE REFERENCIA (RF-1).
+ * PAGINA DE REFERENCIA (RF-1) para los listados.
  *
  * Patron para todas las paginas del proyecto:
  *  - el estado se lee del store de la feature, nunca de un store global
- *  - usa componentes tontos de shared/ui
- *  - contempla los tres estados: cargando, vacio y con datos
- *  - las acciones se ocultan con useHasPermission, no con condicionales ad hoc
+ *  - se compone con shared/ui: PageHeader, BarraFiltros, TablaDatos, Paginacion
+ *  - TablaDatos resuelve carga, recarga, error y vacio
+ *  - las acciones se ocultan con useHasPermission
+ *  - los cambios de otras bases llegan por useCambiosSincronizados
+ *
+ * Filtros de RF-1: nombre o alias, estado, tipo, amenaza, zona (agrupada por
+ * mar), rango de recompensa y afiliacion concreta.
  */
 export function CriminalListPage(): React.ReactElement {
-  const { criminales, meta, cargando, cargar, buscar, irAPagina } = useCriminalesStore();
+  const { criminales, meta, cargando, error, consultadoEn, filtro, cargar, irAPagina } =
+    useCriminalesStore();
   const puedeEscribir = useHasPermission(Permiso.CRIMINALES_ESCRIBIR);
-  const [termino, setTermino] = useState('');
+
+  const [texto, setTexto] = useState(filtro.q ?? '');
+  const q = useValorDiferido(texto.trim(), 350);
 
   useEffect(() => {
-    void cargar();
-  }, [cargar]);
+    void cargar({ q: q || undefined, page: 1 });
+  }, [cargar, q]);
 
-  function enviarBusqueda(evento: FormEvent<HTMLFormElement>): void {
-    evento.preventDefault();
-    void buscar(termino);
+  // Otra base registro o modifico un criminal: se recarga la pagina actual.
+  useCambiosSincronizados(
+    [EVENTOS.CRIMINAL_REGISTRADO, EVENTOS.CRIMINAL_ACTUALIZADO, EVENTOS.CRIMINAL_ESTADO_CAMBIADO],
+    () => void cargar(),
+  );
+
+  function filtrar(cambio: Partial<FiltrosVisibles>): void {
+    void cargar({ ...cambio, page: 1 });
   }
 
-  const estaVacio = !cargando && criminales.length === 0;
+  const activos = [
+    filtro.estado,
+    filtro.categoria,
+    filtro.nivelAmenaza,
+    filtro.zonaInfluenciaId,
+    filtro.organizacionId,
+    filtro.recompensaMin ?? filtro.recompensaMax,
+  ].filter((v) => v !== undefined && v !== '').length;
+
+  function limpiar(): void {
+    setTexto('');
+    void cargar({
+      q: undefined,
+      estado: undefined,
+      categoria: undefined,
+      nivelAmenaza: undefined,
+      zonaInfluenciaId: undefined,
+      organizacionId: undefined,
+      recompensaMin: undefined,
+      recompensaMax: undefined,
+      page: 1,
+    });
+  }
+
+  const hayFiltros = activos > 0 || Boolean(q);
 
   return (
     <>
       <PageHeader
-        kicker="ARCHIVO CRIMINAL"
         titulo="Criminales"
-        descripcion="Piratas, revolucionarios y organizaciones criminales independientes."
+        descripcion="Piratas, revolucionarios y organizaciones independientes con orden de captura."
+        meta={consultadoEn && <ActualizadoHace fecha={consultadoEn} prefijo="Consultado" />}
       >
+        <BotonEnlace to="organizaciones">Tripulaciones y organizaciones</BotonEnlace>
         {puedeEscribir && (
-          <Link className="primary-button" to="nuevo">
+          <BotonEnlace variante="principal" to="nuevo" icono={<IconoMas tamano={18} />}>
             Registrar criminal
-          </Link>
+          </BotonEnlace>
         )}
       </PageHeader>
 
-      <form className="search-wrap" onSubmit={enviarBusqueda}>
-        <span aria-hidden="true">⌕</span>
-        <input
-          type="search"
-          placeholder="Buscar por nombre o alias..."
-          aria-label="Buscar criminales"
-          value={termino}
-          onChange={(e) => setTermino(e.target.value)}
+      <BarraFiltros
+        busqueda={texto}
+        onBusquedaChange={setTexto}
+        etiquetaBusqueda="Buscar por nombre o alias"
+        filtrosActivos={activos}
+        onLimpiar={limpiar}
+      >
+        <CampoSelect
+          etiqueta="Estado"
+          opcionVacia="Todos"
+          value={filtro.estado ?? ''}
+          opciones={opcionesEstadoCriminal()}
+          onChange={(e) => filtrar({ estado: (e.target.value || undefined) as EstadoCriminal })}
         />
-        <button className="secondary-button" type="submit">
-          Buscar
-        </button>
-      </form>
-
-      {cargando ? (
-        <EmptyState titulo="Consultando el registro…" icono="◷" />
-      ) : estaVacio ? (
-        <EmptyState
-          titulo="Sin resultados"
-          detalle="Ningún criminal coincide con los filtros aplicados."
+        <CampoSelect
+          etiqueta="Tipo"
+          opcionVacia="Todos"
+          value={filtro.categoria ?? ''}
+          opciones={opcionesCategoria()}
+          onChange={(e) =>
+            filtrar({ categoria: (e.target.value || undefined) as CategoriaOrganizacion })
+          }
         />
-      ) : (
-        <>
-          <table className="tabla">
-            <caption className="sr-only">Listado de criminales registrados</caption>
-            <thead>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Alias</th>
-                <th scope="col">Recompensa</th>
-                <th scope="col">Amenaza</th>
-                <th scope="col">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {criminales.map((criminal) => (
-                <tr key={criminal.id}>
-                  <td>
-                    <Link to={criminal.id}>{criminal.nombre}</Link>
-                  </td>
-                  <td>{criminal.alias.join(', ') || '—'}</td>
-                  <td>{formatearBerries(criminal.recompensaVigenteMonto, true)}</td>
-                  <td>
-                    <BadgeAmenaza nivel={criminal.nivelAmenaza} />
-                  </td>
-                  <td>{criminal.estado}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <CampoSelect
+          etiqueta="Amenaza"
+          opcionVacia="Todas"
+          value={filtro.nivelAmenaza ?? ''}
+          opciones={opcionesNivelAmenaza(true)}
+          onChange={(e) => filtrar({ nivelAmenaza: (e.target.value || undefined) as NivelAmenaza })}
+        />
+        <CampoZona
+          etiqueta="Zona"
+          opcionVacia="Todos los mares"
+          value={filtro.zonaInfluenciaId ?? ''}
+          onChange={(e) => filtrar({ zonaInfluenciaId: e.target.value || undefined })}
+        />
+        <CampoSelect
+          etiqueta="Recompensa"
+          opcionVacia="Cualquier monto"
+          value={claveDeRango(filtro.recompensaMin, filtro.recompensaMax)}
+          opciones={RANGOS_RECOMPENSA.map((r) => ({ valor: r.clave, etiqueta: r.etiqueta }))}
+          onChange={(e) => {
+            const rango = rangoPorClave(e.target.value);
+            filtrar({ recompensaMin: rango?.min, recompensaMax: rango?.max });
+          }}
+        />
+        <SelectorOrganizacion
+          etiqueta="Afiliación"
+          opcionVacia="Todas"
+          value={filtro.organizacionId ?? ''}
+          onChange={(e) => filtrar({ organizacionId: e.target.value || undefined })}
+        />
+      </BarraFiltros>
 
-          <nav className="paginacion" aria-label="Paginación">
-            <button
-              type="button"
-              className="secondary-button"
-              disabled={meta.page <= 1}
-              onClick={() => void irAPagina(meta.page - 1)}
+      <TablaDatos
+        titulo="Criminales registrados"
+        filas={criminales}
+        columnas={COLUMNAS}
+        claveFila={(c) => c.id}
+        cargando={cargando && criminales.length === 0}
+        actualizando={cargando && criminales.length > 0}
+        error={error}
+        onReintentar={() => void cargar()}
+        claseFila={(c) => (c.estado === 'ACTIVO' ? undefined : 'criminal-fila--baja')}
+        vacio={
+          hayFiltros ? (
+            <EstadoVacio
+              icono={<IconoBrujula tamano={28} />}
+              titulo="Ningún criminal coincide con la búsqueda"
+              detalle="Prueba con otro nombre o alias, o quita algún filtro."
+            />
+          ) : (
+            <EstadoVacio
+              titulo="Aún no hay criminales en el archivo"
+              detalle="Los registros de todas las bases aparecerán aquí."
             >
-              Anterior
-            </button>
-            <span>
-              Página {meta.page} de {meta.totalPages}
-            </span>
-            <button
-              type="button"
-              className="secondary-button"
-              disabled={!meta.hasNext}
-              onClick={() => void irAPagina(meta.page + 1)}
-            >
-              Siguiente
-            </button>
-          </nav>
-        </>
-      )}
+              {puedeEscribir && (
+                <BotonEnlace variante="secundario" to="nuevo">
+                  Registrar el primero
+                </BotonEnlace>
+              )}
+            </EstadoVacio>
+          )
+        }
+      />
+
+      <Paginacion
+        meta={meta}
+        sustantivo="criminales"
+        deshabilitada={cargando}
+        onCambiarPagina={(p) => void irAPagina(p)}
+      />
     </>
   );
 }

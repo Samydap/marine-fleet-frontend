@@ -3,47 +3,79 @@ import type { PageResult } from '@core/models/page-result';
 import type {
   Avistamiento,
   AvistamientoPayload,
-  CriminalOpcion,
   FiltroAvistamientos,
 } from '../models/avistamiento';
+import type {
+  FiltroReportes,
+  NuevoReporteCiudadano,
+  ReporteCiudadano,
+  ReporteRecibido,
+  ReporteRevisado,
+  RevisionReporte,
+} from '../models/reporte';
 
-const RUTA = '/avistamientos';
+const AVISTAMIENTOS = '/avistamientos';
+const REPORTES = '/reportes-ciudadanos';
+const id = (valor: string): string => encodeURIComponent(valor);
 
 /**
- * RF-3. Portado de la v1 (frontend/src/App.tsx), donde estas cuatro llamadas
- * estaban escritas a mano con `fetch` dentro del componente.
- *
- * Lo que cambia respecto a la v1:
- *  - las URL ya no llevan el host ni el prefijo: los pone apiUrlInterceptor
- *  - el manejo de errores ya no se repite: lo hace errorInterceptor
- *  - el sobre { success, data } lo desenvuelve apiClient
+ * RF-3. Contrato: modules/inteligencia/presentation (AvistamientosController y
+ * ReportesCiudadanosController). Todo pasa por apiClient: la URL base, el token
+ * y los avisos de error los ponen los interceptores.
  */
 export const inteligenciaApi = {
+  // --- Avistamientos ---------------------------------------------------------
+
   listarAvistamientos(filtro: FiltroAvistamientos = {}): Promise<PageResult<Avistamiento>> {
-    return apiClient.getPage<Avistamiento>(RUTA, { ...filtro });
+    return apiClient.getPage<Avistamiento>(AVISTAMIENTOS, { ...filtro }, { sinAviso: true });
   },
 
   crearAvistamiento(payload: AvistamientoPayload): Promise<Avistamiento> {
-    return apiClient.post<Avistamiento>(RUTA, payload);
+    return apiClient.post<Avistamiento>(AVISTAMIENTOS, payload);
   },
 
-  actualizarAvistamiento(id: string, payload: AvistamientoPayload): Promise<Avistamiento> {
-    return apiClient.put<Avistamiento>(`${RUTA}/${encodeURIComponent(id)}`, payload);
+  actualizarAvistamiento(
+    avistamientoId: string,
+    payload: AvistamientoPayload,
+  ): Promise<Avistamiento> {
+    return apiClient.put<Avistamiento>(`${AVISTAMIENTOS}/${id(avistamientoId)}`, payload);
   },
 
-  eliminarAvistamiento(id: string): Promise<void> {
-    return apiClient.delete<void>(`${RUTA}/${encodeURIComponent(id)}`);
-  },
-
-  /**
-   * Opciones del selector de criminales. Consume el endpoint publico de
-   * criminales en lugar de importar nada de features/criminales.
-   */
-  async listarCriminalesParaSelector(): Promise<CriminalOpcion[]> {
-    const pagina = await apiClient.getPage<CriminalOpcion>('/criminales', {
-      limit: 100,
-      order: 'DESC',
+  verificarAvistamiento(
+    avistamientoId: string,
+    estado: 'VERIFICADO' | 'DESCARTADO',
+  ): Promise<Avistamiento> {
+    return apiClient.patch<Avistamiento>(`${AVISTAMIENTOS}/${id(avistamientoId)}/verificacion`, {
+      estado,
     });
-    return pagina.data;
+  },
+
+  eliminarAvistamiento(avistamientoId: string): Promise<void> {
+    return apiClient.delete<void>(`${AVISTAMIENTOS}/${id(avistamientoId)}`);
+  },
+
+  // --- Reportes ciudadanos ---------------------------------------------------
+
+  listarReportes(filtro: FiltroReportes = {}): Promise<PageResult<ReporteCiudadano>> {
+    return apiClient.getPage<ReporteCiudadano>(REPORTES, { ...filtro }, { sinAviso: true });
+  },
+
+  /** Cuantos esperan revision (contador de la pestaña). Peticion de fondo. */
+  async contarReportesPendientes(): Promise<number> {
+    const pagina = await apiClient.getPage<ReporteCiudadano>(
+      REPORTES,
+      { estado: 'PENDIENTE', limit: 1 },
+      { silencioso: true },
+    );
+    return pagina.meta.total;
+  },
+
+  revisarReporte(reporteId: string, revision: RevisionReporte): Promise<ReporteRevisado> {
+    return apiClient.patch<ReporteRevisado>(`${REPORTES}/${id(reporteId)}/revision`, revision);
+  },
+
+  /** Publico (@Public, maximo 5 por minuto por IP): lo usa /reportar sin sesion. */
+  enviarReporteCiudadano(reporte: NuevoReporteCiudadano): Promise<ReporteRecibido> {
+    return apiClient.post<ReporteRecibido>(REPORTES, reporte);
   },
 };

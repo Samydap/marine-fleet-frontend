@@ -30,11 +30,36 @@ export enum Permiso {
   INCIDENTES_LEER = 'INCIDENTES_LEER',
   INCIDENTES_ESCRIBIR = 'INCIDENTES_ESCRIBIR',
   AMENAZA_CONFIGURAR_CRITERIOS = 'AMENAZA_CONFIGURAR_CRITERIOS',
+  REPORTES_LEER = 'REPORTES_LEER',
+  CATALOGOS_ADMINISTRAR = 'CATALOGOS_ADMINISTRAR',
   USUARIOS_ADMINISTRAR = 'USUARIOS_ADMINISTRAR',
   AUDITORIA_LEER = 'AUDITORIA_LEER',
   SISTEMA_CONFIGURAR = 'SISTEMA_CONFIGURAR',
 }
 
+/** Nombre del cargo tal como se muestra en la interfaz. */
+export const ETIQUETA_ROL: Readonly<Record<RolCodigo, string>> = {
+  [RolCodigo.ALMIRANTE]: 'Almirante',
+  [RolCodigo.DIRECTOR_INTELIGENCIA]: 'Director de Inteligencia',
+  [RolCodigo.ANALISTA_DATOS_CRIMINALES]: 'Analista de Datos Criminales',
+  [RolCodigo.COORDINADOR_OPERACIONES]: 'Coordinador de Operaciones',
+  [RolCodigo.DESARROLLADOR_BACKEND]: 'Desarrollador Backend',
+  [RolCodigo.ESPECIALISTA_SEGURIDAD]: 'Especialista en Seguridad',
+  [RolCodigo.CAPITAN]: 'Capitán de Base',
+};
+
+/** Roles que, por politica, exigen segundo factor (ROLES_CON_MFA_OBLIGATORIO del backend). */
+export const ROLES_CON_MFA_OBLIGATORIO: readonly RolCodigo[] = [
+  RolCodigo.ALMIRANTE,
+  RolCodigo.DIRECTOR_INTELIGENCIA,
+  RolCodigo.ESPECIALISTA_SEGURIDAD,
+];
+
+export function etiquetaRol(rol: RolCodigo | string): string {
+  return ETIQUETA_ROL[rol as RolCodigo] ?? rol;
+}
+
+/** Espejo de UsuarioSesionDto (auth/presentation/dto/sesion.dto.ts). */
 export interface UsuarioSesion {
   readonly id: string;
   readonly email: string;

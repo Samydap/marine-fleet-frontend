@@ -9,6 +9,19 @@
 export interface Peticion {
   url: string;
   init: RequestInit;
+  /**
+   * Peticion de fondo (sondeo de sincronizacion, refresco automatico): no
+   * enciende la barra de carga ni publica avisos de error. El error se lanza
+   * igual para que quien llamo decida.
+   */
+  silencioso?: boolean;
+  /**
+   * La pantalla ya explica el error en linea (EstadoError, AlertaConflicto):
+   * la barra de carga se enciende pero no se publica el aviso flotante, que
+   * repetiria lo mismo encima del contenido. `true` calla cualquier error;
+   * `'conflicto'` solo el 409 (los demas fallos de la escritura si se avisan).
+   */
+  sinAviso?: boolean | 'conflicto';
 }
 
 export type Siguiente = (peticion: Peticion) => Promise<Response>;
