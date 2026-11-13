@@ -67,6 +67,23 @@ describe('sessionService', () => {
     expect(tokenStore.accessToken).toBe('token-a');
   });
 
+  it('con segundo factor devuelve el reto sin abrir la sesion', async () => {
+    const reto = { mfaRequerido: true, challengeToken: 'reto-1', email: 'almirante@marina.gov' };
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ success: true, data: reto }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      ),
+    );
+
+    expect(await sessionService.login('almirante@marina.gov', 'Marina.2026')).toEqual(reto);
+    expect(usuarioActual()).toBeNull();
+    expect(sessionService.hayToken()).toBe(false);
+  });
+
   it('el permiso ALL del Almirante concede cualquier permiso', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(respuestaLogin(ALMIRANTE)));
     await sessionService.login('almirante@marina.gov', 'Marina.2026');

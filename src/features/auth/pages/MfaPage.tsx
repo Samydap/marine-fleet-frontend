@@ -1,11 +1,11 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { rutaInicio } from '@core/session/navegacion';
 import { AccesoLayout } from '../components/AccesoLayout';
 import { AlertaAcceso } from '../components/AlertaAcceso';
 import { BotonEnviar } from '../components/BotonEnviar';
 import { IconoAlerta } from '../components/iconos';
-import { esRetoMfa, mfaApi } from '../data-access/mfa-api';
+import { esRetoMfa, mfaApi, type RetoMfa } from '../data-access/mfa-api';
+import { destinoTrasLogin } from '../models/destino-acceso';
 import { describirFalloMfa, type FalloAcceso } from '../models/fallo-acceso';
 import { validarCodigoMfa } from '../models/validacion-acceso';
 
@@ -36,16 +36,11 @@ export function MfaPage(): React.ReactElement {
     );
   }
 
-  return <FormularioMfa challengeToken={reto.challengeToken} email={reto.email} />;
+  return <FormularioMfa reto={reto} />;
 }
 
-function FormularioMfa({
-  challengeToken,
-  email,
-}: {
-  readonly challengeToken: string;
-  readonly email: string;
-}): React.ReactElement {
+function FormularioMfa({ reto }: { readonly reto: RetoMfa }): React.ReactElement {
+  const { challengeToken, email } = reto;
   const navegar = useNavigate();
   const refCodigo = useRef<HTMLInputElement>(null);
   const [codigo, setCodigo] = useState('');
@@ -75,7 +70,7 @@ function FormularioMfa({
     setEnviando(true);
     try {
       const usuario = await mfaApi.verificar({ challengeToken, codigo });
-      navegar(rutaInicio(usuario), { replace: true });
+      navegar(destinoTrasLogin(reto, usuario), { replace: true });
     } catch (fallido) {
       const descrito = describirFalloMfa(fallido);
       setFallo(descrito);

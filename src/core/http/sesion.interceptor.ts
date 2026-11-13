@@ -6,7 +6,7 @@ import { PREFIJO_API } from './api-url.interceptor';
 import type { Interceptor, Peticion, Siguiente } from './types';
 
 /** Rutas cuyo 401 significa "credenciales" y no "token vencido". */
-const RUTAS_DE_ACCESO = ['/auth/login', '/auth/refresh'];
+const RUTAS_DE_ACCESO = ['/auth/login', '/auth/refresh', '/auth/mfa/verify'];
 
 interface ParTokens {
   readonly accessToken: string;

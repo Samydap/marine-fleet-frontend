@@ -1,5 +1,6 @@
-import { ApiError } from '@core/models/api-response';
+import { apiClient } from '@core/http/api-client';
 import type { UsuarioSesion } from '@core/session/permiso.enum';
+import { sessionService, type RespuestaLogin } from '@core/session/session.service';
 
 /** Espejo de VerifyMfaDto (auth/presentation/dto/verify-mfa.dto.ts). */
 export interface VerificarMfaPeticion {
@@ -9,11 +10,13 @@ export interface VerificarMfaPeticion {
 
 /**
  * Lo que la pantalla de MFA recibe por `location.state` desde el login cuando
- * el backend exija el segundo factor.
+ * el backend exige el segundo factor. `redirectTo` es la ruta protegida que el
+ * usuario intentaba abrir antes de entrar.
  */
 export interface RetoMfa {
   readonly challengeToken: string;
   readonly email: string;
+  readonly redirectTo?: string;
 }
 
 export function esRetoMfa(valor: unknown): valor is RetoMfa {
@@ -23,33 +26,14 @@ export function esRetoMfa(valor: unknown): valor is RetoMfa {
 }
 
 /**
- * MOCK AISLADO (revisado contra el backend en develop, modulo auth completo).
- *
- * El backend define VerifyMfaDto y el puerto MFA_PROVIDER, pero el
- * AuthController solo expone POST /auth/login, POST /auth/refresh y
- * GET /auth/me: NO hay endpoint de verificacion, y /auth/login nunca devuelve
- * un `challengeToken` (PENDIENTE de login.use-case.ts y auth.module.ts:
- * verify-mfa.use-case.ts + totp-mfa.adapter.ts). Hasta entonces esta funcion
- * responde lo mismo que un servidor sin el segundo factor habilitado, para
- * que la pantalla muestre un estado honesto en lugar de aceptar cualquier
- * codigo.
- *
- * Cuando exista el endpoint (contrato esperado: POST /auth/mfa/verify con
- * VerifyMfaDto -> LoginResponseDto), el cuerpo se reemplaza por:
- *
- *   const respuesta = await apiClient.post<RespuestaLogin>('/auth/mfa/verify', peticion);
- *   sessionService.iniciar(respuesta);
- *   return respuesta.usuario;
+ * POST /auth/mfa/verify (publico): canjea el reto del login + el codigo TOTP
+ * por la sesion (LoginResponseDto). Un codigo incorrecto cuenta como intento
+ * fallido; con 5 seguidos la cuenta se bloquea.
  */
 export const mfaApi = {
   async verificar(peticion: VerificarMfaPeticion): Promise<UsuarioSesion> {
-    if (!/^\d{6}$/.test(peticion.codigo)) {
-      throw new ApiError(400, 'HTTP', 'El codigo debe tener 6 digitos.');
-    }
-    throw new ApiError(
-      501,
-      'MFA_NO_DISPONIBLE',
-      'La verificación en dos pasos todavía no está habilitada en el servidor.',
-    );
+    const respuesta = await apiClient.post<RespuestaLogin>('/auth/mfa/verify', peticion);
+    sessionService.iniciar(respuesta);
+    return respuesta.usuario;
   },
 };

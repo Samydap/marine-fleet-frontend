@@ -1,12 +1,12 @@
 import { useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { rutaInicio } from '@core/session/navegacion';
-import type { UsuarioSesion } from '@core/session/permiso.enum';
-import { sessionService } from '@core/session/session.service';
+import { esRetoLogin, sessionService } from '@core/session/session.service';
 import { AccesoLayout } from '../components/AccesoLayout';
 import { AlertaAcceso } from '../components/AlertaAcceso';
 import { BotonEnviar } from '../components/BotonEnviar';
 import { IconoAlerta, IconoOjo, IconoOjoTachado } from '../components/iconos';
+import type { RetoMfa } from '../data-access/mfa-api';
+import { destinoTrasLogin, rutaPendiente } from '../models/destino-acceso';
 import { describirFalloAcceso, type FalloAcceso } from '../models/fallo-acceso';
 import { validarContrasena, validarCorreo } from '../models/validacion-acceso';
 
@@ -16,36 +16,14 @@ interface ErroresCampo {
 }
 
 /**
- * A donde ir tras entrar: la ruta protegida que el usuario intentaba abrir o,
- * si no hay, la pantalla de llegada de su cargo (core/session/navegacion.ts).
- *
- * Solo se vuelve a rutas internas de la aplicacion: un `redirectTo` externo
- * (`//otro-sitio`) o de vuelta al propio acceso se ignora.
- */
-function destinoTrasLogin(estado: unknown, usuario: UsuarioSesion): string {
-  const destino = (estado as { redirectTo?: unknown } | null)?.redirectTo;
-  if (
-    typeof destino === 'string' &&
-    destino.startsWith('/') &&
-    !destino.startsWith('//') &&
-    !destino.startsWith('/auth')
-  ) {
-    return destino;
-  }
-  return rutaInicio(usuario);
-}
-
-/**
  * RF-7 · Pantalla de acceso.
  *
  * El error de un login fallido se muestra en la propia pagina: las
  * notificaciones globales las pinta MainLayout y esta pantalla queda fuera de
  * el, asi que sin esto un login fallido no le diria nada al usuario.
  *
- * PENDIENTE (backend): POST /auth/login todavia no devuelve el reto del
- * segundo factor (no existe POST /auth/mfa/verify). Cuando exista, si la
- * respuesta trae `challengeToken`, navegar a /auth/mfa con
- * `{ challengeToken, email, redirectTo }` en el state.
+ * Si la cuenta tiene segundo factor, el login devuelve un reto en lugar de la
+ * sesion y se pasa a /auth/mfa con `{ challengeToken, email, redirectTo }`.
  */
 export function LoginPage(): React.ReactElement {
   const navegar = useNavigate();
@@ -93,8 +71,17 @@ export function LoginPage(): React.ReactElement {
     setFallo(null);
     setEnviando(true);
     try {
-      const usuario = await sessionService.login(email.trim(), password);
-      navegar(destinoTrasLogin(location.state, usuario), { replace: true });
+      const resultado = await sessionService.login(email.trim(), password);
+      if (esRetoLogin(resultado)) {
+        const reto: RetoMfa = {
+          challengeToken: resultado.challengeToken,
+          email: resultado.email,
+          redirectTo: rutaPendiente(location.state),
+        };
+        navegar('/auth/mfa', { state: reto });
+        return;
+      }
+      navegar(destinoTrasLogin(location.state, resultado), { replace: true });
     } catch (error) {
       const descrito = describirFalloAcceso(error);
       setFallo(descrito);

@@ -8,7 +8,7 @@ import type { Interceptor } from './types';
  * aqui: enviar el token a un endpoint publico es inofensivo, omitirlo en uno
  * protegido produce un 401 y cierra la sesion.
  */
-const RUTAS_SIN_TOKEN = ['/auth/login', '/auth/refresh'];
+const RUTAS_SIN_TOKEN = ['/auth/login', '/auth/refresh', '/auth/mfa/verify'];
 
 /** Agrega el Bearer token. Ninguna feature maneja headers de autenticacion. */
 export const authInterceptor: Interceptor = (peticion, siguiente) => {

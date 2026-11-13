@@ -36,14 +36,24 @@ describe('describirFalloAcceso', () => {
 });
 
 describe('describirFalloMfa', () => {
-  it('explica que el segundo factor no esta disponible', () => {
-    const fallo = describirFalloMfa(new ApiError(501, 'MFA_NO_DISPONIBLE', 'No habilitado.'));
-    expect(fallo).toMatchObject({ tipo: 'conexion', titulo: 'Verificación no disponible' });
+  it('un codigo incorrecto se puede corregir y avisa del bloqueo', () => {
+    const fallo = describirFalloMfa(new ApiError(401, 'CODIGO_MFA_INVALIDO', 'x'));
+    expect(fallo).toMatchObject({ tipo: 'credenciales', titulo: 'Código incorrecto' });
+    expect(fallo.detalle).toMatch(/se bloquea/);
   });
 
-  it('trata un 401 como codigo incorrecto', () => {
-    expect(describirFalloMfa(new ApiError(401, 'NO_AUTENTICADO', 'x')).titulo).toBe(
-      'Código incorrecto o vencido',
+  it('un reto vencido pide volver a iniciar sesion', () => {
+    for (const codigo of ['RETO_MFA_INVALIDO', 'SESION_INVALIDA']) {
+      expect(describirFalloMfa(new ApiError(401, codigo, 'x'))).toMatchObject({
+        tipo: 'cuenta',
+        titulo: 'La verificación venció',
+      });
+    }
+  });
+
+  it('una cuenta bloqueada se describe igual que en el login', () => {
+    expect(describirFalloMfa(new ApiError(400, 'CUENTA_BLOQUEADA', 'x')).titulo).toBe(
+      'Cuenta bloqueada',
     );
   });
 });

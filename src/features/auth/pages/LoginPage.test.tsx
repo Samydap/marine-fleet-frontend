@@ -1,6 +1,6 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@core/models/api-response';
 import { Permiso, RolCodigo, type UsuarioSesion } from '@core/session/permiso.enum';
@@ -16,6 +16,11 @@ const USUARIO: UsuarioSesion = {
   baseNavalId: 'b-16',
 };
 
+/** Muestra lo que la pantalla de MFA recibiria en su state. */
+function SondaMfa(): React.ReactElement {
+  return <pre data-testid="reto">{JSON.stringify(useLocation().state)}</pre>;
+}
+
 function renderizar(estado?: unknown): void {
   render(
     <MemoryRouter
@@ -27,6 +32,7 @@ function renderizar(estado?: unknown): void {
         <Route path="/criminales" element={<p>Pantalla de criminales</p>} />
         <Route path="/operativos/7" element={<p>Operativo 7</p>} />
         <Route path="/operativos" element={<p>Tablero de operativos</p>} />
+        <Route path="/auth/mfa" element={<SondaMfa />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -52,6 +58,23 @@ describe('LoginPage', () => {
 
     expect(login).toHaveBeenCalledWith('capitan@marina.gov', 'Marina.2026');
     expect(await screen.findByText('Pantalla de criminales')).toBeInTheDocument();
+  });
+
+  it('con segundo factor pasa a la verificacion con el reto y la ruta pendiente', async () => {
+    vi.spyOn(sessionService, 'login').mockResolvedValue({
+      mfaRequerido: true,
+      challengeToken: 'reto-123',
+      email: 'almirante@marina.gov',
+    });
+    renderizar({ redirectTo: '/operativos/7' });
+
+    await escribirCredenciales('almirante@marina.gov', 'Marina.2026');
+
+    expect(JSON.parse((await screen.findByTestId('reto')).textContent ?? '')).toEqual({
+      challengeToken: 'reto-123',
+      email: 'almirante@marina.gov',
+      redirectTo: '/operativos/7',
+    });
   });
 
   it('sin destino previo lleva a cada cargo a su pantalla de llegada', async () => {

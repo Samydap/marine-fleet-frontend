@@ -11,6 +11,24 @@ export interface RespuestaLogin {
 }
 
 /**
+ * Respuesta de POST /auth/login cuando la cuenta tiene segundo factor: no trae
+ * tokens, solo el reto (vence en 5 minutos) que se canjea en POST /auth/mfa/verify.
+ */
+export interface RetoMfaLogin {
+  readonly mfaRequerido: true;
+  readonly challengeToken: string;
+  readonly email: string;
+}
+
+export function esRetoLogin(valor: unknown): valor is RetoMfaLogin {
+  return (
+    typeof valor === 'object' &&
+    valor !== null &&
+    typeof (valor as Partial<RetoMfaLogin>).challengeToken === 'string'
+  );
+}
+
+/**
  * Llamadas de red de la sesion. Separado del store para que el interceptor de
  * errores pueda limpiar la sesion sin crear un ciclo de imports.
  *
@@ -19,17 +37,21 @@ export interface RespuestaLogin {
  */
 export const sessionService = {
   /**
-   * POST /auth/login. Hoy el backend responde siempre con los tokens: el reto
-   * del segundo factor (challengeToken) todavia no existe en el contrato. Ver
-   * features/auth/data-access/mfa-api.ts.
+   * POST /auth/login. Sin segundo factor abre la sesion y devuelve el usuario.
+   * Con segundo factor no hay sesion todavia: devuelve el reto, que la pantalla
+   * de MFA canjea (features/auth/data-access/mfa-api.ts).
    */
-  async login(email: string, password: string): Promise<UsuarioSesion> {
-    const respuesta = await apiClient.post<RespuestaLogin>('/auth/login', { email, password });
+  async login(email: string, password: string): Promise<UsuarioSesion | RetoMfaLogin> {
+    const respuesta = await apiClient.post<RespuestaLogin | RetoMfaLogin>('/auth/login', {
+      email,
+      password,
+    });
+    if (esRetoLogin(respuesta)) return respuesta;
     sessionService.iniciar(respuesta);
     return respuesta.usuario;
   },
 
-  /** Guarda tokens y usuario. Lo usan el login y, cuando exista, el paso de MFA. */
+  /** Guarda tokens y usuario. Lo usan el login y el paso de MFA. */
   iniciar(respuesta: RespuestaLogin): void {
     tokenStore.guardar(respuesta.accessToken, respuesta.refreshToken);
     useSessionStore.getState().setUsuario(respuesta.usuario);

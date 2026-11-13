@@ -95,21 +95,28 @@ export function describirFalloAcceso(fallo: unknown): FalloAcceso {
   };
 }
 
-/** Errores del paso de verificacion en dos pasos (VerifyMfaDto). */
+/**
+ * Errores de POST /auth/mfa/verify (auth/application/verify-mfa.use-case.ts):
+ *   401 CODIGO_MFA_INVALIDO (cuenta como intento fallido) ·
+ *   401 RETO_MFA_INVALIDO (el reto del login vencio a los 5 minutos o no es valido) ·
+ *   401 SESION_INVALIDA (la cuenta cambio entre el login y el codigo).
+ * El resto (cuenta bloqueada, sin conexion...) se describe igual que en el login.
+ */
 export function describirFalloMfa(fallo: unknown): FalloAcceso {
   if (fallo instanceof ApiError) {
-    if (fallo.codigo === 'MFA_NO_DISPONIBLE') {
+    if (fallo.codigo === 'RETO_MFA_INVALIDO' || fallo.codigo === 'SESION_INVALIDA') {
       return {
-        tipo: 'conexion',
-        titulo: 'Verificación no disponible',
-        detalle: `${fallo.message} Vuelve a intentarlo más tarde o avisa al Especialista en Seguridad.`,
+        tipo: 'cuenta',
+        titulo: 'La verificación venció',
+        detalle:
+          'Pasaron más de 5 minutos desde que escribiste tu contraseña. Vuelve a iniciar sesión para recibir una verificación nueva.',
       };
     }
-    if (fallo.status === 401) {
+    if (fallo.codigo === 'CODIGO_MFA_INVALIDO' || fallo.status === 401) {
       return {
         tipo: 'credenciales',
-        titulo: 'Código incorrecto o vencido',
-        detalle: 'Los códigos cambian cada pocos segundos. Escribe el que se muestra ahora.',
+        titulo: 'Código incorrecto',
+        detalle: `Los códigos cambian cada 30 segundos: escribe el que se muestra ahora. ${AVISO_BLOQUEO}`,
       };
     }
   }
