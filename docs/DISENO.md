@@ -212,7 +212,7 @@ estructura (navy) y un acento de autoridad (dorado). Los colores semánticos
 - **Horizonte** (`--horizonte`, #2c4868): el resplandor del cielo al caer la
   noche detrás de la fortaleza.
 - **Silueta** (`--silueta`, #050a14): la fortaleza y la muralla a contraluz.
-- **Luz de la silueta** (`--silueta-luz`): las ventanas encendidas del cuartel.
+- **Luz de la silueta** (`--silueta-luz`: `rgba(184, 194, 209, 0.38)`): las ventanas encendidas del cuartel.
 - **Mar de noche** (`--mar-noche`, #070e1a): el mar al pie de la escena; el
   texto del pie del acceso va encima en `--sobre-navy-texto` (10,7:1).
 
@@ -389,7 +389,8 @@ encima y lo flotante (avisos, menús, diálogos) arriba de todo.
 - **Sombra 1** (`--sombra`: `0 1px 3px rgba(20, 36, 59, 0.12)`): elementos que
   se separan dentro del papel.
 - **Sombra 2** (`--sombra-2`: `0 18px 40px -18px rgba(13, 23, 38, 0.45)`): solo
-  elementos flotantes (notificaciones, menús, diálogos).
+  elementos flotantes que no son hojas (notificaciones). Los diálogos, que son
+  una hoja de papel sobre el lienzo, llevan `--sombra-papel`.
 
 **La regla de una sola hoja.** Papel sobre papel no se levanta: lo que cae
 dentro de una `.ui-hoja` (tabla, paginación, estado vacío) pierde su sombra y
@@ -760,7 +761,7 @@ negativo.
 
 ### Diálogo — `Dialogo`, `DialogoConfirmacion`
 
-- `<dialog>` nativo: velo `--velo`, panel de papel de radio 14px y `--sombra-2`,
+- `<dialog>` nativo: velo `--velo`, panel de papel de radio 14px y `--sombra-papel`,
   520px (760px `amplio`). En móvil sube desde abajo como hoja a todo el ancho.
 - Anatomía: título (Manrope 800, 19px), descripción, cuerpo y acciones a la
   derecha con la principal al final. La X se pinta en la esquina pero va la

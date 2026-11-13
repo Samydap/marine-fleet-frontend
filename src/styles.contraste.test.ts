@@ -90,6 +90,21 @@ describe('contraste de los tokens', () => {
       ['--tinta', '--papel-2'],
       // Sello 正義 del Almirante en las hojas de aviso (acceso denegado, 404).
       ['--gold-oscuro', '--papel'],
+      // Mensajes de estado y nivel de amenaza sobre el papel.
+      ['--error', '--papel'],
+      ['--aviso', '--papel'],
+      ['--exito', '--papel'],
+      ['--error', '--error-fondo'],
+      ['--aviso', '--aviso-fondo'],
+      ['--exito', '--exito-fondo'],
+      ['--amenaza-bajo-tinta', '--amenaza-bajo-fondo'],
+      ['--amenaza-medio-tinta', '--amenaza-medio-fondo'],
+      ['--amenaza-alto-tinta', '--amenaza-alto-fondo'],
+      ['--amenaza-bajo-tinta', '--papel'],
+      ['--amenaza-medio-tinta', '--papel'],
+      ['--amenaza-alto-tinta', '--papel'],
+      ['--tinta-2', '--papel-2'],
+      ['--tinta-3', '--papel-2'],
     ];
     for (const [texto, fondo] of paresTexto) {
       expect(contraste(texto, fondo), `${texto} sobre ${fondo}`).toBeGreaterThanOrEqual(4.5);

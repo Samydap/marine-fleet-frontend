@@ -157,7 +157,8 @@ export const IconoBrujula = crear(
 );
 
 // --- Tipos de criminal (InsigniaTipoCriminal) --------------------------------
-// Diseno original, sin reproducir ninguna bandera ni emblema existente.
+// El pirata lleva el Jolly Roger (calavera sobre dos huesos cruzados), motivo
+// del universo; el revolucionario y el independiente son disenos propios.
 
 /** Pirata: Jolly Roger sobrio, craneo sobre dos huesos cruzados. */
 export const IconoPirata = crear(
