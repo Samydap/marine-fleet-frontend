@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { CategoriaCriminal } from '@shared/utils/criminal';
 import { InsigniaEstado, type TonoEstado } from './InsigniaEstado';
 import { InsigniaTipoCriminal } from './InsigniaTipoCriminal';
+import { RetratoCriminal } from './RetratoCriminal';
 
 describe('InsigniaTipoCriminal', () => {
   it.each([
@@ -64,5 +65,28 @@ describe('InsigniaEstado', () => {
   it('marca el estado en curso', () => {
     const { container } = render(<InsigniaEstado etiqueta="En curso" tono="aviso" enCurso />);
     expect(container.querySelector('.insignia-estado-marca--en-curso')).toBeInTheDocument();
+  });
+});
+
+describe('RetratoCriminal con marco de cartel', () => {
+  it('el retrato con marco de cartel conserva el nombre accesible y no agrega texto', () => {
+    const { container, rerender } = render(
+      <RetratoCriminal fotoUrl={null} nombre="Barbanegra" marco="cartel" />,
+    );
+    expect(screen.getByRole('img', { name: 'Barbanegra, sin foto' })).toHaveClass(
+      'retrato--cartel',
+    );
+    expect(container.textContent).not.toContain('WANTED');
+
+    rerender(
+      <RetratoCriminal fotoUrl="/api/v1/archivos/fotos/a.png" nombre="Barbanegra" marco="cartel" />,
+    );
+    expect(screen.getByAltText('Foto de Barbanegra')).toHaveClass('retrato--cartel');
+    expect(container.textContent).toBe('');
+  });
+
+  it('por defecto no lleva marco', () => {
+    render(<RetratoCriminal fotoUrl={null} nombre="Barbanegra" />);
+    expect(screen.getByRole('img')).not.toHaveClass('retrato--cartel');
   });
 });

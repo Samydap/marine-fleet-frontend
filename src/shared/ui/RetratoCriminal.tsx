@@ -7,6 +7,8 @@ interface Props {
   readonly nombre: string;
   /** sm 32px (tablas), md 48px (listas y cabeceras), lg 96px, xl 160px (columna de la ficha). */
   readonly tamano?: 'sm' | 'md' | 'lg' | 'xl';
+  /** `cartel`: papel envejecido y filete de tinta alrededor. Decorativo, sin texto. */
+  readonly marco?: 'ninguno' | 'cartel';
 }
 
 function iniciales(nombre: string): string {
@@ -28,9 +30,14 @@ function iniciales(nombre: string): string {
  *
  *   <RetratoCriminal fotoUrl={c.fotoUrl} nombre={c.nombre} tamano="sm" />
  */
-export function RetratoCriminal({ fotoUrl, nombre, tamano = 'md' }: Props): React.ReactElement {
+export function RetratoCriminal({
+  fotoUrl,
+  nombre,
+  tamano = 'md',
+  marco = 'ninguno',
+}: Props): React.ReactElement {
   const [fallo, setFallo] = useState(false);
-  const clase = `retrato retrato--${tamano}`;
+  const clase = `retrato retrato--${tamano}${marco === 'cartel' ? ' retrato--cartel' : ''}`;
   const src = urlArchivo(fotoUrl);
 
   if (!src || fallo) {

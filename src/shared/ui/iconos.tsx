@@ -159,13 +159,14 @@ export const IconoBrujula = crear(
 // --- Tipos de criminal (InsigniaTipoCriminal) --------------------------------
 // Diseno original, sin reproducir ninguna bandera ni emblema existente.
 
-/** Pirata: craneo con dos tibias cruzadas, geometrico. */
+/** Pirata: Jolly Roger sobrio, craneo sobre dos huesos cruzados. */
 export const IconoPirata = crear(
   <>
-    <path d="M7.5 11.5a4.5 4.5 0 1 1 9 0v1.5l-1.5 1v1.5h-6V14l-1.5-1z" />
-    <circle cx="10.25" cy="11.25" r="0.9" />
-    <circle cx="13.75" cy="11.25" r="0.9" />
-    <path d="M4 19.5 20 15M4 15l16 4.5" />
+    <path d="M5 14.5 19 20M19 14.5 5 20" />
+    <path d="M12 3.5a5.5 5.5 0 0 0-5.5 5.5c0 2 .9 3.3 2.2 4.2V15h6.6v-1.8c1.3-.9 2.2-2.2 2.2-4.2A5.5 5.5 0 0 0 12 3.5z" />
+    <circle cx="9.9" cy="9.6" r="1" />
+    <circle cx="14.1" cy="9.6" r="1" />
+    <path d="M12 11.5v1.2" />
   </>,
 );
 

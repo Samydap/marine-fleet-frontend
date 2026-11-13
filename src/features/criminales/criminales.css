@@ -29,6 +29,11 @@
   color: var(--tinta-2);
 }
 
+/* Amenaza alta: filete rojo a la izquierda. Decorativo, la etiqueta de amenaza sigue visible. */
+.ui-tabla tbody tr.fila-amenaza-alta > :first-child {
+  box-shadow: inset 3px 0 0 var(--amenaza-alto);
+}
+
 /* ------------------------------------------------------------ ficha: marco */
 
 .ficha-alias {

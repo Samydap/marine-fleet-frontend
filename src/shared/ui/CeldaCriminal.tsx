@@ -41,7 +41,7 @@ export function CeldaCriminal({
   if (criminal === null) {
     return (
       <span className="celda-criminal">
-        <RetratoCriminal fotoUrl={null} nombre="?" tamano={tamano} />
+        <RetratoCriminal fotoUrl={null} nombre="?" tamano={tamano} marco="cartel" />
         <span className="celda-criminal-texto">
           <span className="celda-criminal-ausente">Criminal no disponible</span>
           <small>Se dio de baja del archivo o tu rol no puede verlo.</small>
@@ -52,7 +52,12 @@ export function CeldaCriminal({
 
   return (
     <span className="celda-criminal">
-      <RetratoCriminal fotoUrl={criminal.fotoUrl} nombre={criminal.nombre} tamano={tamano} />
+      <RetratoCriminal
+        fotoUrl={criminal.fotoUrl}
+        nombre={criminal.nombre}
+        tamano={tamano}
+        marco="cartel"
+      />
       <span className="celda-criminal-texto">
         {sinEnlace ? (
           <TextoRecortado como="strong" texto={criminal.nombre} />

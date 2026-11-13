@@ -46,7 +46,7 @@ const COLUMNAS: readonly ColumnaTabla<Criminal>[] = [
     principal: true,
     celda: (c) => (
       <span className="criminal-celda">
-        <RetratoCriminal fotoUrl={c.fotoUrl} nombre={c.nombre} tamano="sm" />
+        <RetratoCriminal fotoUrl={c.fotoUrl} nombre={c.nombre} tamano="sm" marco="cartel" />
         <span className="criminal-celda-texto">
           <Link to={c.id}>{c.nombre}</Link>
           {c.alias.length > 0 && (
@@ -240,7 +240,13 @@ export function CriminalListPage(): React.ReactElement {
         actualizando={cargando && criminales.length > 0}
         error={error}
         onReintentar={() => void cargar()}
-        claseFila={(c) => (c.estado === 'ACTIVO' ? undefined : 'criminal-fila--baja')}
+        claseFila={(c) =>
+          c.estado !== 'ACTIVO'
+            ? 'criminal-fila--baja'
+            : c.nivelAmenaza === 'ALTO'
+              ? 'fila-amenaza-alta'
+              : undefined
+        }
         vacio={
           hayFiltros ? (
             <EstadoVacio
