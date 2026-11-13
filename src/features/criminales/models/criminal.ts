@@ -1,4 +1,5 @@
 import type { PageQuery } from '@core/models/page-result';
+import type { DatosCartel } from '@shared/utils/cartel';
 import type {
   CategoriaCriminal,
   EstadoCriminal,
@@ -205,4 +206,14 @@ export interface CartelVigenteResumen {
   readonly numeroVersion: number;
   readonly motivoGeneracion: string;
   readonly generadoEn: string;
+}
+
+/**
+ * El cartel oficial vigente: su resumen (version, motivo, fecha) y la
+ * instantanea emitida, que es lo que se pinta. Nunca se arma un cartel con los
+ * datos actuales del criminal.
+ */
+export interface CartelVigente {
+  readonly resumen: CartelVigenteResumen;
+  readonly instantanea: DatosCartel;
 }

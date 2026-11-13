@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useCatalogos } from '@core/catalogos/catalogos';
 import { ActualizadoHace } from '@shared/ui/ActualizadoHace';
+import { CartelWanted } from '@shared/ui/CartelWanted';
 import { MontoBerries } from '@shared/ui/MontoBerries';
 import { RetratoCriminal } from '@shared/ui/RetratoCriminal';
+import type { DatosCartel } from '@shared/utils/cartel';
 import { formatearSoloFecha } from '@shared/utils/fecha';
 import type { CartelVigenteResumen, CriminalDetalle } from '../models/criminal';
 import { useNombreZonaConMar } from '@shared/ui/CampoZona';
@@ -20,21 +22,60 @@ const MOTIVO_CARTEL: Readonly<Record<string, string>> = {
 interface Props {
   readonly criminal: CriminalDetalle;
   readonly cartel: CartelVigenteResumen | null;
+  /** Lo impreso en el cartel vigente; null si no hay cartel emitido o no se pudo leer. */
+  readonly instantanea: DatosCartel | null;
 }
 
 /**
- * Columna de identificacion de la ficha: foto, recompensa (el dato que manda)
- * y los datos personales. Es la "hoja de filiacion" del expediente.
+ * Columna de identificacion de la ficha: el cartel oficial vigente, la
+ * recompensa (el dato que manda) y los datos personales. Es la "hoja de
+ * filiacion" del expediente.
+ *
+ * El cartel es la instantanea emitida, nunca uno armado con los datos de hoy:
+ * lo que se ve es lo que circula por las bases. Sin cartel, un hueco que lo
+ * dice y lleva a emitirlo; la foto del expediente ocupa su lugar.
  */
-export function FichaIdentidad({ criminal, cartel }: Props): React.ReactElement {
+export function FichaIdentidad({ criminal, cartel, instantanea }: Props): React.ReactElement {
   const { nombreBase } = useCatalogos();
   const zonaConMar = useNombreZonaConMar();
   const base = nombreBase(criminal.origenBaseId);
 
   return (
     <aside className="expediente-identidad" aria-label="Identificación">
+      <section className="identidad-cartel" aria-label="Cartel de búsqueda">
+        {instantanea ? (
+          <figure className="identidad-cartel-oficial">
+            <CartelWanted
+              datos={instantanea}
+              version={cartel ? { numero: cartel.numeroVersion, fecha: cartel.generadoEn } : null}
+            />
+            <figcaption>
+              {cartel && (
+                <>
+                  Versión {cartel.numeroVersion},{' '}
+                  {MOTIVO_CARTEL[cartel.motivoGeneracion] ?? 'generada'}.{' '}
+                  <ActualizadoHace fecha={cartel.generadoEn} prefijo="Emitida" />
+                </>
+              )}
+              <Link to={`/carteles/${criminal.id}`} className="identidad-enlace">
+                Ver cartel y versiones
+              </Link>
+            </figcaption>
+          </figure>
+        ) : (
+          <div className="identidad-cartel-hueco">
+            <p className="identidad-cartel-hueco-titulo">Sin cartel emitido</p>
+            <Link to={`/carteles/${criminal.id}`} className="identidad-enlace">
+              Emitir cartel
+            </Link>
+          </div>
+        )}
+      </section>
+
       <div className="identidad-cabeza">
-        <RetratoCriminal fotoUrl={criminal.fotoUrl} nombre={criminal.nombre} tamano="xl" />
+        {!instantanea && (
+          <RetratoCriminal fotoUrl={criminal.fotoUrl} nombre={criminal.nombre} tamano="xl" />
+        )}
         <div className="identidad-recompensa">
           <span className="identidad-etiqueta">Recompensa vigente</span>
           <MontoBerries valor={criminal.recompensaVigenteMonto} tamano="grande" />
@@ -70,21 +111,6 @@ export function FichaIdentidad({ criminal, cartel }: Props): React.ReactElement 
         <p className="identidad-descripcion">
           {criminal.descripcionFisica?.trim() || 'Sin descripción registrada.'}
         </p>
-      </div>
-
-      <div className="identidad-bloque identidad-cartel">
-        <h2 className="identidad-etiqueta">Cartel de búsqueda</h2>
-        {cartel ? (
-          <p>
-            Versión {cartel.numeroVersion}, {MOTIVO_CARTEL[cartel.motivoGeneracion] ?? 'generada'}.{' '}
-            <ActualizadoHace fecha={cartel.generadoEn} prefijo="Emitida" />
-          </p>
-        ) : (
-          <p>Aún no tiene cartel emitido.</p>
-        )}
-        <Link to={`/carteles/${criminal.id}`} className="identidad-enlace">
-          {cartel ? 'Ver cartel y versiones' : 'Ir a carteles'}
-        </Link>
       </div>
     </aside>
   );

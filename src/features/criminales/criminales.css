@@ -161,8 +161,49 @@
   overflow-wrap: anywhere;
 }
 
+/* Cartel oficial vigente: la instantanea emitida, a su escala (~280 px). */
+.identidad-cartel {
+  display: grid;
+  min-width: 0;
+}
+
+.identidad-cartel-oficial {
+  display: grid;
+  gap: var(--esp-15);
+  width: 100%;
+  max-width: 280px;
+  margin: 0;
+  justify-self: center;
+}
+
+.identidad-cartel-oficial figcaption {
+  display: grid;
+  gap: 2px;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  line-height: 1.5;
+}
+
 .identidad-cartel .actualizado {
   display: block;
+}
+
+/* Sin cartel emitido: el hueco donde iria, con el camino para emitirlo. */
+.identidad-cartel-hueco {
+  display: grid;
+  gap: var(--esp-05);
+  padding: var(--esp-2);
+  border: 1px dashed var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--superficie-2);
+}
+
+.identidad-cartel-hueco-titulo {
+  margin: 0;
+  color: var(--tinta);
+  font-family: var(--fuente-titulo);
+  font-size: var(--texto-md);
+  font-weight: 700;
 }
 
 .identidad-enlace {

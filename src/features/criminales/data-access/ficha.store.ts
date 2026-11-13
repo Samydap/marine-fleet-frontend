@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { PAGINA_VACIA, type PageMeta } from '@core/models/page-result';
+import type { DatosCartel } from '@shared/utils/cartel';
 import type {
   Antecedente,
   CartelVigenteResumen,
@@ -23,7 +24,10 @@ interface FichaState {
   historialMeta: PageMeta;
   historialCargando: boolean;
   historialError: unknown;
+  /** Version, motivo y fecha del cartel vigente. */
   cartel: CartelVigenteResumen | null;
+  /** Lo impreso en el cartel vigente (la instantanea emitida); null si no hay. */
+  instantaneaCartel: DatosCartel | null;
   /** Abre la ficha de un criminal; `silencioso` para refrescos por sincronizacion. */
   abrir: (id: string, silencioso?: boolean) => Promise<void>;
   recargarCriminal: (silencioso?: boolean) => Promise<void>;
@@ -53,6 +57,7 @@ export const useFichaStore = create<FichaState>()((set, get) => ({
   historialCargando: false,
   historialError: null,
   cartel: null,
+  instantaneaCartel: null,
 
   abrir: async (id, silencioso = false) => {
     if (get().id !== id) {
@@ -66,6 +71,7 @@ export const useFichaStore = create<FichaState>()((set, get) => ({
         historialMeta: PAGINA_VACIA,
         historialError: null,
         cartel: null,
+        instantaneaCartel: null,
       });
     }
     await Promise.all([
@@ -144,8 +150,14 @@ export const useFichaStore = create<FichaState>()((set, get) => ({
   recargarCartel: async () => {
     const id = get().id;
     if (!id) return;
-    const cartel = await criminalesApi.cartelVigente(id);
-    if (get().id === id) set({ cartel });
+    try {
+      const vigente = await criminalesApi.cartelVigente(id);
+      if (get().id !== id) return;
+      set({ cartel: vigente?.resumen ?? null, instantaneaCartel: vigente?.instantanea ?? null });
+    } catch {
+      // Sin cartel legible: la ficha muestra el hueco (o el ultimo cartel ya
+      // leido, si fue un refresco por sincronizacion) y sigue en pie.
+    }
   },
 
   cambiarEstado: async (estado) => {

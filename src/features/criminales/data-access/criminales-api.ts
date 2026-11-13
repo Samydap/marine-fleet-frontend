@@ -1,11 +1,14 @@
 import { apiClient } from '@core/http/api-client';
+import { ApiError } from '@core/models/api-response';
 import type { PageResult } from '@core/models/page-result';
+import { leerInstantanea } from '@shared/utils/cartel';
 import type {
   ActualizarCriminalPayload,
   AfiliarPayload,
   Afiliacion,
   Antecedente,
   CambiarFotoPayload,
+  CartelVigente,
   CartelVigenteResumen,
   Criminal,
   CriminalDetalle,
@@ -92,18 +95,34 @@ export const criminalesApi = {
   },
 
   /**
-   * Cartel vigente (endpoint de carteles, consumido por contrato: la feature
-   * carteles no se importa). 404 si aun no tiene cartel: se devuelve null.
+   * Cartel oficial vigente (endpoint de carteles, consumido por contrato: la
+   * feature carteles no se importa) con su instantanea emitida. 404 si aun no
+   * tiene cartel: se devuelve null. Cualquier otro error se propaga y la ficha
+   * pinta el hueco sin aviso flotante.
    */
-  async cartelVigente(id: string): Promise<CartelVigenteResumen | null> {
+  async cartelVigente(criminalId: string): Promise<CartelVigente | null> {
     try {
-      return await apiClient.get<CartelVigenteResumen>(
-        `/carteles/criminal/${encodeURIComponent(id)}`,
+      const cartel = await apiClient.get<CartelVigenteResumen & { datos?: unknown }>(
+        `/carteles/criminal/${encodeURIComponent(criminalId)}`,
         undefined,
-        { silencioso: true },
+        { sinAviso: true },
       );
-    } catch {
-      return null;
+      const datos =
+        cartel.datos && typeof cartel.datos === 'object'
+          ? (cartel.datos as Record<string, unknown>)
+          : {};
+      return {
+        resumen: {
+          id: cartel.id,
+          numeroVersion: cartel.numeroVersion,
+          motivoGeneracion: cartel.motivoGeneracion,
+          generadoEn: cartel.generadoEn,
+        },
+        instantanea: leerInstantanea(datos, criminalId),
+      };
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) return null;
+      throw error;
     }
   },
 };
