@@ -193,7 +193,7 @@ export function OperativoDetailPage(): React.ReactElement {
 
       <div className={cargando ? 'ficha ficha--actualizando' : 'ficha'}>
         <div className="ficha-principal">
-          <section className="ficha-seccion" aria-labelledby="sec-objetivo">
+          <section className="ficha-seccion ui-hoja" aria-labelledby="sec-objetivo">
             <h2 id="sec-objetivo" className="ficha-seccion-titulo">
               Objetivo
             </h2>
@@ -228,7 +228,7 @@ export function OperativoDetailPage(): React.ReactElement {
             </div>
           </section>
 
-          <section className="ficha-seccion" aria-labelledby="sec-bases">
+          <section className="ficha-seccion ui-hoja" aria-labelledby="sec-bases">
             <div className="ficha-seccion-cabecera">
               <h2 id="sec-bases" className="ficha-seccion-titulo">
                 Bases asignadas <span className="cifra">{bases.length}</span>
@@ -251,7 +251,7 @@ export function OperativoDetailPage(): React.ReactElement {
             />
           </section>
 
-          <section className="ficha-seccion" aria-labelledby="sec-responsables">
+          <section className="ficha-seccion ui-hoja" aria-labelledby="sec-responsables">
             <div className="ficha-seccion-cabecera">
               <h2 id="sec-responsables" className="ficha-seccion-titulo">
                 Responsables <span className="cifra">{op.responsables.length}</span>

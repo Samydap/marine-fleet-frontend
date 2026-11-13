@@ -212,32 +212,36 @@ export function OrganizacionDetailPage(): React.ReactElement {
         </div>
       </section>
 
-      <div className="org-miembros-cabecera">
-        <h2>Miembros conocidos</h2>
-        <label className="casilla">
-          <input
-            type="checkbox"
-            checked={historicos}
-            onChange={(e) => setHistoricos(e.target.checked)}
-          />
-          Incluir antiguos miembros
-        </label>
-      </div>
+      <section className="ui-hoja" aria-labelledby="org-miembros-titulo">
+        <div className="org-miembros-cabecera">
+          <h2 id="org-miembros-titulo">Miembros conocidos</h2>
+          <label className="casilla">
+            <input
+              type="checkbox"
+              checked={historicos}
+              onChange={(e) => setHistoricos(e.target.checked)}
+            />
+            Incluir antiguos miembros
+          </label>
+        </div>
 
-      <TablaDatos
-        titulo={`Miembros de ${org.nombre}`}
-        filas={miembros}
-        columnas={COLUMNAS}
-        claveFila={(m) => m.membresiaId}
-        actualizando={cargando}
-        claseFila={(m) => (m.vigente && m.estado === 'ACTIVO' ? undefined : 'criminal-fila--baja')}
-        vacio={
-          <EstadoVacio
-            titulo="Sin miembros conocidos"
-            detalle="Afilia criminales desde su ficha para verlos aquí."
-          />
-        }
-      />
+        <TablaDatos
+          titulo={`Miembros de ${org.nombre}`}
+          filas={miembros}
+          columnas={COLUMNAS}
+          claveFila={(m) => m.membresiaId}
+          actualizando={cargando}
+          claseFila={(m) =>
+            m.vigente && m.estado === 'ACTIVO' ? undefined : 'criminal-fila--baja'
+          }
+          vacio={
+            <EstadoVacio
+              titulo="Sin miembros conocidos"
+              detalle="Afilia criminales desde su ficha para verlos aquí."
+            />
+          }
+        />
+      </section>
 
       <DialogoOrganizacion
         abierto={editando}

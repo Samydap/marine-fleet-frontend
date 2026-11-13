@@ -43,6 +43,11 @@
   font-size: var(--texto-lg);
 }
 
+/* En la hoja, el espacio lo pone la hoja. */
+.ui-hoja > .amenaza-subtitulo {
+  margin-bottom: 0;
+}
+
 .amenaza-total {
   margin: var(--esp-05) 0 0;
   color: var(--tinta-2);
@@ -180,6 +185,11 @@
   flex-wrap: wrap;
   gap: var(--esp-2);
   margin-bottom: var(--esp-2);
+  padding: var(--esp-2);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-lg);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 .tendencias-controles .ui-campo {

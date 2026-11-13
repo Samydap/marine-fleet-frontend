@@ -607,6 +607,10 @@
   margin-bottom: var(--esp-15);
 }
 
+.ui-hoja > .org-miembros-cabecera {
+  margin-bottom: 0;
+}
+
 .org-miembros-cabecera h2 {
   margin: 0;
   color: var(--navy);

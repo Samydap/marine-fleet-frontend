@@ -75,6 +75,16 @@
   list-style: none;
 }
 
+/* Dentro de la hoja del grupo, la lista llega a los bordes del papel. */
+.ui-hoja .despliegue-lista {
+  margin: 0 calc(var(--esp-3) * -1) calc(var(--esp-3) * -1);
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0 0 var(--radio-lg) var(--radio-lg);
+  background: transparent;
+  box-shadow: none;
+}
+
 .despliegue-fila {
   padding: var(--esp-15) var(--esp-2);
   border-bottom: 1px solid var(--line);
@@ -369,12 +379,21 @@
   font-size: var(--texto-sm);
 }
 
+/* El contenido de la seccion ya va en la hoja: sin segunda superficie. */
+.ui-hoja > .ficha-superficie {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 /* Columna lateral: UNA superficie con bloques separados por filetes. */
 .ficha-lateral {
   display: grid;
-  border: 1px solid var(--line);
+  border: 1px solid var(--papel-borde);
   border-radius: var(--radio-lg);
-  background: var(--superficie);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
 }
 
 .ficha-bloque {
@@ -643,6 +662,10 @@
   .operativo-form-seccion,
   .ficha-superficie {
     padding: var(--esp-2);
+  }
+
+  .ui-hoja .despliegue-lista {
+    margin: 0 calc(var(--esp-2) * -1) calc(var(--esp-2) * -1);
   }
 
   .asignacion-fila {

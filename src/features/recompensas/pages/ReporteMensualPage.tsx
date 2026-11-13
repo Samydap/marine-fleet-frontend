@@ -183,7 +183,7 @@ export function ReporteMensualPage(): React.ReactElement {
           </section>
 
           {!sinDatos && (
-            <section className="reporte-detalle" aria-labelledby="reporte-detalle-titulo">
+            <section className="reporte-detalle ui-hoja" aria-labelledby="reporte-detalle-titulo">
               <h2 id="reporte-detalle-titulo" className="recompensas-subtitulo">
                 Detalle por mar
               </h2>

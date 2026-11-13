@@ -342,7 +342,7 @@ export function CriteriosPage(): React.ReactElement {
         )}
       </div>
 
-      <section className="criterios-historial" aria-labelledby="criterios-historial">
+      <section className="criterios-historial ui-hoja" aria-labelledby="criterios-historial">
         <h2 id="criterios-historial" className="amenaza-subtitulo">
           Historial de cambios
         </h2>

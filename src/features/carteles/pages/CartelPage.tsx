@@ -131,7 +131,7 @@ export function CartelPage(): React.ReactElement {
       <div className="cartel-vista" role="status" aria-busy="true">
         <span className="sr-only">Abriendo el cartel…</span>
         <Skeleton forma="bloque" className="cartel-hueso" />
-        <div className="cartel-lateral">
+        <div className="cartel-lateral ui-hoja">
           <Skeleton ancho="60%" alto={22} />
           <Skeleton forma="bloque" alto={44} />
           <Skeleton forma="bloque" alto={44} />
@@ -241,7 +241,7 @@ export function CartelPage(): React.ReactElement {
           />
         </div>
 
-        <aside className="cartel-lateral" aria-label="Versiones del cartel">
+        <aside className="cartel-lateral ui-hoja" aria-label="Versiones del cartel">
           <div aria-live="polite">
             {!esVigente && (
               <Alerta

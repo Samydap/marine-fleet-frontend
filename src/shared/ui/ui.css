@@ -552,6 +552,36 @@
   font-size: var(--texto-sm);
 }
 
+/* === Hoja de papel (ui-hoja) =============================================== */
+
+/* Una seccion con titulo propio que va sobre el lienzo: el titulo y su
+   contenido comparten una sola hoja. Las superficies compartidas que caen
+   dentro no vuelven a levantarse (sin papel sobre papel). */
+.ui-hoja {
+  display: grid;
+  gap: var(--esp-15);
+  min-width: 0;
+  padding: var(--esp-2) var(--esp-3) var(--esp-3);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-lg);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
+.ui-hoja .ui-tabla-desplazable,
+.ui-hoja .paginacion,
+.ui-hoja .paginacion-resumen--solo,
+.ui-hoja .estado-cargando-filas {
+  box-shadow: none;
+}
+
+.ui-hoja .estado {
+  padding: var(--esp-3) var(--esp-2);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 /* === Tabla de datos ======================================================= */
 
 .ui-tabla-marco {
@@ -1537,6 +1567,14 @@ h1.estado-titulo {
     border-radius: var(--radio);
     background: var(--papel);
     box-shadow: var(--sombra-papel);
+  }
+
+  .ui-hoja .ui-tabla tbody tr {
+    box-shadow: none;
+  }
+
+  .ui-hoja {
+    padding: var(--esp-2);
   }
 
   .ui-tabla td {

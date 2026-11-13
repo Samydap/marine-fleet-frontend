@@ -256,7 +256,7 @@ export function TendenciasPage(): React.ReactElement {
             )}
           </section>
 
-          <section aria-labelledby="tendencias-detalle">
+          <section className="ui-hoja" aria-labelledby="tendencias-detalle">
             <h2 id="tendencias-detalle" className="amenaza-subtitulo">
               Detalle por {etiquetaAgrupacion(agrupacion).toLowerCase()}
             </h2>

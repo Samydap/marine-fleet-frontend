@@ -27,6 +27,11 @@
   font-size: var(--texto-lg);
 }
 
+/* En la hoja, el espacio lo pone la hoja. */
+.ui-hoja > .recompensas-subtitulo {
+  margin-bottom: 0;
+}
+
 .recompensa-sin-dato {
   color: var(--tinta-2);
   font-style: italic;

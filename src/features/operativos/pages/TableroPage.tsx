@@ -105,7 +105,7 @@ export function TableroPage(): React.ReactElement {
   let contenido: React.ReactNode;
   if (primeraCarga) {
     contenido = (
-      <section className="despliegue-grupo" aria-busy="true">
+      <section className="despliegue-grupo ui-hoja" aria-busy="true">
         <span className="sr-only">Cargando operativos…</span>
         <EncabezadoColumnas />
         <FilasEsqueleto />
@@ -158,7 +158,7 @@ export function TableroPage(): React.ReactElement {
         {grupos.map((g) => (
           <section
             key={g.clave}
-            className={`despliegue-grupo despliegue-grupo--${g.clave}`}
+            className={`despliegue-grupo despliegue-grupo--${g.clave} ui-hoja`}
             aria-labelledby={`grupo-${g.clave}`}
           >
             <h2 id={`grupo-${g.clave}`} className="despliegue-grupo-titulo">
