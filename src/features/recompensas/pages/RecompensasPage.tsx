@@ -40,7 +40,13 @@ const COLUMNAS: readonly ColumnaTabla<Recompensa>[] = [
     clave: 'criminal',
     encabezado: 'Criminal',
     principal: true,
-    celda: (r) => <CeldaCriminal criminalId={r.criminalId} />,
+    celda: (r) => (
+      <CeldaCriminal
+        criminalId={r.criminalId}
+        nombre={r.criminalNombre}
+        fotoUrl={r.criminalFotoUrl}
+      />
+    ),
   },
   {
     clave: 'monto',

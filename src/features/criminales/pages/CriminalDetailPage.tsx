@@ -118,7 +118,7 @@ export function CriminalDetailPage(): React.ReactElement {
               tono={tonoEstadoCriminal(actual.estado)}
             />
             <BadgeAmenaza nivel={actual.nivelAmenaza} conPrefijo />
-            <ActualizadoHace fecha={actual.updatedAt} />
+            <ActualizadoHace fecha={actual.updatedAt} autor={actual.actualizadoPorNombre} />
           </>
         }
       >

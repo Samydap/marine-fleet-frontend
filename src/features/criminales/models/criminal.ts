@@ -51,9 +51,13 @@ export interface CriminalDetalle extends Criminal {
   /** Todas las afiliaciones vigentes. */
   readonly afiliaciones: Afiliacion[];
   readonly origenBaseId: string | null;
-  /** Ids de usuario (el backend no expone el nombre aqui; el historial si). */
+  /** Nombres resueltos por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly origenBaseNombre?: string | null;
+  /** Ids de usuario; el nombre llega aparte. */
   readonly creadoPor: string | null;
+  readonly creadoPorNombre?: string | null;
   readonly actualizadoPor: string | null;
+  readonly actualizadoPorNombre?: string | null;
 }
 
 /** CrearCriminalDto. */

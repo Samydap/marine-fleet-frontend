@@ -10,22 +10,39 @@ interface Props {
   readonly tamano?: 'sm' | 'md';
   /** Sin enlace a la ficha (dentro de un boton o de otro enlace). */
   readonly sinEnlace?: boolean;
+  /**
+   * Nombre que ya trae la respuesta (`criminalNombre`). Con el, la celda no
+   * consulta el directorio; `null` significa que el criminal ya no existe.
+   */
+  readonly nombre?: string | null;
+  readonly fotoUrl?: string | null;
 }
 
 /**
  * Resumen de un criminal en una celda de tabla: retrato, nombre (enlace a su
- * ficha) y alias. Las respuestas de recompensas, incidentes o reportes solo
- * traen el id: el nombre sale del directorio de core/, pedido una vez por
- * sesion. Si no se puede leer, lo dice; nunca muestra el id crudo.
+ * ficha) y alias. Las respuestas de recompensas, incidentes y reportes ya
+ * traen el nombre y la foto: se pasan y la celda no pide nada. Sin ellos, el
+ * nombre sale del directorio de core/, pedido una vez por sesion. Si no se
+ * puede leer, lo dice; nunca muestra el id crudo.
  *
- *   celda: (r) => <CeldaCriminal criminalId={r.criminalId} />
+ *   celda: (r) => (
+ *     <CeldaCriminal criminalId={r.criminalId} nombre={r.criminalNombre} fotoUrl={r.criminalFotoUrl} />
+ *   )
  */
 export function CeldaCriminal({
   criminalId,
   tamano = 'sm',
   sinEnlace = false,
+  nombre,
+  fotoUrl = null,
 }: Props): React.ReactElement {
-  const criminal = useCriminal(criminalId);
+  const delDirectorio = useCriminal(nombre === undefined ? criminalId : null);
+  const criminal =
+    nombre === undefined
+      ? delDirectorio
+      : nombre === null
+        ? null
+        : { id: criminalId, nombre, fotoUrl, alias: [] as readonly string[] };
   const lado = tamano === 'md' ? '48px' : '32px';
 
   if (criminal === undefined) {

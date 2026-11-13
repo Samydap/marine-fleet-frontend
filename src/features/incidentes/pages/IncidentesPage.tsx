@@ -63,7 +63,10 @@ export function IncidentesPage(): React.ReactElement {
 
   useEffect(() => {
     void resolver(
-      incidentes.flatMap((i) => i.criminales.map((c) => c.criminalId)),
+      // Los incidentes ya traen el nombre de cada criminal: solo se piden los que falten.
+      incidentes.flatMap((i) =>
+        i.criminales.filter((c) => c.criminalNombre === undefined).map((c) => c.criminalId),
+      ),
       incidentes.flatMap((i) => (i.operativoId ? [i.operativoId] : [])),
     );
   }, [incidentes, resolver]);
@@ -132,7 +135,9 @@ export function IncidentesPage(): React.ReactElement {
         celda: (i) => (
           <span className="inc-texto-largo">
             {resumirNombres(
-              i.criminales.map((c) => nombreCriminal(c.criminalId, 'Criminal sin identificar')),
+              i.criminales.map(
+                (c) => c.criminalNombre ?? nombreCriminal(c.criminalId, 'Criminal sin identificar'),
+              ),
             )}
           </span>
         ),
@@ -141,7 +146,8 @@ export function IncidentesPage(): React.ReactElement {
         clave: 'base',
         encabezado: 'Base naval',
         ocultarEnMovil: true,
-        celda: (i) => (i.baseNavalId ? nombreBase(i.baseNavalId) : 'Sin base'),
+        celda: (i) =>
+          i.baseNavalId ? (i.baseNavalNombre ?? nombreBase(i.baseNavalId)) : 'Sin base',
       },
       {
         clave: 'operativo',

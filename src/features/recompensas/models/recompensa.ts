@@ -24,6 +24,11 @@ export const MOTIVO_MINIMO = 3;
 export interface Recompensa {
   readonly id: string;
   readonly criminalId: string;
+  /** Nombre resuelto por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly criminalNombre?: string | null;
+  readonly criminalFotoUrl?: string | null;
+  readonly solicitadaPorNombre?: string | null;
+  readonly validadaPorNombre?: string | null;
   readonly monto: number;
   readonly moneda: string;
   readonly estado: EstadoRecompensa;

@@ -118,7 +118,7 @@ export function DialogoResponsables({
           value={baseId}
           opciones={basesOp.map((b) => ({
             valor: b.baseNavalId,
-            etiqueta: `${nombreBase(b.baseNavalId) ?? b.baseNavalId}${
+            etiqueta: `${b.baseNavalNombre ?? nombreBase(b.baseNavalId) ?? b.baseNavalId}${
               b.rolParticipacion === 'LIDER' ? ' (líder)' : ''
             }`,
           }))}

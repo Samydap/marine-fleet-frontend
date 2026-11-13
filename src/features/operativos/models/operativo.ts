@@ -29,6 +29,8 @@ export const ROLES_ASIGNABLES: readonly RolParticipacion[] = ['APOYO', 'LOGISTIC
 /** ParticipacionResponse. */
 export interface ParticipacionBase {
   readonly baseNavalId: string;
+  /** Nombre resuelto por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly baseNavalNombre?: string | null;
   readonly rolParticipacion: RolParticipacion;
   readonly unidadesAsignadas: number;
   readonly recursos: string | null;
@@ -38,6 +40,8 @@ export interface ParticipacionBase {
 
 export interface ResponsableOperativo {
   readonly usuarioId: string;
+  /** Nombre resuelto por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly usuarioNombre?: string | null;
   readonly funcion: string;
 }
 
@@ -47,10 +51,13 @@ export interface Operativo {
   readonly codigo: string;
   readonly nombre: string;
   readonly objetivoCriminalId: string | null;
+  readonly objetivoCriminalNombre?: string | null;
+  readonly objetivoCriminalFotoUrl?: string | null;
   readonly objetivo: string | null;
   readonly descripcion: string | null;
   readonly zonaInfluenciaId: string;
   readonly baseLiderId: string;
+  readonly baseLiderNombre?: string | null;
   readonly estado: EstadoOperativo;
   readonly prioridad: PrioridadOperativo;
   readonly fechaInicioPlaneada: string | null;

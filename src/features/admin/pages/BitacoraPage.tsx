@@ -33,7 +33,7 @@ function DetalleRegistro({
 }: {
   readonly registro: RegistroAuditoria | null;
   readonly onCerrar: () => void;
-  readonly nombreUsuario: (id: string | null) => string;
+  readonly nombreUsuario: (registro: RegistroAuditoria) => string;
 }): React.ReactElement {
   const cambios = registro ? diferencias(registro.valorAnterior, registro.valorNuevo) : [];
   return (
@@ -44,7 +44,7 @@ function DetalleRegistro({
       titulo={registro ? describirAccion(registro.accion) : ''}
       descripcion={
         registro &&
-        `${nombreUsuario(registro.usuarioId)} · ${formatearFecha(registro.fecha)}${
+        `${nombreUsuario(registro)} · ${formatearFecha(registro.fecha)}${
           registro.ip ? ` · IP ${registro.ip}` : ''
         }`
       }
@@ -114,8 +114,11 @@ export function BitacoraPage(): React.ReactElement {
     if (leeUsuarios) void cargarNombres();
   }, [leeUsuarios, cargarNombres]);
 
-  const nombreUsuario = (id: string | null): string =>
-    id ? (nombres[id] ?? id) : 'Sistema o visitante anónimo';
+  // La bitacora trae `usuarioNombre`; el directorio queda para registros sin el.
+  const nombreUsuario = (r: RegistroAuditoria): string =>
+    r.usuarioId
+      ? (r.usuarioNombre ?? nombres[r.usuarioId] ?? r.usuarioId)
+      : 'Sistema o visitante anónimo';
 
   const columnas: ColumnaTabla<RegistroAuditoria>[] = [
     {
@@ -146,7 +149,7 @@ export function BitacoraPage(): React.ReactElement {
       encabezado: 'Usuario',
       celda: (r) => (
         <span className="bitacora-accion">
-          <TextoRecortado texto={nombreUsuario(r.usuarioId)} />
+          <TextoRecortado texto={nombreUsuario(r)} />
           {r.rol && <small>{etiquetaRol(r.rol)}</small>}
         </span>
       ),

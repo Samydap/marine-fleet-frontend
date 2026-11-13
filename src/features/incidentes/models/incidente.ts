@@ -40,6 +40,9 @@ export const DESENLACES: readonly DesenlaceParticipante[] = [
 
 export interface ParticipanteCriminal {
   readonly criminalId: string;
+  /** Nombre resuelto por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly criminalNombre?: string | null;
+  readonly criminalFotoUrl?: string | null;
   readonly rolEnIncidente: RolEnIncidente;
   readonly desenlace: DesenlaceParticipante;
   readonly observaciones: string | null;
@@ -61,6 +64,8 @@ export interface Incidente {
   readonly ubicacion: string;
   readonly zonaInfluenciaId: string | null;
   readonly baseNavalId: string | null;
+  readonly baseNavalNombre?: string | null;
+  readonly registradoPorNombre?: string | null;
   readonly operativoId: string | null;
   readonly descripcion: string;
   readonly observaciones: string | null;

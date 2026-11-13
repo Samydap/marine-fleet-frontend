@@ -4,8 +4,9 @@ import { resolverCriminales } from '@core/directorio/directorio-criminales';
 import type { FiltroRecompensas, Recompensa } from '../models/recompensa';
 import { recompensasApi } from './recompensas-api';
 
-// Las respuestas de recompensas solo traen `criminalId`: el nombre y la foto
-// los resuelve el directorio de core/ (una vez por sesion y compartido).
+// Las respuestas de recompensas traen el nombre y la foto del criminal. La
+// bandeja de validacion pide ademas su ficha al directorio de core/: necesita
+// la recompensa vigente, la amenaza y la afiliacion para comparar.
 
 /** Listado paginado: el historial general y la bandeja del Almirante usan la misma forma. */
 interface Listado {
@@ -56,7 +57,10 @@ export const useRecompensasStore = create<RecompensasState>()((set, get) => ({
           consultadoEn: new Date().toISOString(),
         },
       });
-      void resolverCriminales(pagina.data.map((r) => r.criminalId));
+      // El historial ya trae nombre y foto (criminalNombre): solo se piden los que falten.
+      void resolverCriminales(
+        pagina.data.filter((r) => r.criminalNombre === undefined).map((r) => r.criminalId),
+      );
     } catch (error) {
       set((s) => ({ historial: { ...s.historial, cargando: false, error } }));
     }

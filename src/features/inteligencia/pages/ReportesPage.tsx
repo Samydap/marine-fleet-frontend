@@ -3,7 +3,7 @@ import {
   useNombresCriminales,
   useOpcionesCriminales,
 } from '@core/directorio/directorio-criminales';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Permiso } from '@core/session/permiso.enum';
 import { EVENTOS } from '@core/sync/eventos';
 import { useCambiosSincronizados } from '@core/sync/sincronizacion';
@@ -58,17 +58,22 @@ export function ReportesPage(): React.ReactElement {
     void cargar({ page: 1 });
   }, [cargar]);
 
-  // Los reportes solo traen el id del criminal: se resuelven los nombres que falten.
+  // Los reportes traen el nombre del criminal; solo se piden los que no lo traigan.
   useEffect(() => {
-    void resolverCriminales(reportes.map((r) => r.criminalId));
+    void resolverCriminales(
+      reportes.filter((r) => r.criminalNombre === undefined).map((r) => r.criminalId),
+    );
   }, [reportes]);
 
   useCambiosSincronizados([EVENTOS.REPORTE_RECIBIDO, EVENTOS.REPORTE_APROBADO], () => {
     void cargar();
   });
 
-  const nombreDe = (criminalId: string): string =>
-    nombreCriminal(criminalId, 'Criminal sin identificar');
+  const nombreDe = useCallback(
+    (r: ReporteCiudadano): string =>
+      r.criminalNombre ?? nombreCriminal(r.criminalId, 'Criminal sin identificar'),
+    [nombreCriminal],
+  );
 
   function filtrar(cambio: Partial<FiltroReportes>): void {
     void cargar({ ...cambio, page: 1 });
@@ -98,7 +103,7 @@ export function ReportesPage(): React.ReactElement {
         ancho: '14rem',
         celda: (r) => (
           <button type="button" className="intel-enlace" onClick={() => setAbierto(r)}>
-            {nombreCriminal(r.criminalId, 'Criminal sin identificar')}
+            {nombreDe(r)}
           </button>
         ),
       },
@@ -154,7 +159,7 @@ export function ReportesPage(): React.ReactElement {
         ),
       },
     ],
-    [ahora, nombreZona, nombreCriminal],
+    [ahora, nombreZona, nombreDe],
   );
 
   const viendoPendientes = filtro.estado === 'PENDIENTE';
@@ -234,7 +239,7 @@ export function ReportesPage(): React.ReactElement {
 
       <DialogoRevisionReporte
         reporte={abierto}
-        nombreCriminal={abierto ? nombreDe(abierto.criminalId) : ''}
+        nombreCriminal={abierto ? nombreDe(abierto) : ''}
         zona={abierto ? nombreZona(abierto.zonaInfluenciaId) : null}
         puedeRevisar={puedeRevisar}
         onCerrar={() => setAbierto(null)}

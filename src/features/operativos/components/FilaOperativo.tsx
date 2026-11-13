@@ -88,10 +88,10 @@ export function FilaOperativo({
               className={
                 b.rolParticipacion === 'LIDER' ? 'base-chip base-chip--lider' : 'base-chip'
               }
-              title={nombreBase(b.baseNavalId) ?? b.baseNavalId}
+              title={b.baseNavalNombre ?? nombreBase(b.baseNavalId) ?? b.baseNavalId}
             >
               {b.rolParticipacion === 'LIDER' && <span className="sr-only">Base líder: </span>}
-              {nombreBase(b.baseNavalId) ?? b.baseNavalId}
+              {b.baseNavalNombre ?? nombreBase(b.baseNavalId) ?? b.baseNavalId}
             </li>
           ))}
           {ocultas > 0 && (

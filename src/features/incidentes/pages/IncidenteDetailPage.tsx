@@ -73,7 +73,7 @@ export function IncidenteDetailPage(): React.ReactElement {
   useEffect(() => {
     if (!incidente) return;
     void resolver(
-      incidente.criminales.map((c) => c.criminalId),
+      incidente.criminales.filter((c) => c.criminalNombre === undefined).map((c) => c.criminalId),
       incidente.operativoId ? [incidente.operativoId] : [],
     );
   }, [incidente, resolver]);
@@ -105,6 +105,7 @@ export function IncidenteDetailPage(): React.ReactElement {
   }
 
   const nombreDe = (criminalId: string): string =>
+    incidente.criminales.find((c) => c.criminalId === criminalId)?.criminalNombre ??
     nombreCriminal(criminalId, 'Criminal sin identificar');
   const operativo = incidente.operativoId ? operativosPorId[incidente.operativoId] : undefined;
 
@@ -246,7 +247,11 @@ export function IncidenteDetailPage(): React.ReactElement {
               </div>
               <div>
                 <dt>Base naval</dt>
-                <dd>{incidente.baseNavalId ? nombreBase(incidente.baseNavalId) : 'Sin base'}</dd>
+                <dd>
+                  {incidente.baseNavalId
+                    ? (incidente.baseNavalNombre ?? nombreBase(incidente.baseNavalId))
+                    : 'Sin base'}
+                </dd>
               </div>
               <div>
                 <dt>Bajas</dt>

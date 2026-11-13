@@ -21,6 +21,10 @@ export interface Informante {
 export interface ReporteCiudadano {
   readonly id: string;
   readonly criminalId: string;
+  /** Nombre resuelto por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly criminalNombre?: string | null;
+  readonly criminalFotoUrl?: string | null;
+  readonly revisadoPorNombre?: string | null;
   readonly descripcion: string;
   readonly fechaHecho: string | null;
   readonly ubicacion: string;

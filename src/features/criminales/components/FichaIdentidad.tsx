@@ -47,7 +47,7 @@ export function FichaIdentidad({
 }: Props): React.ReactElement {
   const { nombreBase } = useCatalogos();
   const zonaConMar = useNombreZonaConMar();
-  const base = nombreBase(criminal.origenBaseId);
+  const base = criminal.origenBaseNombre ?? nombreBase(criminal.origenBaseId);
 
   return (
     <aside className="expediente-identidad" aria-label="Identificación">

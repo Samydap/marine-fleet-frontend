@@ -108,7 +108,7 @@ export function OperativoDetailPage(): React.ReactElement {
       principal: true,
       celda: (b) => (
         <span className="base-celda">
-          <strong>{nombreBase(b.baseNavalId) ?? b.baseNavalId}</strong>
+          <strong>{b.baseNavalNombre ?? nombreBase(b.baseNavalId) ?? b.baseNavalId}</strong>
           <small>{etiquetaRolParticipacion(b.rolParticipacion)}</small>
         </span>
       ),
@@ -279,7 +279,9 @@ export function OperativoDetailPage(): React.ReactElement {
               <ul className="responsables ficha-superficie">
                 {op.responsables.map((r) => (
                   <li key={r.usuarioId}>
-                    <strong>{nombres[r.usuarioId] ?? `Marine ${r.usuarioId}`}</strong>
+                    <strong>
+                      {r.usuarioNombre ?? nombres[r.usuarioId] ?? `Marine ${r.usuarioId}`}
+                    </strong>
                     <span>{r.funcion}</span>
                   </li>
                 ))}

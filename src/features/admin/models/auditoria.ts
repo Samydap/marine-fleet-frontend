@@ -8,6 +8,8 @@ export interface RegistroAuditoria {
   readonly id: string;
   readonly fecha: string;
   readonly usuarioId: string | null;
+  /** Nombre resuelto por el backend (@ConNombres); `null` si el id ya no existe. */
+  readonly usuarioNombre?: string | null;
   readonly rol: string | null;
   readonly accion: string;
   readonly tipoAccion: TipoAccionAuditoria;

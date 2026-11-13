@@ -44,7 +44,12 @@ function Expediente({
   return (
     <li className="expediente" aria-labelledby={idTitulo}>
       <div className="expediente-criminal" id={idTitulo}>
-        <CeldaCriminal criminalId={recompensa.criminalId} tamano="md" />
+        <CeldaCriminal
+          criminalId={recompensa.criminalId}
+          nombre={recompensa.criminalNombre}
+          fotoUrl={recompensa.criminalFotoUrl}
+          tamano="md"
+        />
         {criminal && (
           <div className="expediente-insignias">
             <InsigniaTipoCriminal categoria={criminal.organizacion?.categoria ?? null} />
@@ -88,7 +93,9 @@ function Expediente({
           >
             {tiempoRelativo(recompensa.fechaSolicitud)}
           </time>
-          {propia && ' por ti'}
+          {propia
+            ? ' por ti'
+            : recompensa.solicitadaPorNombre && ` por ${recompensa.solicitadaPorNombre}`}
         </p>
         {recompensa.motivo ? (
           <blockquote className="expediente-motivo">{recompensa.motivo}</blockquote>
@@ -129,7 +136,12 @@ function DialogoDecision({
   const [motivo, setMotivo] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [enCurso, setEnCurso] = useState(false);
-  const nombre = useCriminal(decision?.recompensa.criminalId)?.nombre ?? null;
+  const delDirectorio = useCriminal(
+    decision && decision.recompensa.criminalNombre === undefined
+      ? decision.recompensa.criminalId
+      : null,
+  );
+  const nombre = decision?.recompensa.criminalNombre ?? delDirectorio?.nombre ?? null;
 
   useEffect(() => {
     setMotivo('');
