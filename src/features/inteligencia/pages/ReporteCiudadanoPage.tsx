@@ -1,6 +1,7 @@
 import { useRef, useState, type FormEvent } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SelloMarina } from '@core/layout/SelloMarina';
+import { EmblemaGaviota } from '@core/layout/emblemas/EmblemaGaviota';
+import { SelloJusticia } from '@core/layout/emblemas/SelloJusticia';
 import { Boton } from '@shared/ui/Boton';
 import { CampoAreaTexto, CampoTexto } from '@shared/ui/Campo';
 import { IconoExito } from '@shared/ui/iconos';
@@ -101,11 +102,13 @@ export function ReporteCiudadanoPage(): React.ReactElement {
   return (
     <div className="denuncia">
       <header className="denuncia-franja">
-        <SelloMarina simple className="denuncia-sello" />
+        <EmblemaGaviota variante="silueta" tamano={40} className="denuncia-gaviota" />
         <p className="denuncia-marca">
           <strong>Marina</strong>
           <span>Línea de reportes ciudadanos</span>
         </p>
+        {/* Sin sesion: el 正義 va en blanco (el dorado es del rango). */}
+        <SelloJusticia tono="blanco" className="denuncia-justicia" />
       </header>
 
       <main className="denuncia-contenido">
