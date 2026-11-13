@@ -570,6 +570,64 @@
   background: var(--navy-profundo);
 }
 
+/* --- Pantallas de aviso: acceso denegado y 404 -------------------------- */
+
+/* Hoja de orden oficial: la gaviota y el 正義 estampados en tinta y el titulo
+   en display. Sobre el papel el 正義 va en navy; el dorado (Almirante) baja a
+   su tono de tinta para leerse sobre el papel. */
+.estado-insignias {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-3);
+  margin-bottom: var(--esp-3);
+}
+
+.estado-gaviota {
+  flex: 0 0 auto;
+  color: var(--navy);
+}
+
+.estado--oficial .sello-justicia {
+  color: var(--navy);
+}
+
+.estado--oficial .sello-justicia[data-tono='dorado'] {
+  color: var(--gold-tinta);
+}
+
+.estado-orden {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-05);
+  margin: 0 0 var(--esp-1);
+  color: var(--tinta-2);
+  font: 700 var(--texto-xs) / 1.4 var(--fuente-titulo);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.estado-orden .icono {
+  width: 16px;
+  height: 16px;
+}
+
+.estado--oficial h1.estado-titulo {
+  max-width: 26ch;
+  font: 400 var(--titulo-orden) / 1.1 var(--fuente-display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+}
+
+.estado-ruta {
+  padding: 0 var(--esp-05);
+  border-radius: var(--radio-sm);
+  background: var(--papel-2);
+  color: var(--tinta);
+  font: 500 var(--texto-sm) / 1.5 var(--fuente-codigo);
+  overflow-wrap: anywhere;
+}
+
 /* --- Responsive ------------------------------------------------------------ */
 
 @media (max-width: 900px) {
@@ -637,6 +695,19 @@
   .lienzo-carta,
   .lienzo-gaviota {
     display: none;
+  }
+
+  .estado-insignias {
+    gap: var(--esp-2);
+  }
+
+  .estado-gaviota {
+    width: 44px;
+    height: 44px;
+  }
+
+  .estado--oficial .sello-justicia[data-tamano] {
+    --sello-lado: 60px;
   }
 }
 

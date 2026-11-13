@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { InsigniasAviso } from './InsigniasAviso';
 import { IconoCandado } from '../layout/iconos-shell';
 import { rutaInicio } from '../session/navegacion';
 import { etiquetaRol } from '../session/permiso.enum';
@@ -18,7 +19,8 @@ function conPreposicion(recurso: string): string {
  * Estado "sin permiso" (DISENO.md, Estados). Lo pinta RequirePermiso en lugar
  * de la pagina protegida, dentro del shell: el usuario ve que existe, que su
  * cargo no lo cubre y a donde puede ir, en vez de una pantalla en blanco o un
- * salto silencioso a otra ruta.
+ * salto silencioso a otra ruta. Va en una hoja de orden oficial con la
+ * gaviota y el 正義 grande (identidad Marineford, 6.8).
  *
  * shared/ui lo reexporta como EstadoSinPermiso para usarlo dentro de una pagina.
  */
@@ -27,10 +29,15 @@ export function AccesoDenegado({ recurso }: Props): React.ReactElement {
   const inicio = rutaInicio(usuario);
 
   return (
-    <section className="estado estado--pantalla" aria-labelledby="acceso-denegado-titulo">
-      <span className="estado-icono estado-icono--candado">
+    <section
+      className="estado estado--pantalla estado--oficial"
+      aria-labelledby="acceso-denegado-titulo"
+    >
+      <InsigniasAviso />
+      <p className="estado-orden">
         <IconoCandado />
-      </span>
+        Acceso restringido
+      </p>
       <h1 id="acceso-denegado-titulo" className="estado-titulo">
         Tu cargo no tiene acceso {recurso ? conPreposicion(recurso) : 'a esta sección'}
       </h1>

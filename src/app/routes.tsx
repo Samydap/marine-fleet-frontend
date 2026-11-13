@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
+import { PaginaNoEncontrada } from '@core/guards/PaginaNoEncontrada';
 import { RedirigirInicio, SinAcceso } from '@core/guards/RedirigirInicio';
 import { RequireAuth } from '@core/guards/RequireAuth';
 import { MainLayout } from '@core/layout/MainLayout';
@@ -56,10 +57,12 @@ export const router = createBrowserRouter([
 
           // Un rol sin ninguna seccion visible (matriz RBAC vacia); los demas, a su inicio.
           { path: 'sin-acceso', element: <SinAcceso /> },
+
+          // Cualquier otra direccion: 404 dentro del shell. Sin sesion,
+          // RequireAuth lleva primero al login.
+          { path: '*', element: <PaginaNoEncontrada /> },
         ],
       },
     ],
   },
-
-  { path: '*', element: <Navigate to="/" replace /> },
 ]);

@@ -51,6 +51,12 @@
   --peligro-sobre-lienzo-fondo: rgba(242, 139, 130, 0.12);
   /* Gaviota en marca de agua del lienzo. */
   --marca-agua: rgba(255, 255, 255, 0.045);
+  /* Escena de Marineford (acceso): resplandor del horizonte al caer la noche,
+     la fortaleza a contraluz, sus ventanas y el mar nocturno al pie. */
+  --horizonte: #2c4868;
+  --silueta: #050a14;
+  --silueta-luz: rgba(184, 194, 209, 0.38);
+  --mar-noche: #070e1a;
 
   /* Papel oficial: hojas sobre la mesa de mando. */
   --papel: #f6f2e8;
@@ -295,4 +301,67 @@ a {
   .sello-anillo {
     animation: none;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Silueta de Marineford (core/layout/emblemas/SiluetaMarineford.tsx). Escena
+   estatica del acceso: los colores salen de los tokens de la escena.
+   --------------------------------------------------------------------------- */
+.marineford {
+  display: block;
+  overflow: visible;
+}
+
+.marineford-horizonte-alto {
+  stop-color: var(--horizonte);
+  stop-opacity: 0;
+}
+
+.marineford-horizonte-bajo {
+  stop-color: var(--horizonte);
+  stop-opacity: 1;
+}
+
+.marineford-mar {
+  fill: var(--mar-noche);
+}
+
+.marineford-fortaleza {
+  fill: var(--silueta);
+}
+
+.marineford-luces {
+  fill: var(--silueta-luz);
+}
+
+.marineford-olas,
+.marineford-reflejo {
+  fill: none;
+  stroke: var(--sobre-navy-linea);
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.marineford-reflejo {
+  stroke: var(--silueta-luz);
+  stroke-width: 2;
+}
+
+.marineford-gaviotas {
+  fill: none;
+  stroke: var(--sobre-navy-texto);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.5;
+}
+
+.marineford-blason {
+  fill: none;
+  stroke: var(--silueta-luz);
+  stroke-width: 1.5;
+}
+
+.marineford-kanji {
+  fill: var(--sobre-lienzo);
+  font: 400 26px / 1 var(--fuente-kanji);
 }

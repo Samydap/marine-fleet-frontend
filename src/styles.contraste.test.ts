@@ -81,6 +81,13 @@ describe('contraste de los tokens', () => {
       ['--peligro-sobre-lienzo', '--lienzo-2'],
       // Boton principal de la cabecera: blanco con texto navy.
       ['--navy', '--sobre-lienzo'],
+      // Acceso y /reportar: marca y pie sobre el cielo, el mar de Marineford y
+      // el lienzo; titulo de las hojas de aviso y la ruta del 404 en el papel.
+      ['--sobre-navy-texto', '--lienzo-2'],
+      ['--sobre-navy-texto', '--mar-noche'],
+      ['--sobre-navy-texto', '--navy-profundo'],
+      ['--navy', '--papel'],
+      ['--tinta', '--papel-2'],
     ];
     for (const [texto, fondo] of paresTexto) {
       expect(contraste(texto, fondo), `${texto} sobre ${fondo}`).toBeGreaterThanOrEqual(4.5);
