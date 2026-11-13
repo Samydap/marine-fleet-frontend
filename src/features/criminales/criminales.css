@@ -707,6 +707,22 @@
 }
 
 @media (max-width: 760px) {
+  /* En el telefono cada fila es una ficha: el filete va en su borde izquierdo,
+     no junto al retrato dentro del relleno. */
+  .ui-tabla tbody tr.fila-amenaza-alta {
+    box-shadow:
+      inset 3px 0 0 var(--amenaza-alto),
+      var(--sombra-papel);
+  }
+
+  .ui-hoja .ui-tabla tbody tr.fila-amenaza-alta {
+    box-shadow: inset 3px 0 0 var(--amenaza-alto);
+  }
+
+  .ui-tabla tbody tr.fila-amenaza-alta > :first-child {
+    box-shadow: none;
+  }
+
   .expediente-identidad,
   .expediente-seccion,
   .expediente-form {
