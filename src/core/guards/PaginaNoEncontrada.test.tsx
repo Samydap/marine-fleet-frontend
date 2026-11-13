@@ -47,6 +47,14 @@ describe('PaginaNoEncontrada', () => {
       '/operativos',
     );
   });
+
+  it('sin secciones disponibles para el cargo no ofrece ir al panel', () => {
+    useSessionStore.setState({ usuario: usuario(RolCodigo.CAPITAN, []) });
+    pintar(<PaginaNoEncontrada />, '/x');
+
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Esta página no existe');
+    expect(screen.queryByRole('link', { name: 'Ir a mi panel' })).not.toBeInTheDocument();
+  });
 });
 
 describe('insignias de las pantallas de aviso', () => {

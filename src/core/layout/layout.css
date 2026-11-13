@@ -267,7 +267,7 @@
   color: var(--sobre-navy-aviso);
 }
 
-/* Llamada entrante: la concha se sacude y las pupilas se encienden. */
+/* Llamada entrante: la concha se sacude un instante (600 ms). */
 .den-den-mushi[data-estado='llamando'] {
   animation: mushi-llama 600ms var(--ease-out);
 }
@@ -545,7 +545,7 @@
 }
 
 .aviso-cerrar:hover {
-  background: var(--fondo);
+  background: var(--papel-2);
   color: var(--tinta);
 }
 

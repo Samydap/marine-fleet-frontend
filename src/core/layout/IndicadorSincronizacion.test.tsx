@@ -13,6 +13,7 @@ describe('IndicadorSincronizacion', () => {
   it('con el canal caído muestra el Den Den Mushi dormido y el texto Sin conexión', () => {
     useSincronizacionStore.setState({ estado: 'sin-conexion', ultimaSenal: null });
     const { container } = render(<IndicadorSincronizacion />);
+    expect(screen.getByText('Sin conexión, reintentando')).toBeInTheDocument();
     expect(screen.getByText('Sin conexión')).toBeInTheDocument();
     expect(container.querySelector('[data-estado="dormido"]')).not.toBeNull();
   });

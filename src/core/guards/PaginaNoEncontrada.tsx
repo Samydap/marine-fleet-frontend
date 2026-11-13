@@ -26,11 +26,13 @@ export function PaginaNoEncontrada(): React.ReactElement {
         La dirección <code className="estado-ruta">{pathname}</code> no figura en el sistema. Puede
         venir de un enlace viejo o mal copiado.
       </p>
-      <div className="estado-acciones">
-        <Link className="ui-boton ui-boton--secundario" to={inicio}>
-          Ir a mi panel
-        </Link>
-      </div>
+      {inicio !== '/sin-acceso' && (
+        <div className="estado-acciones">
+          <Link className="ui-boton ui-boton--secundario" to={inicio}>
+            Ir a mi panel
+          </Link>
+        </div>
+      )}
     </section>
   );
 }
