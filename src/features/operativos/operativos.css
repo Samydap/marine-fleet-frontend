@@ -77,7 +77,7 @@
 
 /* Dentro de la hoja del grupo, la lista llega a los bordes del papel. */
 .ui-hoja .despliegue-lista {
-  margin: 0 calc(var(--esp-3) * -1) calc(var(--esp-3) * -1);
+  margin: 0 calc(var(--hoja-relleno) * -1) calc(var(--hoja-relleno) * -1);
   border: 0;
   border-top: 1px solid var(--line);
   border-radius: 0 0 var(--radio-lg) var(--radio-lg);
@@ -662,10 +662,6 @@
   .operativo-form-seccion,
   .ficha-superficie {
     padding: var(--esp-2);
-  }
-
-  .ui-hoja .despliegue-lista {
-    margin: 0 calc(var(--esp-2) * -1) calc(var(--esp-2) * -1);
   }
 
   .asignacion-fila {

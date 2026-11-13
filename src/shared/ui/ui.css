@@ -556,12 +556,15 @@
 
 /* Una seccion con titulo propio que va sobre el lienzo: el titulo y su
    contenido comparten una sola hoja. Las superficies compartidas que caen
-   dentro no vuelven a levantarse (sin papel sobre papel). */
+   dentro no vuelven a levantarse (sin papel sobre papel).
+   --hoja-relleno es el relleno lateral e inferior: quien quiera llegar al
+   borde del papel (una lista a sangre) lo resta con margen negativo. */
 .ui-hoja {
+  --hoja-relleno: var(--esp-3);
   display: grid;
   gap: var(--esp-15);
   min-width: 0;
-  padding: var(--esp-2) var(--esp-3) var(--esp-3);
+  padding: var(--esp-2) var(--hoja-relleno) var(--hoja-relleno);
   border: 1px solid var(--papel-borde);
   border-radius: var(--radio-lg);
   background: var(--papel);
@@ -1574,7 +1577,7 @@ h1.estado-titulo {
   }
 
   .ui-hoja {
-    padding: var(--esp-2);
+    --hoja-relleno: var(--esp-2);
   }
 
   .ui-tabla td {
