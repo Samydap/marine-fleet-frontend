@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
 
-/* El cartel WANTED: la unica pieza con estetica de papel. Solo tokens de
+/* El cartel WANTED: papel envejecido, serifa y tinta de cartel. Solo tokens de
    src/styles.css (--cartel-*). La serifa display (Playfair) se descarga solo
    donde se pinta un cartel: este CSS lo importa CartelWanted. */
 

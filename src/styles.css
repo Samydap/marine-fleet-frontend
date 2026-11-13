@@ -165,8 +165,9 @@
   --ancho-lateral: 232px;
   --ancho-contenido: 1280px;
 
-  /* Cartel WANTED (RF-2). Unica pieza con estetica de papel: estos tokens solo
-     los usa features/carteles. Ver DISENO.md, "Cartel WANTED". */
+  /* Cartel WANTED (RF-2): papel envejecido y tinta del cartel. Fuera del
+     cartel solo los toma el marco de RetratoCriminal. Ver DISENO.md,
+     "Cartel WANTED". */
   --cartel-papel: #e9d6aa;
   --cartel-papel-claro: #f3e6c4;
   --cartel-mancha: rgba(140, 96, 38, 0.16);

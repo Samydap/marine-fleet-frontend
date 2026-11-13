@@ -20,7 +20,7 @@ function conPreposicion(recurso: string): string {
  * de la pagina protegida, dentro del shell: el usuario ve que existe, que su
  * cargo no lo cubre y a donde puede ir, en vez de una pantalla en blanco o un
  * salto silencioso a otra ruta. Va en una hoja de orden oficial con la
- * gaviota y el 正義 grande (identidad Marineford, 6.8).
+ * gaviota y el 正義 grande (DISENO.md, "Pantallas con tratamiento especial").
  *
  * shared/ui lo reexporta como EstadoSinPermiso para usarlo dentro de una pagina.
  */

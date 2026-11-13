@@ -341,8 +341,9 @@
 
 /* === Cabecera de pagina: orden del Cuartel General ======================== */
 
-/* Va directo sobre el lienzo oscuro (DISENO 6.3): titulo blanco en display,
-   descripcion y meta en --sobre-navy-texto, acciones y foco en blanco. */
+/* Va directo sobre el lienzo oscuro (DISENO.md, "Cabecera de pagina"): titulo
+   blanco en display, descripcion y meta en --sobre-navy-texto, acciones y foco
+   en blanco. */
 .page-header {
   margin-bottom: var(--esp-3);
 }
@@ -495,8 +496,9 @@
 /* === Pestanas de seccion (PestanasSeccion) ================================ */
 
 /* Siempre bajo el PageHeader y, como el, directo sobre el lienzo: texto claro,
-   foco blanco y subrayado dorado en la activa (DISENO 6.3). En el telefono la fila se desplaza en horizontal
-   (sin envolver): una pestana en segunda linea parece otra cosa. */
+   foco blanco y subrayado dorado en la activa. En el telefono la fila se
+   desplaza en horizontal (sin envolver): una pestana en segunda linea parece
+   otra cosa. */
 .ui-pestanas {
   display: flex;
   gap: var(--esp-3);

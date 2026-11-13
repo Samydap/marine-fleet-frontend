@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
    Pantalla de acceso (RF-7): login y verificacion en dos pasos.
-   Solo usa tokens de src/styles.css; referencia en docs/DISENO.md y en la
-   identidad Marineford (6.4 y 6.8).
+   Solo usa tokens de src/styles.css; referencia en docs/DISENO.md
+   ("Pantallas con tratamiento especial").
    --------------------------------------------------------------------------- */
 
 .acceso {
