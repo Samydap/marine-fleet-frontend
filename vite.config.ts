@@ -1,11 +1,21 @@
 import { fileURLToPath, URL } from 'node:url';
+import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import flowbiteReact from 'flowbite-react/plugin/vite';
 // defineConfig viene de vitest/config, no de vite: es el que acepta la clave
 // `test`. Con el de 'vite' el typecheck falla.
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    // Tailwind CSS v4: compila src/tailwind.css (ahi esta toda su configuracion).
+    tailwindcss(),
+    // Flowbite React: genera .flowbite-react/class-list.json con las clases de
+    // los componentes que se importen. Las pruebas no procesan CSS (css: false),
+    // asi que ahi no se carga.
+    ...(process.env.VITEST ? [] : [flowbiteReact()]),
+  ],
 
   resolve: {
     // Los mismos alias que tsconfig.json. Evitan los '../../../..' y, con ellos,

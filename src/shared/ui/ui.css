@@ -1,0 +1,1849 @@
+/* ---------------------------------------------------------------------------
+   Componentes de shared/ui. Se carga una vez desde main.tsx (global) porque
+   core/ tambien pinta botones y estados (AccesoDenegado) y no puede importar
+   de shared/. Solo tokens de src/styles.css; anatomia en docs/DISENO.md.
+   Prefijo `ui-` para no chocar con las clases heredadas de la v1.
+   --------------------------------------------------------------------------- */
+
+/* === Botones ============================================================== */
+
+.ui-boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-1);
+  min-height: 44px;
+  padding: 10px var(--esp-2);
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-decoration: none;
+  user-select: none;
+  transition:
+    background-color var(--dur-corta) ease,
+    border-color var(--dur-corta) ease,
+    color var(--dur-corta) ease,
+    transform var(--dur-corta) var(--ease-out);
+}
+
+.ui-boton:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.ui-boton:disabled {
+  opacity: 0.55;
+}
+
+.ui-boton[aria-busy='true'] {
+  opacity: 1;
+  cursor: progress;
+}
+
+.ui-boton--compacto {
+  min-height: 36px;
+  padding: 6px var(--esp-15);
+  font-size: var(--texto-sm);
+}
+
+.ui-boton--principal {
+  background: var(--navy);
+  color: var(--superficie);
+}
+
+.ui-boton--secundario {
+  border-color: var(--borde-campo);
+  background: var(--superficie);
+  color: var(--tinta);
+}
+
+.ui-boton--peligro {
+  background: var(--error);
+  color: var(--superficie);
+}
+
+.ui-boton--peligro-sutil {
+  border-color: var(--error-borde);
+  background: var(--superficie);
+  color: var(--error);
+}
+
+.ui-boton--fantasma {
+  background: transparent;
+  color: var(--navy-2);
+}
+
+/* Regla del galon: solo validaciones de rango. */
+.ui-boton--autoridad {
+  border-color: var(--gold);
+  background: var(--navy);
+  color: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--gold);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-boton--principal:hover:not(:disabled),
+  .ui-boton--autoridad:hover:not(:disabled) {
+    background: var(--navy-2);
+  }
+
+  .ui-boton--secundario:hover:not(:disabled) {
+    border-color: var(--tinta-2);
+    background: var(--superficie-2);
+  }
+
+  .ui-boton--peligro:hover:not(:disabled) {
+    background: var(--error-hover);
+  }
+
+  .ui-boton--peligro-sutil:hover:not(:disabled) {
+    border-color: var(--error);
+    background: var(--error-fondo);
+  }
+
+  .ui-boton--fantasma:hover:not(:disabled) {
+    background: var(--seleccion);
+  }
+}
+
+.ui-boton-indicador {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: spin 0.7s linear infinite;
+}
+
+.ui-boton-icono {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: var(--radio);
+  background: transparent;
+  color: var(--tinta-2);
+  transition:
+    background-color var(--dur-corta) ease,
+    color var(--dur-corta) ease,
+    transform var(--dur-corta) var(--ease-out);
+}
+
+.ui-boton-icono--compacto {
+  width: 32px;
+  height: 32px;
+}
+
+.ui-boton-icono:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.ui-boton-icono:disabled {
+  opacity: 0.45;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-boton-icono:hover:not(:disabled) {
+    background: var(--seleccion);
+    color: var(--navy);
+  }
+}
+
+/* === Campos =============================================================== */
+
+.ui-campo {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  align-content: start;
+}
+
+.ui-campo-etiqueta {
+  color: var(--tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ui-campo-obligatorio {
+  color: var(--error);
+}
+
+.ui-control {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px var(--esp-15);
+  border: 1px solid var(--borde-campo);
+  border-radius: var(--radio);
+  /* El campo sigue blanco sobre el papel: se lee donde se escribe. */
+  background: var(--superficie-campo);
+  color: var(--tinta);
+  caret-color: var(--navy-2);
+  /* 16px: iOS no hace zoom al enfocar. */
+  font-size: 16px;
+  line-height: 1.35;
+  transition:
+    border-color var(--dur-corta) ease,
+    background-color var(--dur-corta) ease;
+}
+
+.ui-control::placeholder {
+  color: var(--tinta-3);
+}
+
+.ui-control:hover:not(:focus):not(:disabled):not([readonly]) {
+  border-color: var(--tinta-2);
+}
+
+.ui-control:focus {
+  border-color: var(--navy-2);
+  outline: 2px solid var(--navy-2);
+  outline-offset: 2px;
+}
+
+.ui-control[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+.ui-control:disabled,
+.ui-control[readonly] {
+  background: var(--papel-2);
+  color: var(--tinta-2);
+}
+
+.ui-control--area {
+  min-height: 96px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.ui-select {
+  position: relative;
+}
+
+.ui-select select {
+  padding-right: 40px;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Flecha propia (SVG en linea) para que el select hable el mismo trazo. */
+.ui-select::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  border-right: 1.75px solid var(--tinta-2);
+  border-bottom: 1.75px solid var(--tinta-2);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.ui-campo-ayuda,
+.ui-campo-error {
+  margin: 0;
+  font-size: var(--texto-sm);
+  line-height: 1.4;
+}
+
+.ui-campo-ayuda {
+  color: var(--tinta-2);
+}
+
+.ui-campo-ayuda-fila {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--esp-2);
+}
+
+.ui-campo-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--error);
+}
+
+.ui-campo-error .icono {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+/* Grilla de formulario: 2 columnas en escritorio, 1 en movil. */
+.ui-form-grilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--esp-3) var(--esp-2);
+}
+
+.ui-form-grilla > .ui-campo--ancho {
+  grid-column: 1 / -1;
+}
+
+.ui-form-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--esp-15);
+  margin-top: var(--esp-3);
+  padding-top: var(--esp-2);
+  border-top: 1px solid var(--line);
+}
+
+/* === Sello 正義 (SelloJusticia, core/layout/emblemas) ====================== */
+
+/* Global porque lo pintan la cabecera, el acceso y el acceso denegado. Sello
+   cuadrado de doble filete, los dos kanji en columna y un giro leve de timbre
+   puesto a mano. Estatico: no anima. */
+.sello-justicia {
+  --sello-lado: 52px;
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: var(--sello-lado);
+  height: var(--sello-lado);
+  border: 2px solid currentColor;
+  border-radius: var(--radio-sm);
+  color: var(--sobre-lienzo);
+  transform: rotate(-3deg);
+}
+
+.sello-justicia::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 1px solid currentColor;
+  border-radius: inherit;
+  opacity: 0.55;
+}
+
+.sello-justicia[data-tamano='lg'] {
+  --sello-lado: 76px;
+}
+
+/* Regla del galon: dorado solo para el Almirante. */
+.sello-justicia[data-tono='dorado'] {
+  color: var(--gold);
+}
+
+.sello-justicia-kanji {
+  font: 400 calc(var(--sello-lado) * 0.38) / 1 var(--fuente-kanji);
+  letter-spacing: 0;
+  writing-mode: vertical-rl;
+}
+
+/* === Cabecera de pagina: orden del Cuartel General ======================== */
+
+/* Va directo sobre el lienzo oscuro (DISENO.md, "Cabecera de pagina"): titulo
+   blanco en display, descripcion y meta en --sobre-navy-texto, acciones y foco
+   en blanco. */
+.page-header {
+  margin-bottom: var(--esp-3);
+}
+
+.page-header :focus-visible {
+  outline-color: var(--sobre-lienzo);
+}
+
+.page-header-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-05);
+  margin-bottom: var(--esp-15);
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.page-header-volver:hover {
+  color: var(--sobre-lienzo);
+  text-decoration: underline;
+}
+
+.page-header-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--esp-2) var(--esp-3);
+}
+
+.page-header-orden {
+  display: flex;
+  flex: 1 1 28rem;
+  align-items: flex-start;
+  gap: var(--esp-2);
+  min-width: 0;
+}
+
+/* El sello se alinea con la primera linea del titulo, no con el bloque. */
+.page-header-sello {
+  margin-top: var(--esp-05);
+}
+
+.page-header-texto {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.page-header h1 {
+  margin: 0;
+  color: var(--sobre-lienzo);
+  font: 400 var(--titulo-orden) / 1.1 var(--fuente-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.page-header-descripcion {
+  max-width: 68ch;
+  margin: var(--esp-1) 0 0;
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-md);
+  line-height: 1.5;
+}
+
+.page-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1) var(--esp-15);
+  margin-top: var(--esp-15);
+  color: var(--sobre-navy-texto);
+  font-size: var(--texto-sm);
+}
+
+.page-header-meta .actualizado {
+  color: inherit;
+}
+
+.page-header-meta .actualizado--viejo {
+  color: var(--sobre-navy-aviso);
+}
+
+/* Las insignias y badges de la meta traen su propio fondo de papel; la
+   prioridad no, asi que en la cabecera pasa a los tonos del lienzo. */
+.page-header-meta .prioridad,
+.page-header-meta .prioridad-texto {
+  color: var(--sobre-lienzo);
+}
+
+.page-header-meta .prioridad--critica,
+.page-header-meta .prioridad--critica .prioridad-texto {
+  color: var(--peligro-sobre-lienzo);
+}
+
+.page-header-meta .prioridad-galon--vacio {
+  color: var(--sobre-navy-pista);
+}
+
+.page-header-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-15);
+}
+
+/* Acciones sobre el lienzo. Solo dentro de la cabecera: en el papel y en los
+   dialogos los botones conservan su aspecto. */
+.page-header-acciones .ui-boton--principal {
+  background: var(--sobre-lienzo);
+  color: var(--navy);
+}
+
+.page-header-acciones .ui-boton--secundario {
+  border-color: var(--sobre-lienzo);
+  background: transparent;
+  color: var(--sobre-lienzo);
+}
+
+.page-header-acciones .ui-boton--peligro-sutil {
+  border-color: var(--peligro-sobre-lienzo);
+  background: transparent;
+  color: var(--peligro-sobre-lienzo);
+}
+
+.page-header-acciones .ui-boton--fantasma,
+.page-header-acciones .ui-boton-icono {
+  color: var(--sobre-lienzo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .page-header-acciones .ui-boton--principal:hover:not(:disabled) {
+    background: var(--papel);
+  }
+
+  .page-header-acciones .ui-boton--secundario:hover:not(:disabled),
+  .page-header-acciones .ui-boton--fantasma:hover:not(:disabled),
+  .page-header-acciones .ui-boton-icono:hover:not(:disabled) {
+    background: var(--sobre-navy-hover);
+    color: var(--sobre-lienzo);
+  }
+
+  .page-header-acciones .ui-boton--peligro-sutil:hover:not(:disabled) {
+    border-color: var(--peligro-sobre-lienzo);
+    background: var(--peligro-sobre-lienzo-fondo);
+  }
+}
+
+/* === Pestanas de seccion (PestanasSeccion) ================================ */
+
+/* Siempre bajo el PageHeader y, como el, directo sobre el lienzo: texto claro,
+   foco blanco y subrayado dorado en la activa. En el telefono la fila se
+   desplaza en horizontal (sin envolver): una pestana en segunda linea parece
+   otra cosa. */
+.ui-pestanas {
+  display: flex;
+  gap: var(--esp-3);
+  margin: calc(var(--esp-1) * -1) 0 var(--esp-3);
+  border-bottom: 1px solid var(--sobre-navy-linea);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.ui-pestanas::-webkit-scrollbar {
+  display: none;
+}
+
+.ui-pestana {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--esp-1);
+  min-height: 44px;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  color: var(--sobre-navy-texto);
+  font: 600 var(--texto-sm) / 1.3 var(--fuente-texto);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color var(--dur-corta) var(--ease-out),
+    border-color var(--dur-corta) var(--ease-out);
+}
+
+.ui-pestana:focus-visible {
+  outline-color: var(--sobre-lienzo);
+  outline-offset: -2px;
+  border-radius: var(--radio-sm);
+}
+
+.ui-pestana[aria-current='page'] {
+  border-bottom-color: var(--gold);
+  color: var(--sobre-lienzo);
+  font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-pestana:hover {
+    color: var(--sobre-lienzo);
+  }
+}
+
+.ui-pestana-contador {
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: var(--radio-sm);
+  background: var(--info-fondo);
+  color: var(--info);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  text-align: center;
+}
+
+.ui-pestana[aria-current='page'] .ui-pestana-contador {
+  background: var(--sobre-lienzo);
+  color: var(--navy);
+}
+
+/* === Barra de filtros ===================================================== */
+
+.barra-filtros {
+  display: grid;
+  gap: var(--esp-15);
+  margin-bottom: var(--esp-2);
+  padding: var(--esp-2);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-lg);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
+.barra-filtros-principal {
+  display: flex;
+  gap: var(--esp-1);
+}
+
+.barra-filtros-busqueda {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.barra-filtros-lupa {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  color: var(--tinta-2);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.barra-filtros-entrada {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.barra-filtros-entrada::-webkit-search-cancel-button {
+  display: none;
+}
+
+.barra-filtros-borrar {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: var(--radio-sm);
+  background: transparent;
+  color: var(--tinta-2);
+  transform: translateY(-50%);
+}
+
+.barra-filtros-borrar:hover {
+  background: var(--papel-2);
+  color: var(--tinta);
+}
+
+.barra-filtros-alternar {
+  display: none;
+}
+
+.barra-filtros-contador {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radio-sm);
+  background: var(--navy);
+  color: var(--superficie);
+  font-size: var(--texto-xs);
+}
+
+.barra-filtros-campos {
+  display: grid;
+  /* auto-fit con un minimo menor: a 1440 caben seis filtros en una fila, sin
+     dejar uno huerfano en la segunda. */
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--esp-15);
+}
+
+.barra-filtros-pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-1);
+  padding-top: var(--esp-15);
+  border-top: 1px solid var(--line);
+}
+
+.barra-filtros-resumen {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* === Hoja de papel (ui-hoja) =============================================== */
+
+/* Una seccion con titulo propio que va sobre el lienzo: el titulo y su
+   contenido comparten una sola hoja. Las superficies compartidas que caen
+   dentro no vuelven a levantarse (sin papel sobre papel).
+   --hoja-relleno es el relleno lateral e inferior: quien quiera llegar al
+   borde del papel (una lista a sangre) lo resta con margen negativo. */
+.ui-hoja {
+  --hoja-relleno: var(--esp-3);
+  display: grid;
+  gap: var(--esp-15);
+  min-width: 0;
+  padding: var(--esp-2) var(--hoja-relleno) var(--hoja-relleno);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-lg);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
+.ui-hoja .ui-tabla-desplazable,
+.ui-hoja .paginacion,
+.ui-hoja .paginacion-resumen--solo,
+.ui-hoja .estado-cargando-filas {
+  box-shadow: none;
+}
+
+.ui-hoja .estado {
+  padding: var(--esp-3) var(--esp-2);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* === Tabla de datos ======================================================= */
+
+.ui-tabla-marco {
+  display: grid;
+  gap: var(--esp-15);
+  min-width: 0;
+}
+
+.ui-tabla-desplazable {
+  overflow-x: auto;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
+.ui-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  transition: opacity var(--dur-corta) ease;
+}
+
+.ui-tabla--actualizando {
+  opacity: 0.55;
+}
+
+.ui-tabla th,
+.ui-tabla td {
+  padding: 10px var(--esp-15);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.ui-tabla th {
+  position: sticky;
+  top: 0;
+  background: var(--superficie-2);
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ui-tabla tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ui-tabla tbody tr {
+  transition: background-color var(--dur-corta) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ui-tabla tbody tr:not(.ui-tabla-fila--esqueleto):hover {
+    background: var(--superficie-2);
+  }
+}
+
+.ui-tabla-fila--resaltada,
+.ui-tabla-fila--resaltada:hover {
+  background: var(--seleccion);
+}
+
+.ui-tabla-celda--fin {
+  text-align: right !important;
+}
+
+.ui-tabla-celda--centro {
+  text-align: center !important;
+}
+
+.ui-tabla-celda--principal {
+  font-weight: 600;
+}
+
+.ui-tabla-celda--principal a {
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.ui-tabla-celda--principal a:hover {
+  text-decoration: underline;
+}
+
+/* Enlace de fila: amplia el area de clic a toda la celda principal. */
+.ui-tabla td a {
+  overflow-wrap: anywhere;
+}
+
+/* === Paginacion =========================================================== */
+
+/* Va bajo la tabla, sobre el lienzo: franja propia de papel para que el
+   resumen se lea. */
+.paginacion,
+.paginacion-resumen--solo {
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-15);
+  margin-top: var(--esp-2);
+  padding: var(--esp-1) var(--esp-1) var(--esp-1) var(--esp-2);
+}
+
+.paginacion-resumen {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.paginacion-resumen--solo {
+  margin-top: var(--esp-15);
+  padding: var(--esp-15) var(--esp-2);
+}
+
+.paginacion-controles {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+}
+
+.paginacion-pagina {
+  color: var(--tinta);
+  font-size: var(--texto-sm);
+  white-space: nowrap;
+}
+
+/* === Estados (vacio, error, sin permiso, carga) =========================== */
+
+.estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--esp-6) var(--esp-3);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+  text-align: center;
+}
+
+.estado--en-panel {
+  padding: var(--esp-3) var(--esp-2);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.estado--pantalla {
+  margin-top: var(--esp-4);
+  padding: var(--esp-6) var(--esp-3) calc(var(--esp-6) + var(--esp-2));
+  border-radius: var(--radio-lg);
+}
+
+.estado-icono {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--esp-2);
+  border-radius: var(--radio-lg);
+  background: var(--papel-2);
+  color: var(--tinta-2);
+}
+
+.estado--error .estado-icono {
+  background: var(--error-fondo);
+  color: var(--error);
+}
+
+.estado-icono--candado {
+  background: var(--papel-2);
+  color: var(--navy);
+}
+
+.estado-titulo {
+  max-width: 40ch;
+  margin: 0;
+  color: var(--navy);
+  font: 800 var(--texto-lg) / 1.3 var(--fuente-titulo);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+h1.estado-titulo {
+  font-size: var(--titulo-panel);
+}
+
+.estado-detalle {
+  max-width: 52ch;
+  margin: var(--esp-1) 0 0;
+  color: var(--tinta-2);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.estado-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--esp-15);
+  margin-top: var(--esp-3);
+}
+
+.ui-skeleton {
+  display: block;
+  max-width: 100%;
+  height: 12px;
+  border-radius: var(--radio-sm);
+  background: linear-gradient(
+      90deg,
+      var(--skeleton) 0%,
+      var(--skeleton-brillo) 50%,
+      var(--skeleton) 100%
+    )
+    0 0 / 200% 100%;
+  animation: skeleton-brillo 1.4s ease-in-out infinite;
+}
+
+.ui-skeleton--bloque {
+  height: 48px;
+  border-radius: var(--radio);
+}
+
+.ui-skeleton--circulo {
+  border-radius: 50%;
+}
+
+@keyframes skeleton-brillo {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.estado-cargando {
+  display: grid;
+  gap: var(--esp-3);
+}
+
+.estado-cargando-cabecera {
+  display: grid;
+  gap: var(--esp-15);
+}
+
+.estado-cargando-filas {
+  display: grid;
+  gap: var(--esp-2);
+  padding: var(--esp-3);
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio);
+  background: var(--papel);
+  box-shadow: var(--sombra-papel);
+}
+
+/* === Alertas en linea ===================================================== */
+
+.ui-alerta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--esp-15);
+  padding: var(--esp-15) var(--esp-2);
+  border: 1px solid;
+  border-radius: var(--radio);
+  animation: alerta-aparece var(--dur-media) var(--ease-out);
+}
+
+.ui-alerta > .icono {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.ui-alerta-cuerpo {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.ui-alerta-titulo {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.ui-alerta-detalle {
+  margin-top: 2px;
+  font-size: var(--texto-sm);
+  line-height: 1.5;
+}
+
+.ui-alerta-detalle p {
+  margin: 0;
+}
+
+.ui-alerta-acciones {
+  display: flex;
+  gap: var(--esp-1);
+  align-self: center;
+}
+
+.ui-alerta--error {
+  border-color: var(--error-borde);
+  background: var(--error-fondo);
+  color: var(--error);
+}
+
+.ui-alerta--aviso {
+  border-color: var(--aviso-borde);
+  background: var(--aviso-fondo);
+  color: var(--aviso);
+}
+
+.ui-alerta--exito {
+  border-color: var(--exito-borde);
+  background: var(--exito-fondo);
+  color: var(--exito);
+}
+
+.ui-alerta--info {
+  border-color: var(--info-borde);
+  background: var(--info-fondo);
+  color: var(--info);
+}
+
+@keyframes alerta-aparece {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+/* === Insignias ============================================================ */
+
+.badge-amenaza {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 8px;
+  border-radius: var(--radio-pildora);
+  font-size: var(--texto-xs);
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.badge-amenaza-barras {
+  flex: 0 0 auto;
+}
+
+.badge-amenaza--bajo {
+  background: var(--amenaza-bajo-fondo);
+  color: var(--amenaza-bajo-tinta);
+}
+
+.badge-amenaza--medio {
+  background: var(--amenaza-medio-fondo);
+  color: var(--amenaza-medio-tinta);
+}
+
+.badge-amenaza--alto {
+  background: var(--amenaza-alto-fondo);
+  color: var(--amenaza-alto-tinta);
+}
+
+.badge-amenaza--pendiente {
+  background: var(--amenaza-pendiente-fondo);
+  color: var(--amenaza-pendiente-tinta);
+}
+
+.insignia-tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 2px 8px 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radio-sm);
+  background: var(--superficie);
+  color: var(--navy);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.insignia-tipo .icono {
+  flex: 0 0 auto;
+}
+
+.insignia-tipo--sin-afiliacion {
+  border-style: dashed;
+  color: var(--tinta-2);
+}
+
+.insignia-tipo--icono {
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.insignia-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: var(--radio-sm);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.insignia-estado-marca {
+  flex: 0 0 auto;
+}
+
+.insignia-estado-marca--en-curso {
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px currentColor;
+}
+
+.insignia-estado--neutro {
+  background: var(--amenaza-pendiente-fondo);
+  color: var(--tinta-2);
+}
+
+.insignia-estado--info {
+  background: var(--info-fondo);
+  color: var(--info);
+}
+
+.insignia-estado--exito {
+  background: var(--exito-fondo);
+  color: var(--exito);
+}
+
+.insignia-estado--aviso {
+  background: var(--aviso-fondo);
+  color: var(--aviso);
+}
+
+.insignia-estado--peligro {
+  background: var(--error-fondo);
+  color: var(--error);
+}
+
+.insignia-estado--autoridad {
+  border: 1px solid var(--gold-borde);
+  background: var(--gold-fondo);
+  color: var(--gold-oscuro);
+}
+
+/* === Datos ================================================================ */
+
+.actualizado {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.actualizado time {
+  font-variant-numeric: tabular-nums;
+}
+
+.actualizado--viejo {
+  color: var(--aviso);
+  font-weight: 600;
+}
+
+.monto {
+  white-space: nowrap;
+}
+
+.monto--vacio {
+  color: var(--tinta-2);
+  font-style: italic;
+}
+
+.monto--alto-rango {
+  color: var(--gold-oscuro);
+  font-weight: 700;
+}
+
+.monto--grande {
+  font: 800 var(--titulo-pagina) / 1.2 var(--fuente-titulo);
+  letter-spacing: -0.02em;
+}
+
+/* Texto recortado (TextoRecortado): elipsis con el texto entero en el title. */
+.ui-recortado {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-recortado--lineas {
+  display: -webkit-box;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--recortado-lineas, 2);
+  line-clamp: var(--recortado-lineas, 2);
+}
+
+.retrato {
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--radio-sm);
+  background: var(--superficie-2);
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.retrato--sm {
+  width: 32px;
+  height: 32px;
+}
+
+.retrato--md {
+  width: 48px;
+  height: 48px;
+}
+
+.retrato--lg {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radio);
+}
+
+.retrato--xl {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--radio);
+}
+
+.retrato--sin-foto {
+  background: var(--seleccion);
+  color: var(--navy-2);
+  font: 800 var(--texto-xs) var(--fuente-titulo);
+  letter-spacing: 0.04em;
+}
+
+.retrato--lg.retrato--sin-foto,
+.retrato--xl.retrato--sin-foto {
+  font-size: var(--titulo-panel);
+}
+
+/* Marco de cartel: papel envejecido y filete de tinta. Solo decora. */
+.retrato--cartel {
+  padding: 2px;
+  border: 1px solid var(--cartel-marco);
+  background-color: var(--cartel-papel);
+  background-image: radial-gradient(ellipse at 50% 45%, var(--cartel-papel-claro), transparent 80%);
+  box-shadow: inset 0 0 0 1px var(--cartel-papel-claro);
+}
+
+.retrato--cartel.retrato--lg,
+.retrato--cartel.retrato--xl {
+  padding: 4px;
+}
+
+.retrato--cartel.retrato--sin-foto {
+  padding: 0;
+  color: var(--cartel-tinta);
+}
+
+/* === Criminal en celda y selector (CeldaCriminal, SelectorCriminal) ======= */
+
+.celda-criminal {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-15);
+  min-width: 0;
+}
+
+.celda-criminal-texto {
+  display: grid;
+  min-width: 0;
+}
+
+.celda-criminal-texto a {
+  overflow-wrap: anywhere;
+}
+
+.celda-criminal-texto small {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 400;
+}
+
+.celda-criminal-ausente {
+  color: var(--tinta-2);
+  font-weight: 600;
+}
+
+.selector-criminal {
+  display: grid;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.selector-criminal-resultados {
+  min-width: 0;
+}
+
+.selector-criminal-cargando {
+  display: grid;
+  gap: var(--esp-1);
+  padding: var(--esp-15);
+}
+
+.selector-criminal-nota {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.selector-criminal-lista {
+  display: grid;
+  max-height: 22rem;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--line);
+  border-radius: var(--radio);
+  list-style: none;
+  transition: opacity var(--dur-corta) var(--ease-out);
+}
+
+.selector-criminal-lista--actualizando {
+  opacity: 0.6;
+}
+
+.selector-criminal-lista li + li {
+  border-top: 1px solid var(--line);
+}
+
+.selector-criminal-opcion {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--esp-15);
+  width: 100%;
+  min-height: 52px;
+  padding: var(--esp-1) var(--esp-15);
+  border: 0;
+  background: var(--superficie);
+  color: var(--tinta);
+  font: inherit;
+  text-align: left;
+  transition: background-color var(--dur-corta) var(--ease-out);
+}
+
+.selector-criminal-opcion:focus-visible {
+  outline-offset: -2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .selector-criminal-opcion:hover {
+    background: var(--seleccion);
+  }
+}
+
+.selector-criminal-opcion-texto {
+  display: grid;
+  min-width: 0;
+}
+
+.selector-criminal-opcion-texto small,
+.selector-criminal-alias {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+}
+
+.selector-criminal-opcion-datos,
+.selector-criminal-insignias {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-1);
+}
+
+.selector-criminal-elegido {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--esp-2);
+  padding: var(--esp-2);
+  border: 1px solid var(--borde-campo);
+  border-radius: var(--radio);
+  background: var(--superficie-2);
+}
+
+.selector-criminal-datos {
+  display: grid;
+  flex: 1;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.selector-criminal-nombre {
+  margin: 0;
+  color: var(--navy);
+  font: 800 var(--texto-lg) / 1.3 var(--fuente-titulo);
+  overflow-wrap: anywhere;
+}
+
+.selector-criminal-vigente {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* === Barras horizontales (BarrasHorizontales) ============================= */
+
+.barras-h {
+  display: grid;
+  gap: var(--esp-15);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.barras-h-fila {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr) 5.5rem;
+  gap: var(--esp-15);
+  align-items: center;
+}
+
+.barras-h--amplio .barras-h-fila {
+  grid-template-columns: 13.5rem minmax(0, 1fr) 5.5rem;
+}
+
+.barras-h-etiqueta {
+  min-width: 0;
+  color: var(--tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.barras-h-pista {
+  display: block;
+  height: 20px;
+  border-left: 1px solid var(--borde-campo);
+}
+
+.barras-h-barra {
+  display: block;
+  height: 100%;
+  min-width: 2px;
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+  background: var(--navy-2);
+}
+
+.barras-h-barra--alto {
+  background: var(--amenaza-alto);
+}
+
+.barras-h-barra--medio {
+  background: var(--amenaza-medio);
+}
+
+.barras-h-barra--bajo {
+  background: var(--amenaza-bajo);
+}
+
+.barras-h-barra--pendiente {
+  background: var(--amenaza-pendiente);
+}
+
+.barras-h-valor {
+  color: var(--tinta);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Un grupo aparte dentro de la misma serie (la Grand Line). */
+.barras-h-fila--separada {
+  padding-top: var(--esp-15);
+  border-top: 1px dashed var(--line);
+}
+
+/* === Prioridad: galones de manga (MarcaPrioridad) ========================= */
+
+.prioridad {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--navy-2);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prioridad-galon--vacio {
+  color: var(--line);
+}
+
+.prioridad-texto {
+  color: var(--tinta);
+}
+
+.prioridad--critica,
+.prioridad--critica .prioridad-texto {
+  color: var(--error);
+}
+
+.prioridad--critica .prioridad-galon--vacio {
+  color: var(--line);
+}
+
+/* === Dialogo ============================================================== */
+
+.ui-dialogo {
+  width: min(520px, calc(100vw - var(--esp-4)));
+  max-width: none;
+  max-height: calc(100dvh - var(--esp-4));
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--papel-borde);
+  border-radius: var(--radio-lg);
+  background: var(--papel);
+  color: var(--tinta);
+  box-shadow: var(--sombra-papel);
+}
+
+.ui-dialogo--amplio {
+  width: min(760px, calc(100vw - var(--esp-4)));
+}
+
+.ui-dialogo::backdrop {
+  background: var(--velo);
+}
+
+.ui-dialogo[open] {
+  animation: dialogo-entra var(--dur-media) var(--ease-out);
+}
+
+.ui-dialogo[open]::backdrop {
+  animation: dialogo-velo var(--dur-media) var(--ease-out);
+}
+
+.ui-dialogo-panel {
+  --dialogo-pad-x: var(--esp-3);
+  --dialogo-pad-b: var(--esp-3);
+  position: relative;
+  display: grid;
+  gap: var(--esp-2);
+  padding: var(--esp-3) var(--dialogo-pad-x) var(--dialogo-pad-b);
+}
+
+.ui-dialogo-titulo {
+  margin: 0;
+  /* Hueco para la X, que va al final del DOM pero se pinta en la esquina. */
+  padding-right: var(--esp-4);
+  color: var(--navy);
+  font: 800 var(--titulo-panel) / 1.3 var(--fuente-titulo);
+  letter-spacing: -0.02em;
+}
+
+.ui-dialogo-cerrar {
+  position: absolute;
+  top: calc(var(--esp-3) - 6px);
+  right: calc(var(--dialogo-pad-x) - 8px);
+}
+
+.ui-dialogo-descripcion {
+  margin: calc(var(--esp-1) * -1) 0 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-md);
+  line-height: 1.5;
+}
+
+.ui-dialogo-acciones {
+  /* Pegadas al borde inferior: en un formulario largo (o en el telefono) la
+     accion principal no queda bajo el pliegue. */
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--esp-15);
+  margin: 0 calc(var(--dialogo-pad-x) * -1) calc(var(--dialogo-pad-b) * -1);
+  padding: var(--esp-2) var(--dialogo-pad-x) var(--dialogo-pad-b);
+  border-top: 1px solid var(--line);
+  background: var(--papel);
+}
+
+@keyframes dialogo-entra {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+@keyframes dialogo-velo {
+  from {
+    opacity: 0;
+  }
+}
+
+/* === Responsive ============================================================ */
+
+@media (max-width: 760px) {
+  .barra-filtros {
+    padding: var(--esp-15);
+  }
+
+  .barra-filtros-alternar {
+    display: inline-flex;
+    flex: 0 0 auto;
+  }
+
+  .barra-filtros-campos {
+    display: none;
+    grid-template-columns: 1fr;
+  }
+
+  .barra-filtros-campos--abiertos {
+    display: grid;
+  }
+
+  .ui-form-grilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .barras-h-fila,
+  .barras-h--amplio .barras-h-fila {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--esp-05);
+  }
+
+  .barras-h-pista {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .page-header-acciones {
+    width: 100%;
+  }
+
+  .page-header-acciones > * {
+    flex: 1 1 auto;
+  }
+
+  /* Tabla -> fichas apiladas: sin desplazamiento horizontal en el telefono. */
+  .ui-tabla-desplazable {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .ui-tabla,
+  .ui-tabla tbody,
+  .ui-tabla tr,
+  .ui-tabla td {
+    display: block;
+  }
+
+  .ui-tabla thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .ui-tabla tbody {
+    display: grid;
+    gap: var(--esp-1);
+  }
+
+  .ui-tabla tbody tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--esp-1) var(--esp-2);
+    padding: var(--esp-15) var(--esp-2);
+    border: 1px solid var(--papel-borde);
+    border-radius: var(--radio);
+    background: var(--papel);
+    box-shadow: var(--sombra-papel);
+  }
+
+  .ui-hoja .ui-tabla tbody tr {
+    box-shadow: none;
+  }
+
+  .ui-hoja {
+    --hoja-relleno: var(--esp-2);
+  }
+
+  .ui-tabla td {
+    padding: 0;
+    border: 0;
+    text-align: left !important;
+  }
+
+  .ui-tabla td::before {
+    content: attr(data-etiqueta);
+    display: block;
+    margin-bottom: 2px;
+    color: var(--tinta-2);
+    font-size: var(--texto-xs);
+    font-weight: 600;
+  }
+
+  .ui-tabla td.ui-tabla-celda--principal {
+    grid-column: 1 / -1;
+    padding-bottom: var(--esp-05);
+    font-size: var(--texto-md);
+  }
+
+  .ui-tabla td.ui-tabla-celda--principal::before,
+  .ui-tabla-fila--esqueleto td::before {
+    content: none;
+  }
+
+  /* Datos largos (un relato, un lugar) a todo el ancho de la ficha; los cortos
+     (tipo, amenaza, estado) siguen de dos en dos. */
+  .ui-tabla td.ui-tabla-celda--ancha {
+    grid-column: 1 / -1;
+  }
+
+  .ui-tabla td.ui-tabla-celda--solo-escritorio {
+    display: none;
+  }
+
+  .paginacion {
+    justify-content: center;
+  }
+
+  .paginacion-resumen {
+    flex: 1 0 100%;
+    text-align: center;
+  }
+
+  .ui-dialogo {
+    width: 100vw;
+    max-height: 92dvh;
+    margin: auto 0 0;
+    border-radius: var(--radio-lg) var(--radio-lg) 0 0;
+  }
+
+  .ui-dialogo-panel {
+    --dialogo-pad-x: var(--esp-2);
+    --dialogo-pad-b: calc(var(--esp-3) + env(safe-area-inset-bottom));
+  }
+
+  .ui-dialogo-acciones > * {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 410px) {
+  /* El buscador ocupa todo el ancho (el placeholder no se corta) y "Filtros"
+     baja a su propia linea. */
+  .barra-filtros-principal {
+    flex-wrap: wrap;
+  }
+
+  .barra-filtros-busqueda {
+    flex-basis: 100%;
+  }
+
+  .barra-filtros-alternar {
+    flex: 1 1 100%;
+  }
+
+  .selector-criminal-opcion {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .selector-criminal-opcion-datos {
+    grid-column: 2;
+  }
+
+  .paginacion-pagina {
+    display: none;
+  }
+
+  /* El sello cede ancho al titulo en el telefono angosto. */
+  .page-header-orden {
+    gap: var(--esp-15);
+  }
+
+  .sello-justicia[data-tamano='md'] {
+    --sello-lado: 42px;
+  }
+}
+
+/* === Movimiento reducido =================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .selector-criminal-opcion,
+  .selector-criminal-lista {
+    transition: none;
+  }
+
+  .ui-pestana {
+    transition: none;
+  }
+
+  .ui-boton:active:not(:disabled),
+  .ui-boton-icono:active:not(:disabled) {
+    transform: none;
+  }
+
+  .ui-boton-indicador {
+    animation: none;
+    border-right-color: currentColor;
+    opacity: 0.5;
+  }
+
+  .ui-skeleton {
+    animation: none;
+  }
+
+  .ui-alerta {
+    animation-name: dialogo-velo;
+  }
+
+  .ui-dialogo[open] {
+    animation-name: dialogo-velo;
+  }
+}

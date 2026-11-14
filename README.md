@@ -46,7 +46,7 @@ la prevención de conflictos en este repositorio.
 | `core/`                 | **Completo**: sesión con Zustand, `RequireAuth`, `RequirePermiso`, los 4 interceptores compuestos sobre `fetch`, cliente HTTP, layout con menú filtrado por permisos, avisos   | Dev 1 |
 | `features/criminales`   | **Slice de referencia**: modelo, módulo HTTP, store y página de listado completa (carga / vacío / datos / paginación)                                                          | Dev 2 |
 | `features/inteligencia` | **CRUD de avistamientos portado de la v1**, ya dentro de la arquitectura. Ver la advertencia de abajo                                                                          | Dev 5 |
-| `features/auth`         | Login funcional contra `POST /auth/login`; MFA pendiente                                                                                                                       | Dev 1 |
+| `features/auth`         | Login contra `POST /auth/login` y segundo factor con `POST /auth/mfa/verify`                                                                                                   | Dev 1 |
 | `shared/`               | `BadgeAmenaza`, `PageHeader`, `EmptyState`, `Cargando`, `useHasPermission` y utilidades de berries, amenaza y fecha                                                            | Dev 4 |
 | Resto de features       | Rutas declaradas con sus guards + página placeholder que indica lo pendiente y su responsable                                                                                  | —     |
 | Pruebas                 | 21 specs con Vitest: lógica pura, un componente con Testing Library y el servicio de sesión con `fetch` sustituido, incluida la matriz de permisos por rol. Son las plantillas | Dev 1 |

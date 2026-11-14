@@ -655,14 +655,14 @@ nest new marine-fleet-backend --package-manager npm --strict
 cd marine-fleet-backend
 
 # Infraestructura
-npm i @nestjs/config @nestjs/typeorm typeorm mysql2 joi
+npm i @nestjs/config @nestjs/typeorm typeorm pg joi
 npm i @nestjs/swagger class-validator class-transformer
 npm i @nestjs/jwt @nestjs/passport passport passport-jwt bcrypt
 npm i @nestjs/event-emitter helmet compression
 npm i pdfkit uuid
 
 # Tipos y calidad
-npm i -D @types/passport-jwt @types/bcrypt @types/pdfkit @types/uuid
+npm i -D @types/passport-jwt @types/bcrypt @types/pdfkit @types/uuid @types/pg
 npm i -D eslint prettier eslint-config-prettier eslint-plugin-prettier
 npm i -D husky lint-staged @commitlint/cli @commitlint/config-conventional
 npx husky init
@@ -861,7 +861,7 @@ module.exports = {
           {
             patterns: [
               { group: ['@nestjs/*'], message: 'El dominio no depende de NestJS.' },
-              { group: ['typeorm', 'mysql2'], message: 'El dominio no depende del ORM.' },
+              { group: ['typeorm', 'pg'], message: 'El dominio no depende del ORM.' },
               {
                 group: ['**/infrastructure/**'],
                 message: 'El dominio no depende de infraestructura.',
@@ -900,7 +900,7 @@ module.exports = {
           {
             patterns: [
               { group: ['@nestjs/*'], message: 'Una entidad no depende de NestJS.' },
-              { group: ['mysql2', 'mysql2/*'], message: 'Una entidad no usa el driver directo.' },
+              { group: ['pg', 'pg/*'], message: 'Una entidad no usa el driver directo.' },
               {
                 group: ['**/infrastructure/**'],
                 message: 'El dominio no depende de infraestructura.',
@@ -1116,10 +1116,11 @@ NODE_ENV=development
 PORT=3000
 
 DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_USER=root
+DB_PORT=5432
+DB_USER=postgres
 DB_PASSWORD=
-DB_NAME=marina_inteligencia
+DB_NAME=marina
+DB_SSL=false
 
 JWT_SECRET=cambiar-en-cada-entorno
 JWT_EXPIRES_IN=15m

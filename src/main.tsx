@@ -1,8 +1,12 @@
+import { MotionConfig } from 'motion/react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@app/routes';
 import './styles.css';
+import './shared/ui/ui.css';
+// Tailwind y las librerias de componentes: ver la cabecera del archivo.
+import './tailwind.css';
 
 const contenedor = document.getElementById('root');
 if (!contenedor) {
@@ -11,6 +15,9 @@ if (!contenedor) {
 
 createRoot(contenedor).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    {/* "user": quien pide menos movimiento en su sistema ve todo sin animar. */}
+    <MotionConfig reducedMotion="user">
+      <RouterProvider router={router} />
+    </MotionConfig>
   </StrictMode>,
 );

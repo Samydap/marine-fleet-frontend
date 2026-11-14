@@ -1,19 +1,18 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
+import { PaginaNoEncontrada } from '@core/guards/PaginaNoEncontrada';
+import { RedirigirInicio, SinAcceso } from '@core/guards/RedirigirInicio';
 import { RequireAuth } from '@core/guards/RequireAuth';
-import { RequirePermiso } from '@core/guards/RequirePermiso';
 import { MainLayout } from '@core/layout/MainLayout';
-import { Permiso } from '@core/session/permiso.enum';
 
 // ---------------------------------------------------------------------------
-// ARCHIVO COMPARTIDO POR LOS SEIS DESARROLLADORES.
+// ARCHIVO COMPARTIDO POR TODO EL EQUIPO.
 //
-// UNA LINEA POR FEATURE, EN ORDEN ALFABETICO. Las rutas hijas se declaran en el
-// `*.routes.tsx` de cada feature, que es propiedad de un solo dueno. Si agregas
-// una pantalla, NO vuelves aqui.
+// UNA LINEA POR FEATURE, EN ORDEN ALFABETICO. Las rutas hijas Y SU GUARD DE
+// PERMISO se declaran en el `*.routes.tsx` de cada feature, que es propiedad
+// de un solo dueno. Si agregas una pantalla, NO vuelves aqui.
 //
-// Las nueve entradas se declararon el dia 1 del Sprint 1 para que este archivo
-// practicamente no vuelva a cambiar. Si aparece un conflicto, se aceptan ambos
-// lados.
+// Los permisos de cada feature salen de core/session/navegacion.ts (la misma
+// tabla del menu y de la redireccion por rol).
 //
 // Las paginas se cargan con React.lazy dentro de cada `*.routes.tsx`, asi que
 // cada una sigue siendo su propio chunk: el bundle de Carteles no se descarga
@@ -23,30 +22,35 @@ import { adminRoutes } from '@features/admin/admin.routes';
 import { amenazaRoutes } from '@features/amenaza/amenaza.routes';
 import { authRoutes } from '@features/auth/auth.routes';
 import { cartelesRoutes } from '@features/carteles/carteles.routes';
+import { comandoRoutes } from '@features/comando/comando.routes';
 import { criminalesRoutes } from '@features/criminales/criminales.routes';
 import { incidentesRoutes } from '@features/incidentes/incidentes.routes';
-import { inteligenciaRoutes } from '@features/inteligencia/inteligencia.routes';
+import {
+  inteligenciaRoutes,
+  reporteCiudadanoRoutes,
+} from '@features/inteligencia/inteligencia.routes';
 import { operativosRoutes } from '@features/operativos/operativos.routes';
 import { recompensasRoutes } from '@features/recompensas/recompensas.routes';
 
 export const router = createBrowserRouter([
-  // Rutas publicas: no pasan por RequireAuth.
+  // Rutas publicas: no pasan por RequireAuth ni por el shell.
   { path: '/auth', children: authRoutes },
+  { path: '/reportar', children: reporteCiudadanoRoutes },
 
   {
     path: '/',
     element: <RequireAuth />,
     children: [
+      // Centro de comando: pantalla completa, fuera del shell (trae su cabecera).
+      { path: 'comando', children: comandoRoutes },
+
       {
         element: <MainLayout />,
         children: [
-          { index: true, element: <Navigate to="/criminales" replace /> },
+          // Cada cargo llega a su pantalla (navegacion.ts, INICIO_POR_ROL).
+          { index: true, element: <RedirigirInicio /> },
 
-          {
-            path: 'admin',
-            element: <RequirePermiso permisos={[Permiso.USUARIOS_ADMINISTRAR]} />,
-            children: adminRoutes,
-          },
+          { path: 'admin', children: adminRoutes },
           { path: 'amenaza', children: amenazaRoutes },
           { path: 'carteles', children: cartelesRoutes },
           { path: 'criminales', children: criminalesRoutes },
@@ -54,10 +58,15 @@ export const router = createBrowserRouter([
           { path: 'inteligencia', children: inteligenciaRoutes },
           { path: 'operativos', children: operativosRoutes },
           { path: 'recompensas', children: recompensasRoutes },
+
+          // Un rol sin ninguna seccion visible (matriz RBAC vacia); los demas, a su inicio.
+          { path: 'sin-acceso', element: <SinAcceso /> },
+
+          // Cualquier otra direccion: 404 dentro del shell. Sin sesion,
+          // RequireAuth lleva primero al login.
+          { path: '*', element: <PaginaNoEncontrada /> },
         ],
       },
     ],
   },
-
-  { path: '*', element: <Navigate to="/" replace /> },
 ]);

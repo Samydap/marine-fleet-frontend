@@ -5,7 +5,12 @@
     "eliminar": "Eliminar",
     "buscar": "Buscar",
     "cargando": "Cargando…",
-    "sinResultados": "Sin resultados"
+    "sinResultados": "Sin resultados",
+    "reintentar": "Reintentar",
+    "limpiarFiltros": "Limpiar filtros",
+    "cerrar": "Cerrar",
+    "anterior": "Anterior",
+    "siguiente": "Siguiente"
   },
   "amenaza": {
     "BAJO": "Bajo",
@@ -16,11 +21,128 @@
   "estadoCriminal": {
     "ACTIVO": "En búsqueda",
     "CAPTURADO": "Capturado",
-    "MUERTO": "Dado de baja"
+    "MUERTO": "Fallecido"
+  },
+  "categoriaCriminal": {
+    "PIRATA": "Pirata",
+    "REVOLUCIONARIO": "Ejército Revolucionario",
+    "CRIMINAL_INDEPENDIENTE": "Organización independiente",
+    "SIN_AFILIACION": "Sin afiliación"
+  },
+  "tipoAgrupacion": {
+    "TRIPULACION": "Tripulación",
+    "ORGANIZACION": "Organización",
+    "BANDA": "Banda"
+  },
+  "rolMembresia": {
+    "LIDER": "Líder",
+    "OFICIAL": "Oficial",
+    "MIEMBRO": "Miembro"
   },
   "errores": {
     "sinConexion": "Sin conexión con el servidor.",
     "sinPermiso": "Tu rol no tiene autorización para esta acción.",
     "conflicto": "Otro usuario modificó este registro. Recarga y vuelve a intentar."
+  },
+  "recompensas": {
+    "estado": {
+      "PENDIENTE_VALIDACION": "Pendiente de validación",
+      "VIGENTE": "Vigente",
+      "HISTORICA": "Histórica",
+      "RECHAZADA": "Rechazada"
+    },
+    "vigenteValidada": "Vigente, validada"
+  },
+  "analisisAmenaza": {
+    "agrupacion": {
+      "zona": "Zona",
+      "afiliacion": "Afiliación",
+      "nivel": "Nivel de amenaza"
+    }
+  },
+  "operativos": {
+    "estado": {
+      "PLANIFICADO": "Planificado",
+      "EN_CURSO": "En curso",
+      "CERRADO": "Completado",
+      "ABORTADO": "Abortado"
+    },
+    "prioridad": {
+      "BAJA": "Baja",
+      "MEDIA": "Media",
+      "ALTA": "Alta",
+      "CRITICA": "Crítica"
+    },
+    "resultado": {
+      "EXITOSO": "Exitoso",
+      "PARCIAL": "Parcial",
+      "FALLIDO": "Fallido"
+    },
+    "rolParticipacion": {
+      "LIDER": "Base líder",
+      "APOYO": "Apoyo",
+      "LOGISTICA": "Logística",
+      "BLOQUEO": "Bloqueo"
+    }
+  },
+  "admin": {
+    "estadoUsuario": {
+      "ACTIVO": "Activo",
+      "BLOQUEADO": "Bloqueado",
+      "INACTIVO": "Inactivo"
+    },
+    "tipoMar": {
+      "CUATRO_MARES": "Cuatro Mares",
+      "GRAND_LINE": "Grand Line"
+    },
+    "tipoAccion": {
+      "CREACION": "Creación",
+      "ACTUALIZACION": "Actualización",
+      "ELIMINACION_LOGICA": "Baja lógica",
+      "CONSULTA": "Consulta",
+      "AUTENTICACION": "Autenticación"
+    }
+  },
+  "inteligencia": {
+    "estadoVerificacion": {
+      "PENDIENTE": "Por verificar",
+      "VERIFICADO": "Verificado",
+      "DESCARTADO": "Descartado"
+    },
+    "origen": {
+      "OFICIAL": "Oficial",
+      "REPORTE_CIUDADANO": "Reporte ciudadano"
+    },
+    "estadoReporte": {
+      "PENDIENTE": "Por revisar",
+      "APROBADO": "Aprobado",
+      "RECHAZADO": "Rechazado"
+    }
+  },
+  "incidentes": {
+    "tipo": {
+      "ENFRENTAMIENTO": "Enfrentamiento",
+      "CAPTURA": "Captura",
+      "FUGA": "Fuga",
+      "AVISTAMIENTO_HOSTIL": "Avistamiento hostil",
+      "SABOTAJE": "Sabotaje"
+    },
+    "resultado": {
+      "EN_CURSO": "En curso",
+      "EXITO": "Éxito",
+      "FRACASO": "Fracaso",
+      "PARCIAL": "Parcial"
+    },
+    "rol": {
+      "OBJETIVO": "Objetivo",
+      "COMPLICE": "Cómplice",
+      "TESTIGO": "Testigo"
+    },
+    "desenlace": {
+      "CAPTURADO": "Capturado",
+      "ESCAPO": "Escapó",
+      "MUERTO": "Muerto",
+      "DESCONOCIDO": "Sin confirmar"
+    }
   }
 }

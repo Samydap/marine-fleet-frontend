@@ -8,7 +8,8 @@ import { useEstaAutenticado } from '../session/session.store';
  * de modo que las rutas hijas no se renderizan si no hay sesion.
  *
  * Si hay token pero no hay estado en memoria (recarga de pagina), intenta
- * rehidratar antes de rechazar: sin esto, F5 siempre devuelve al login.
+ * rehidratar con GET /auth/me antes de rechazar: sin esto, F5 siempre devuelve
+ * al login. Si el access token vencio, sesionInterceptor lo renueva solo.
  */
 export function RequireAuth(): React.ReactElement {
   const estaAutenticado = useEstaAutenticado();
@@ -23,9 +24,12 @@ export function RequireAuth(): React.ReactElement {
     let cancelado = false;
     // void: el resultado no interesa aqui; si falla, el estado queda sin usuario
     // y el propio guard redirige al login.
-    void sessionService.restaurarSesion().finally(() => {
-      if (!cancelado) setRestaurando(false);
-    });
+    void sessionService
+      .restaurarSesion()
+      .catch(() => sessionService.logout())
+      .finally(() => {
+        if (!cancelado) setRestaurando(false);
+      });
 
     return () => {
       cancelado = true;
@@ -33,16 +37,18 @@ export function RequireAuth(): React.ReactElement {
   }, [restaurando]);
 
   if (restaurando) {
+    // Sin spinner: una franja con la forma del shell mientras llega /auth/me.
     return (
-      <div className="empty-state">
-        <div className="loader" />
-        <strong>Restaurando sesión…</strong>
+      <div className="restaurando" role="status" aria-live="polite">
+        <span className="restaurando-lateral" aria-hidden="true" />
+        <span className="sr-only">Restaurando sesión…</span>
       </div>
     );
   }
 
   if (!estaAutenticado) {
-    return <Navigate to="/auth/login" replace state={{ redirectTo: location.pathname }} />;
+    const destino = `${location.pathname}${location.search}`;
+    return <Navigate to="/auth/login" replace state={{ redirectTo: destino }} />;
   }
 
   return <Outlet />;

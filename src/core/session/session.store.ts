@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Permiso } from './permiso.enum';
+import type { Permiso, RolCodigo } from './permiso.enum';
 import { tienePermiso, type UsuarioSesion } from './permiso.enum';
 
 interface SessionState {
@@ -38,3 +38,16 @@ export function tienePermisoActual(requerido: Permiso): boolean {
 export function tieneAlgunPermisoActual(requeridos: readonly Permiso[]): boolean {
   return requeridos.some((permiso) => tienePermisoActual(permiso));
 }
+
+/**
+ * Hook: el usuario tiene ese cargo. Solo para las reglas que el backend ata a
+ * un ROL y no a un permiso, donde ni el permiso ALL del Almirante abre:
+ *
+ *   PUT /amenaza/criterios y POST /amenaza/reclasificar exigen
+ *   @Roles(ANALISTA_DATOS_CRIMINALES). Para eso:
+ *   const puedeEditarCriterios = useEsRol(RolCodigo.ANALISTA_DATOS_CRIMINALES);
+ *
+ * Para todo lo demas se usa useHasPermission.
+ */
+export const useEsRol = (...roles: readonly RolCodigo[]): boolean =>
+  useSessionStore((s) => (s.usuario ? roles.includes(s.usuario.rol) : false));

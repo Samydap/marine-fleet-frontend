@@ -1,0 +1,469 @@
+/* Estilos propios de features/recompensas. Solo tokens de src/styles.css. */
+
+/* --- Panel y titulos --------------------------------------------------- */
+
+.recompensas-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--esp-2);
+  align-content: start;
+  min-width: 0;
+  padding: var(--esp-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radio-lg);
+  background: var(--superficie);
+}
+
+.recompensas-panel-titulo,
+.recompensas-subtitulo {
+  margin: 0;
+  color: var(--navy);
+  font: 800 var(--titulo-panel) / 1.3 var(--fuente-titulo);
+  letter-spacing: -0.015em;
+}
+
+.recompensas-subtitulo {
+  margin-bottom: var(--esp-15);
+  font-size: var(--texto-lg);
+}
+
+/* En la hoja, el espacio lo pone la hoja. */
+.ui-hoja > .recompensas-subtitulo {
+  margin-bottom: 0;
+}
+
+.recompensa-sin-dato {
+  color: var(--tinta-2);
+  font-style: italic;
+}
+
+/* --- Celda del criminal ------------------------------------------------ */
+
+.recompensa-motivo {
+  display: -webkit-box;
+  max-width: 36ch;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--tinta-2);
+}
+
+/* Historicas y rechazadas: quedan en el archivo, pero ya no rigen. */
+.recompensa-fila--cerrada .monto {
+  color: var(--tinta-2);
+  font-weight: 400;
+}
+
+/* --- Solicitud --------------------------------------------------------- */
+
+.solicitud {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: var(--esp-3);
+  align-items: start;
+}
+
+.solicitud-formulario .ui-form-acciones {
+  margin-top: var(--esp-1);
+}
+
+.solicitud-resumen {
+  position: sticky;
+  top: var(--esp-3);
+}
+
+.solicitud-resumen-datos {
+  display: grid;
+  margin: 0;
+}
+
+.solicitud-resumen-datos > div {
+  display: grid;
+  gap: var(--esp-05);
+  padding: var(--esp-15) 0;
+  border-top: 1px solid var(--line);
+}
+
+.solicitud-resumen-datos > div:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.solicitud-resumen-datos dt {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  font-weight: 600;
+}
+
+.solicitud-resumen-datos dd {
+  display: grid;
+  justify-items: start;
+  gap: var(--esp-05);
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.solicitud-tramite {
+  display: grid;
+  justify-items: start;
+  gap: var(--esp-05);
+}
+
+.solicitud-nota {
+  max-width: 48ch;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+  line-height: 1.5;
+}
+
+/* --- Bandeja de validacion --------------------------------------------- */
+
+.bandeja {
+  padding: 0;
+  transition: opacity var(--dur-corta) var(--ease-out);
+}
+
+.bandeja--actualizando {
+  opacity: 0.6;
+}
+
+.bandeja-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.expediente {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 14rem) minmax(0, 1fr) auto;
+  gap: var(--esp-2) var(--esp-3);
+  align-items: start;
+  padding: var(--esp-3);
+}
+
+.bandeja-lista > .expediente + .expediente,
+.expediente--esqueleto + .expediente--esqueleto {
+  border-top: 1px solid var(--line);
+}
+
+.expediente--esqueleto {
+  grid-template-columns: 48px 1fr 1fr;
+  align-items: center;
+}
+
+.expediente-criminal {
+  display: grid;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.expediente-insignias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-1);
+  padding-left: calc(48px + var(--esp-15));
+}
+
+.expediente-montos {
+  display: grid;
+  gap: var(--esp-15);
+  margin: 0;
+}
+
+.expediente-montos dt {
+  color: var(--tinta-2);
+  font-size: var(--texto-xs);
+  font-weight: 600;
+}
+
+.expediente-montos dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--esp-1);
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.expediente-montos .monto--grande {
+  white-space: normal;
+}
+
+.expediente-diferencia {
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.expediente-contexto {
+  display: grid;
+  gap: var(--esp-1);
+  min-width: 0;
+}
+
+.expediente-solicitud {
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+.expediente-motivo {
+  margin: 0;
+  padding-left: var(--esp-15);
+  border-left: 2px solid var(--line);
+  color: var(--tinta);
+  overflow-wrap: anywhere;
+}
+
+.expediente-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--esp-1);
+}
+
+.expediente-propia {
+  max-width: 22ch;
+  margin: 0;
+  color: var(--tinta-2);
+  font-size: var(--texto-sm);
+}
+
+/* --- Reporte mensual --------------------------------------------------- */
+
+.reporte-periodo {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-1);
+  margin-bottom: var(--esp-2);
+}
+
+.reporte-periodo .ui-campo {
+  width: 12rem;
+}
+
+.reporte {
+  margin-bottom: var(--esp-3);
+  transition: opacity var(--dur-corta) var(--ease-out);
+}
+
+.reporte--actualizando {
+  opacity: 0.6;
+}
+
+/* La cifra protagonista de la pantalla (Display de DISENO.md). */
+.reporte-total {
+  margin: 0;
+  color: var(--navy);
+}
+
+.reporte-total .monto {
+  font: 800 var(--texto-cifra) / 1.15 var(--fuente-titulo);
+  font-variant-numeric: proportional-nums;
+  letter-spacing: -0.04em;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.reporte-subtitulo {
+  max-width: 70ch;
+  margin: calc(var(--esp-1) * -1) 0 var(--esp-1);
+  color: var(--tinta-2);
+}
+
+.reporte-mar {
+  font-weight: 600;
+}
+
+/* --- Movil ------------------------------------------------------------- */
+
+@media (max-width: 1000px) {
+  .solicitud {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .solicitud-resumen {
+    position: static;
+  }
+
+  .expediente {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .expediente-acciones {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .recompensas-panel {
+    padding: var(--esp-2);
+  }
+
+  .expediente {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--esp-2);
+  }
+
+  .expediente-acciones {
+    justify-content: stretch;
+  }
+
+  .expediente-acciones .ui-boton {
+    flex: 1 1 10rem;
+  }
+
+  .expediente-propia {
+    max-width: none;
+  }
+
+  .reporte-periodo .ui-campo {
+    flex: 1;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandeja,
+  .reporte {
+    transition: none;
+  }
+}
+
+/* --- Vista: Tabla | Tablon -------------------------------------------- */
+
+.recompensas-vista-barra {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--esp-15);
+}
+
+/* Sobre el lienzo navy, como las pestanas: dorado para la vista elegida. */
+.selector-vista {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--sobre-navy-linea);
+  border-radius: var(--radio-pildora);
+}
+
+.selector-vista-opcion {
+  min-height: 36px;
+  padding: 0 var(--esp-2);
+  border: 0;
+  border-radius: var(--radio-pildora);
+  background: transparent;
+  color: var(--sobre-navy-texto);
+  font: 600 var(--texto-sm) / 1 var(--fuente-texto);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-corta) var(--ease-out),
+    color var(--dur-corta) var(--ease-out);
+}
+
+.selector-vista-opcion[aria-pressed='true'] {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.selector-vista-opcion:focus-visible {
+  outline: 2px solid var(--sobre-lienzo);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .selector-vista-opcion[aria-pressed='false']:hover {
+    background: var(--sobre-navy-hover);
+    color: var(--sobre-lienzo);
+  }
+}
+
+/* --- Tablon: cada recompensa, un mini cartel clavado ------------------ */
+
+.tablero-recompensas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--esp-3) var(--esp-2);
+  margin: 0 0 var(--esp-3);
+  padding: 0;
+  list-style: none;
+}
+
+.recompensa-cartel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--esp-1);
+  padding: var(--esp-2) var(--esp-15) var(--esp-15);
+  border-radius: var(--radio-sm);
+  background-color: var(--cartel-papel);
+  background-image: radial-gradient(ellipse at 18% 12%, var(--cartel-mancha), transparent 45%);
+  box-shadow: var(--sombra-clavado);
+  color: var(--cartel-tinta);
+  text-align: center;
+}
+
+/* La chincheta: el cartel esta clavado al tablon, no flotando. */
+.recompensa-cartel::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cartel-sello);
+  box-shadow: 0 1px 2px rgba(3, 8, 18, 0.6);
+  transform: translateX(-50%);
+}
+
+.recompensa-cartel-nombre {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cartel-tinta);
+  font: 700 var(--texto-md) / 1.2 var(--cartel-fuente);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.recompensa-cartel-nombre--ausente {
+  font-style: italic;
+  font-weight: 400;
+}
+
+a.recompensa-cartel-nombre:focus-visible {
+  outline: 2px solid var(--cartel-tinta);
+  outline-offset: 2px;
+  border-radius: var(--radio-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.recompensa-cartel-nombre:hover {
+    text-decoration: underline;
+  }
+}
+
+.recompensa-cartel .monto {
+  color: var(--cartel-tinta);
+  font: 700 var(--texto-lg) / 1.1 var(--cartel-fuente);
+}
+
+.recompensa-cartel--cerrado .monto {
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.tablero-recompensas-hueso {
+  aspect-ratio: 5 / 6;
+  height: auto;
+}
+
+@media (max-width: 480px) {
+  .tablero-recompensas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--esp-2) var(--esp-15);
+  }
+}
