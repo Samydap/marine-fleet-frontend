@@ -67,6 +67,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -95,6 +96,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -121,6 +123,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -147,6 +150,7 @@
                   "**/admin/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -173,6 +177,7 @@
                   "**/admin/**",
                   "**/amenaza/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -199,6 +204,34 @@
                   "**/admin/**",
                   "**/amenaza/**",
                   "**/auth/**",
+                  "**/comando/**",
+                  "**/criminales/**",
+                  "**/incidentes/**",
+                  "**/inteligencia/**",
+                  "**/operativos/**",
+                  "**/recompensas/**"
+                ],
+                "message": "Prohibido importar de otra feature. Usa @core o @shared, o consume el endpoint del backend."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/features/comando/**/*.{ts,tsx}"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@features/*",
+                  "**/admin/**",
+                  "**/amenaza/**",
+                  "**/auth/**",
+                  "**/carteles/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -226,6 +259,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
                   "**/operativos/**",
@@ -252,6 +286,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/inteligencia/**",
                   "**/operativos/**",
@@ -278,6 +313,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/operativos/**",
@@ -304,6 +340,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -330,6 +367,7 @@
                   "**/amenaza/**",
                   "**/auth/**",
                   "**/carteles/**",
+                  "**/comando/**",
                   "**/criminales/**",
                   "**/incidentes/**",
                   "**/inteligencia/**",
@@ -347,6 +385,12 @@
       "rules": {
         "max-lines": "off",
         "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    },
+    {
+      "files": ["src/shared/ui/shadcn/**/*.{ts,tsx}"],
+      "rules": {
+        "@typescript-eslint/explicit-function-return-type": "off"
       }
     }
   ]

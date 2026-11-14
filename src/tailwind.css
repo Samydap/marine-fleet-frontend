@@ -1,0 +1,236 @@
+/* ============================================================================
+   Tailwind CSS v4 y las librerias de componentes que dependen de el:
+   shadcn/ui, HeroUI (el antiguo NextUI) y Flowbite React.
+   Material UI no pasa por aqui: trae sus propios estilos (Emotion).
+
+   Este archivo convive con el sistema de diseno propio (styles.css y
+   shared/ui/ui.css), que sigue siendo la fuente de verdad (docs/DISENO.md).
+   Para no alterarlo:
+
+   1. Todo lo de Tailwind vive en capas (@layer). El CSS propio no esta en
+      ninguna capa y, por la cascada, siempre gana sobre el de una capa.
+
+   2. Preflight, el reset global de Tailwind, esta DESACTIVADO: pone a cero
+      margenes, titulos, listas y botones de toda la pagina y cambiaria las
+      pantallas que ya existen. Por eso, en lugar de la linea habitual
+          @import 'tailwindcss';
+      se importan solo el tema y las utilidades. (La CLI de Flowbite React
+      busca esa linea para reconocer este archivo: no borrar el comentario.)
+      Para activarlo, descomentar la linea de preflight de mas abajo y revisar
+      las pantallas.
+
+   3. Las utilidades llevan `important`. styles.css tiene reglas globales sobre
+      etiquetas (button, input, a, :focus-visible) que, al no estar en una
+      capa, le ganarian a clases como `text-white` y dejarian los botones de
+      las librerias con el color de texto heredado. Es la opcion que documenta
+      Tailwind para convivir con CSS ya existente.
+
+   4. Las reglas base de shadcn/ui se limitan a sus propios componentes
+      ([data-slot]) en vez de aplicarse a `*` y a `body`.
+   ========================================================================= */
+@layer theme, base, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+/* @import 'tailwindcss/preflight.css' layer(base); */
+@import 'tailwindcss/utilities.css' layer(utilities) important;
+
+/* Sin preflight, los controles conservan el borde y el fondo del navegador.
+   Esto se los quita SOLO a los que estan maquetados con Tailwind: se reconocen
+   porque alguna de sus clases lleva una variante con dos puntos (hover:,
+   focus:, data-[...]:), cosa que ninguna clase del proyecto tiene. */
+@layer base {
+  :where(button, input, select, textarea)[class*=':'] {
+    margin: 0;
+    padding: 0;
+    border: 0 solid;
+    border-radius: 0;
+    background-color: transparent;
+  }
+}
+
+/* --- shadcn/ui ----------------------------------------------------------- */
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+/* --- Flowbite React ------------------------------------------------------ */
+@import 'flowbite-react/plugin/tailwindcss';
+@source '../.flowbite-react/class-list.json';
+
+/* --- HeroUI (NextUI) -----------------------------------------------------
+   Este @source genera los estilos de TODOS los componentes de HeroUI, se usen
+   o no (unos 240 kB de CSS, 28 kB comprimidos). Para aligerarlo, limitarlo a
+   los que se usen, por ejemplo:
+     @source '../node_modules/@heroui/theme/dist/components/(button|input).js';
+   ------------------------------------------------------------------------- */
+@plugin './hero.ts';
+@source '../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+
+/* Modo oscuro por clase (.dark), como esperan shadcn/ui y HeroUI. */
+@custom-variant dark (&:is(.dark *));
+
+/* --- Tokens de shadcn/ui -------------------------------------------------
+   Copia del tema por defecto (base "neutral"). Un cambio respecto al original:
+   el proyecto ya define --muted como color de texto, asi que el de shadcn se
+   llama --shadcn-muted; las clases (bg-muted, text-muted-foreground) no cambian.
+   ------------------------------------------------------------------------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--shadcn-muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  :root {
+    --radius: 0.625rem;
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --shadcn-muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.708 0 0);
+  }
+
+  .dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --shadcn-muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.556 0 0);
+  }
+
+  [data-slot] {
+    @apply border-border outline-ring/50;
+  }
+}
+
+/* --- Centro de comando (features/comando) --------------------------------
+   Colores y animaciones del tablero "Marine Fleet & Bounty HQ".
+   ------------------------------------------------------------------------- */
+@theme {
+  --color-hq-abismo: #030a16;
+  --color-hq-casco: #0b172a;
+  --color-hq-panel: #0d1f38;
+  --color-hq-neon: #00d2ff;
+  --color-hq-azul: #1e40af;
+  --color-hq-alerta: #ef4444;
+  --color-hq-ambar: #f5b83d;
+  --color-hq-papel: #ead9a8;
+  --color-hq-papel-2: #cfae6e;
+  --color-hq-tinta: #3a2616;
+
+  --font-hq-cartel: Georgia, 'Times New Roman', serif;
+  --font-hq-rotulo: 'Manrope', 'Segoe UI', sans-serif;
+
+  --animate-hq-barrido: hq-barrido 4s linear infinite;
+  --animate-hq-ecualizador: hq-ecualizador 0.9s ease-in-out infinite;
+  --animate-hq-franjas: hq-franjas 0.9s linear infinite;
+
+  @keyframes hq-barrido {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes hq-ecualizador {
+    0%,
+    100% {
+      transform: scaleY(0.2);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes hq-franjas {
+    to {
+      background-position: 40px 0;
+    }
+  }
+}

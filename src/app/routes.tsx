@@ -22,6 +22,7 @@ import { adminRoutes } from '@features/admin/admin.routes';
 import { amenazaRoutes } from '@features/amenaza/amenaza.routes';
 import { authRoutes } from '@features/auth/auth.routes';
 import { cartelesRoutes } from '@features/carteles/carteles.routes';
+import { comandoRoutes } from '@features/comando/comando.routes';
 import { criminalesRoutes } from '@features/criminales/criminales.routes';
 import { incidentesRoutes } from '@features/incidentes/incidentes.routes';
 import {
@@ -40,6 +41,9 @@ export const router = createBrowserRouter([
     path: '/',
     element: <RequireAuth />,
     children: [
+      // Centro de comando: pantalla completa, fuera del shell (trae su cabecera).
+      { path: 'comando', children: comandoRoutes },
+
       {
         element: <MainLayout />,
         children: [

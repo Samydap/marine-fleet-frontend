@@ -5,6 +5,8 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from '@app/routes';
 import './styles.css';
 import './shared/ui/ui.css';
+// Tailwind y las librerias de componentes: ver la cabecera del archivo.
+import './tailwind.css';
 
 const contenedor = document.getElementById('root');
 if (!contenedor) {

@@ -1,0 +1,10 @@
+{
+  "$schema": "https://unpkg.com/flowbite-react/schema.json",
+  "components": [],
+  "dark": true,
+  "path": "src/shared/ui/flowbite",
+  "prefix": "",
+  "rsc": false,
+  "tsx": true,
+  "version": 4
+}
