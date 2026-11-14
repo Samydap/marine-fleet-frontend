@@ -6,6 +6,7 @@ import { BotonIcono } from '@shared/ui/Boton';
 import { CampoTexto } from '@shared/ui/Campo';
 import { EstadoError, EstadoVacio, Skeleton } from '@shared/ui/Estados';
 import { IconoAnterior, IconoSiguiente } from '@shared/ui/iconos';
+import { MontoAnimado } from '@shared/ui/MontoAnimado';
 import { MontoBerries } from '@shared/ui/MontoBerries';
 import { BotonesExportar, motivoSinExportar } from '@shared/ui/BotonesExportar';
 import { PageHeader } from '@shared/ui/PageHeader';
@@ -161,7 +162,7 @@ export function ReporteMensualPage(): React.ReactElement {
               {nombreMes}
             </h2>
             <p className="reporte-total cifra">
-              <MontoBerries valor={total} />
+              <MontoAnimado valor={total} />
             </p>
             <p className="reporte-subtitulo">
               {criminales.toLocaleString('es-CO')}{' '}
