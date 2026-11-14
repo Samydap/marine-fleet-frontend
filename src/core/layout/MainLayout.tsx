@@ -1,3 +1,4 @@
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { limpiarCatalogos, useCatalogos } from '../catalogos/catalogos';
@@ -9,6 +10,8 @@ import { sessionService } from '../session/session.service';
 import { useUsuario } from '../session/session.store';
 import { detenerSincronizacion, iniciarSincronizacion } from '../sync/sincronizacion';
 import { Avisos } from './Avisos';
+import { BienvenidaAbordo } from './BienvenidaAbordo';
+import { tomarBienvenida } from './bienvenida';
 import { EmblemaGaviota } from './emblemas/EmblemaGaviota';
 import { IconoCerrar, IconoMenu, IconoSalir } from './iconos-shell';
 import { IndicadorSincronizacion } from './IndicadorSincronizacion';
@@ -32,6 +35,11 @@ export function MainLayout(): React.ReactElement {
   const cargando = useLoadingStore((s) => s.enVuelo > 0);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const location = useLocation();
+  const usuario = useUsuario();
+  const reducir = useReducedMotion() ?? false;
+  // Recien llegado del login: bienvenida a bordo y la pantalla entra despues.
+  const [conBienvenida] = useState(tomarBienvenida);
+  const [bienvenida, setBienvenida] = useState(conBienvenida);
 
   useEffect(() => {
     iniciarSincronizacion();
@@ -81,10 +89,25 @@ export function MainLayout(): React.ReactElement {
       <LienzoMarina />
 
       <main id="contenido" className="contenido" tabIndex={-1}>
-        <div className="contenido-ancho">
+        <motion.div
+          className="contenido-ancho"
+          initial={conBienvenida && !reducir ? { opacity: 0, y: 16 } : false}
+          animate={bienvenida && !reducir ? { opacity: 0, y: 16 } : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+        >
           <Outlet />
-        </div>
+        </motion.div>
       </main>
+
+      <AnimatePresence>
+        {bienvenida && usuario && (
+          <BienvenidaAbordo
+            nombre={usuario.nombreCompleto}
+            rango={etiquetaRol(usuario.rol)}
+            alTerminar={() => setBienvenida(false)}
+          />
+        )}
+      </AnimatePresence>
 
       <Avisos />
     </div>

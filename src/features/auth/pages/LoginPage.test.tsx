@@ -48,6 +48,7 @@ async function escribirCredenciales(email: string, password: string): Promise<vo
 describe('LoginPage', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    sessionStorage.clear();
   });
 
   it('envia el correo sin espacios y la contrasena, y entra al sistema', async () => {
@@ -58,6 +59,16 @@ describe('LoginPage', () => {
 
     expect(login).toHaveBeenCalledWith('capitan@marina.gov', 'Marina.2026');
     expect(await screen.findByText('Pantalla de criminales')).toBeInTheDocument();
+  });
+
+  it('tras entrar deja pendiente la bienvenida a bordo', async () => {
+    vi.spyOn(sessionService, 'login').mockResolvedValue(USUARIO);
+    renderizar();
+
+    await escribirCredenciales('capitan@marina.gov', 'Marina.2026');
+
+    await screen.findByText('Pantalla de criminales');
+    expect(sessionStorage.getItem('marina.bienvenida')).toBe('1');
   });
 
   it('con segundo factor pasa a la verificacion con el reto y la ruta pendiente', async () => {
@@ -75,6 +86,8 @@ describe('LoginPage', () => {
       email: 'almirante@marina.gov',
       redirectTo: '/operativos/7',
     });
+    // La bienvenida espera a que pase el segundo factor.
+    expect(sessionStorage.getItem('marina.bienvenida')).toBeNull();
   });
 
   it('sin destino previo lleva a cada cargo a su pantalla de llegada', async () => {

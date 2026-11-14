@@ -1,3 +1,4 @@
+import { marcarBienvenida } from '@core/layout/bienvenida';
 import { useRef, useState, type FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AccesoLayout } from '../components/AccesoLayout';
@@ -70,6 +71,7 @@ function FormularioMfa({ reto }: { readonly reto: RetoMfa }): React.ReactElement
     setEnviando(true);
     try {
       const usuario = await mfaApi.verificar({ challengeToken, codigo });
+      marcarBienvenida();
       navegar(destinoTrasLogin(reto, usuario), { replace: true });
     } catch (fallido) {
       const descrito = describirFalloMfa(fallido);

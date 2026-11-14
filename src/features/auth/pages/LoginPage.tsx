@@ -1,3 +1,4 @@
+import { marcarBienvenida } from '@core/layout/bienvenida';
 import { useRef, useState, type FormEvent, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { esRetoLogin, sessionService } from '@core/session/session.service';
@@ -81,6 +82,7 @@ export function LoginPage(): React.ReactElement {
         navegar('/auth/mfa', { state: reto });
         return;
       }
+      marcarBienvenida();
       navegar(destinoTrasLogin(location.state, resultado), { replace: true });
     } catch (error) {
       const descrito = describirFalloAcceso(error);
