@@ -101,6 +101,11 @@ Abre el archivo `.env` y ajusta dos cosas:
     solo.
   - Con PostgreSQL local, deja `DATABASE_URL` comentada y usa `DB_HOST`, `DB_PORT`,
     `DB_USER`, `DB_PASSWORD` y `DB_NAME`.
+- **Fotos y carteles (Supabase Storage):** en `SUPABASE_URL` va la Project URL
+  (`https://<id>.supabase.co`) y en `SUPABASE_SERVICE_ROLE_KEY` la llave **secreta** del
+  proyecto (**Project Settings → API Keys**, la `sb_secret_...` o la `service_role`). Nunca
+  la `anon` ni la `publishable`. Así todo el equipo ve las mismas fotos y carteles; sin ellas
+  se guardan solo en tu disco. El bucket se crea solo.
 - **`JWT_SECRET` y `JWT_REFRESH_SECRET`**: cambia el texto de ejemplo por cualquier cadena de
   **mínimo 32 caracteres**. Si son más cortas, la aplicación no arranca.
 
