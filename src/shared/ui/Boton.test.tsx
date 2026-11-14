@@ -25,8 +25,10 @@ describe('Boton', () => {
   });
 
   it('aplica la variante', () => {
-    render(<Boton variante="peligro">Dar de baja</Boton>);
-    expect(screen.getByRole('button', { name: 'Dar de baja' })).toHaveClass('ui-boton--peligro');
+    render(<Boton variante="peligro">Cerrar búsqueda</Boton>);
+    expect(screen.getByRole('button', { name: 'Cerrar búsqueda' })).toHaveClass(
+      'ui-boton--peligro',
+    );
   });
 
   it('el boton de solo icono exige nombre accesible', () => {

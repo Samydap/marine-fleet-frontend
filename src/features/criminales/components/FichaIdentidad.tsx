@@ -113,7 +113,7 @@ export function FichaIdentidad({
         </div>
         {criminal.fechaBaja && (
           <div>
-            <dt>Fecha de baja</dt>
+            <dt>Búsqueda cerrada</dt>
             <dd>{formatearSoloFecha(criminal.fechaBaja)}</dd>
           </div>
         )}

@@ -203,7 +203,7 @@ estructura (navy) y un acento de autoridad (dorado). Los colores semánticos
   (18,4:1).
 - **Peligro sobre el lienzo** (`--peligro-sobre-lienzo`, #f28b82, 7,7:1) y su
   fondo de hover (`--peligro-sobre-lienzo-fondo`): la acción destructiva de la
-  cabecera ("Dar de baja", "Abortar") y la prioridad crítica en la meta.
+  cabecera ("Cerrar búsqueda", "Abortar") y la prioridad crítica en la meta.
 - Los textos secundarios sobre el lienzo usan `--sobre-navy-texto` (10,2:1) y
   el dato viejo `--sobre-navy-aviso` (11,1:1).
 
@@ -576,7 +576,7 @@ componente: `secciones: { a, etiqueta, contador? }[]`, clase `.ui-pestanas`.
 - **Peligro:** fondo `error`. **Solo** el botón que confirma lo irreversible
   dentro de un `DialogoConfirmacion` (o de un diálogo de rechazo).
 - **Peligro sutil** (`variante="peligro-sutil"`): contorno `error-borde` con
-  texto `error`. La acción destructiva en una cabecera ("Dar de baja",
+  texto `error`. La acción destructiva en una cabecera ("Cerrar búsqueda",
   "Abortar", "Marcar disuelta"): se ve, pero no compite con la principal. Abre
   la confirmación, que es donde aparece el rojo sólido.
 - **Fantasma:** sin fondo, texto `navy-2`. Acciones terciarias en tablas y

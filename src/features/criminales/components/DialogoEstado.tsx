@@ -64,14 +64,14 @@ export function DialogoEstado({
       abierto={abierto}
       onCerrar={onCerrar}
       onConfirmar={confirmar}
-      titulo={`¿Dar de baja a ${criminal.nombre}?`}
+      titulo={`¿Cerrar la búsqueda de ${criminal.nombre}?`}
       mensaje="Sigue en el archivo con todo su historial, pero deja de ser objetivo. El cartel se regenera con el sello de su estado."
       textoConfirmar={elegido === 'MUERTO' ? 'Registrar fallecimiento' : 'Registrar captura'}
       textoConfirmando="Registrando…"
       peligroso
     >
       <fieldset className="baja-opciones">
-        <legend>Motivo de la baja</legend>
+        <legend>Cómo termina la búsqueda</legend>
         <label className="baja-opcion">
           <input
             type="radio"

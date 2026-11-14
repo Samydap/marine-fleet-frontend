@@ -169,8 +169,8 @@ interface PropsConfirmacion {
  * dialogo queda abierto para reintentar (el error ya lo avisa el interceptor).
  *
  *   <DialogoConfirmacion abierto={confirmar} onCerrar={() => setConfirmar(false)}
- *     titulo={`¿Dar de baja a ${c.nombre}?`} mensaje="El cartel se retira de circulación."
- *     textoConfirmar="Dar de baja" peligroso onConfirmar={darDeBaja} />
+ *     titulo={`¿Cerrar la búsqueda de ${c.nombre}?`} mensaje="El cartel se retira de circulación."
+ *     textoConfirmar="Cerrar búsqueda" peligroso onConfirmar={cerrarBusqueda} />
  */
 export function DialogoConfirmacion({
   abierto,

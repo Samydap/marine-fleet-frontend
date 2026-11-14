@@ -126,7 +126,7 @@ export function CriminalDetailPage(): React.ReactElement {
           <>
             {actual.estado === 'ACTIVO' && (
               <Boton variante="peligro-sutil" onClick={() => setDialogo('baja')}>
-                Dar de baja
+                Cerrar búsqueda
               </Boton>
             )}
             {actual.estado === 'CAPTURADO' && (
@@ -221,7 +221,7 @@ export function CriminalDetailPage(): React.ReactElement {
             notificar.exito(
               estado === 'ACTIVO'
                 ? `${actual.nombre} vuelve a estar en búsqueda.`
-                : `${actual.nombre}: baja registrada como ${etiquetaEstadoCriminal(estado).toLowerCase()}.`,
+                : `${actual.nombre}: búsqueda cerrada, queda como ${etiquetaEstadoCriminal(estado).toLowerCase()}.`,
             );
           }}
         />
