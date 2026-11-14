@@ -18,8 +18,11 @@ import { guardarArchivo } from '@shared/utils/archivo';
 import { leerInstantanea } from '@shared/utils/cartel';
 import { aIso, formatearFecha } from '@shared/utils/fecha';
 import { cartelesApi } from '../data-access/carteles-api';
+import { CambioMonto } from '../components/CambioMonto';
+import { EscenarioCartel } from '../components/EscenarioCartel';
 import type { Cartel, FormatoCartel } from '../models/cartel';
 import { etiquetaMotivo, nombreArchivo } from '../utils/instantanea';
+import { montoAnterior } from '../utils/monto-anterior';
 import '../carteles.css';
 
 const CLASE_IMPRESION = 'imprimiendo-cartel';
@@ -182,6 +185,7 @@ export function CartelPage(): React.ReactElement {
 
   const datos = leerInstantanea(actual.datos, criminalId);
   const esVigente = actual.id === vigente?.id;
+  const anterior = esVigente ? montoAnterior(versiones, actual, criminalId) : null;
 
   return (
     <>
@@ -234,15 +238,16 @@ export function CartelPage(): React.ReactElement {
       </PageHeader>
 
       <div className="cartel-vista">
-        <div className="cartel-escenario">
+        <EscenarioCartel key={actual.id}>
           <CartelWanted
             datos={datos}
             version={{ numero: actual.numeroVersion, fecha: actual.generadoEn }}
             className="cartel-imprimible"
           />
-        </div>
+        </EscenarioCartel>
 
         <aside className="cartel-lateral ui-hoja" aria-label="Versiones del cartel">
+          {anterior !== null && <CambioMonto anterior={anterior} actual={datos.recompensa} />}
           <div aria-live="polite">
             {!esVigente && (
               <Alerta

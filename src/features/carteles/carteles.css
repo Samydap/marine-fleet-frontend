@@ -92,6 +92,70 @@
 
 .cartel-escenario {
   min-width: 0;
+  /* Profundidad para que el papel se incline en 3D al seguir el mouse. */
+  perspective: 900px;
+}
+
+.cartel-escenario-papel {
+  transform-origin: 50% 0;
+}
+
+/* «WANTED» se estampa cuando el cartel cae sobre el tablon. */
+.cartel-escenario--entra .cartel-wanted {
+  animation: cartel-estampa 300ms var(--ease-out) 180ms both;
+}
+
+@keyframes cartel-estampa {
+  from {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cartel-escenario--entra .cartel-wanted {
+    animation: none;
+  }
+}
+
+/* --- Cambio de recompensa respecto a la version anterior -------------- */
+
+.cambio-monto {
+  display: grid;
+  gap: var(--esp-05);
+  padding-bottom: var(--esp-2);
+  border-bottom: 1px solid var(--papel-borde);
+}
+
+.cambio-monto-titulo {
+  margin: 0;
+  color: var(--tinta-2);
+  font: 700 var(--texto-xs) / 1.3 var(--fuente-texto);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cambio-monto-cifras {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--esp-15);
+}
+
+.cambio-monto-anterior {
+  color: var(--tinta-2);
+  font-size: var(--texto-lg);
+  text-decoration-color: var(--cartel-sello);
+  text-decoration-thickness: 2px;
+}
+
+.cambio-monto-actual {
+  display: inline-block;
+  color: var(--cartel-sello);
+}
+
+.cambio-monto-actual .monto {
+  color: inherit;
 }
 
 .cartel-hueso {
@@ -264,6 +328,16 @@
 /* "Imprimir" pone esta clase en <body> solo mientras imprime: se imprime el
    cartel a media hoja, sin el shell de la aplicacion. */
 @media print {
+  /* Sin giro ni opacidad: un transform en el padre romperia el position:fixed. */
+  .cartel-escenario-papel {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .cartel-escenario--entra .cartel-wanted {
+    animation: none !important;
+  }
+
   body.imprimiendo-cartel * {
     visibility: hidden !important;
   }
