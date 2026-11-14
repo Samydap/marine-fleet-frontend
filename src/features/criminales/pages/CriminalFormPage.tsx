@@ -124,7 +124,17 @@ export function CriminalFormPage(): React.ReactElement {
       }
       if (payload) await criminalesApi.actualizar(original.id, payload);
       const fotoOk = await subirFoto(original.id);
-      if (fotoOk) notificar.exito('Cambios guardados. El cartel se actualiza si hizo falta.');
+      if (!foto) notificar.exito('Cambios guardados.');
+      else if (fotoOk)
+        notificar.exito(
+          `${payload ? 'Cambios guardados y foto actualizada' : 'Foto actualizada'}. El cartel nuevo estará listo en unos segundos.`,
+        );
+      else
+        notificar.error(
+          payload
+            ? 'Los datos se guardaron, pero la foto no se pudo subir. Vuelve a intentarlo desde Editar.'
+            : 'La foto no se pudo subir. Vuelve a intentarlo desde Editar.',
+        );
       navegar(`/criminales/${original.id}`);
     } catch (error) {
       // El interceptor ya aviso del error; el 409 ademas se explica en linea.
