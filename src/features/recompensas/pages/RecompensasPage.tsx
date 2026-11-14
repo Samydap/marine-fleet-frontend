@@ -1,5 +1,5 @@
 import { olvidarCriminal } from '@core/directorio/directorio-criminales';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Permiso } from '@core/session/permiso.enum';
 import { EVENTOS } from '@core/sync/eventos';
 import { useCambiosSincronizados } from '@core/sync/sincronizacion';
@@ -18,6 +18,13 @@ import { Paginacion } from '@shared/ui/Paginacion';
 import { TablaDatos, type ColumnaTabla } from '@shared/ui/TablaDatos';
 import { formatearSoloFecha } from '@shared/utils/fecha';
 import { SeccionesRecompensas } from '../components/SeccionesRecompensas';
+import {
+  SelectorVista,
+  guardarVista,
+  leerVista,
+  type VistaRecompensas,
+} from '../components/SelectorVista';
+import { TablonRecompensas } from '../components/TablonRecompensas';
 import { useRecompensasStore } from '../data-access/recompensas.store';
 import {
   esAltoRango,
@@ -100,6 +107,12 @@ const OPCIONES_RANGO = [
 export function RecompensasPage(): React.ReactElement {
   const { historial, filtro, cargarHistorial } = useRecompensasStore();
   const puedeSolicitar = useHasPermission(Permiso.RECOMPENSAS_SOLICITAR);
+  const [vista, setVista] = useState<VistaRecompensas>(leerVista);
+
+  function cambiarVista(nueva: VistaRecompensas): void {
+    setVista(nueva);
+    guardarVista(nueva);
+  }
 
   useEffect(() => {
     void cargarHistorial({ page: 1 });
@@ -122,6 +135,26 @@ export function RecompensasPage(): React.ReactElement {
   }
 
   const { recompensas, meta, cargando, error, consultadoEn } = historial;
+
+  const vacio =
+    activos > 0 ? (
+      <EstadoVacio
+        icono={<IconoBrujula tamano={28} />}
+        titulo="Ninguna recompensa coincide con los filtros"
+        detalle="Cambia el estado o el rango, o limpia los filtros."
+      />
+    ) : (
+      <EstadoVacio
+        titulo="Aún no hay recompensas registradas"
+        detalle="Cuando una base fije el monto de un criminal, aparecerá aquí."
+      >
+        {puedeSolicitar && (
+          <BotonEnlace variante="secundario" to="/recompensas/solicitar">
+            Solicitar la primera
+          </BotonEnlace>
+        )}
+      </EstadoVacio>
+    );
 
   return (
     <>
@@ -175,41 +208,36 @@ export function RecompensasPage(): React.ReactElement {
         />
       </BarraFiltros>
 
-      <TablaDatos
-        titulo="Historial de recompensas"
-        filas={recompensas}
-        columnas={COLUMNAS}
-        claveFila={(r) => r.id}
-        cargando={cargando && recompensas.length === 0}
-        actualizando={cargando && recompensas.length > 0}
-        error={error}
-        onReintentar={() => void cargarHistorial()}
-        claseFila={(r) =>
-          r.estado === 'HISTORICA' || r.estado === 'RECHAZADA'
-            ? 'recompensa-fila--cerrada'
-            : undefined
-        }
-        vacio={
-          activos > 0 ? (
-            <EstadoVacio
-              icono={<IconoBrujula tamano={28} />}
-              titulo="Ninguna recompensa coincide con los filtros"
-              detalle="Cambia el estado o el rango, o limpia los filtros."
-            />
-          ) : (
-            <EstadoVacio
-              titulo="Aún no hay recompensas registradas"
-              detalle="Cuando una base fije el monto de un criminal, aparecerá aquí."
-            >
-              {puedeSolicitar && (
-                <BotonEnlace variante="secundario" to="/recompensas/solicitar">
-                  Solicitar la primera
-                </BotonEnlace>
-              )}
-            </EstadoVacio>
-          )
-        }
-      />
+      <div className="recompensas-vista-barra">
+        <SelectorVista vista={vista} onCambiar={cambiarVista} />
+      </div>
+
+      {vista === 'tablon' ? (
+        <TablonRecompensas
+          recompensas={recompensas}
+          cargando={cargando}
+          error={error}
+          onReintentar={() => void cargarHistorial()}
+          vacio={vacio}
+        />
+      ) : (
+        <TablaDatos
+          titulo="Historial de recompensas"
+          filas={recompensas}
+          columnas={COLUMNAS}
+          claveFila={(r) => r.id}
+          cargando={cargando && recompensas.length === 0}
+          actualizando={cargando && recompensas.length > 0}
+          error={error}
+          onReintentar={() => void cargarHistorial()}
+          claseFila={(r) =>
+            r.estado === 'HISTORICA' || r.estado === 'RECHAZADA'
+              ? 'recompensa-fila--cerrada'
+              : undefined
+          }
+          vacio={vacio}
+        />
+      )}
 
       <Paginacion
         meta={meta}

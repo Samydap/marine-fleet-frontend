@@ -329,3 +329,141 @@
     transition: none;
   }
 }
+
+/* --- Vista: Tabla | Tablon -------------------------------------------- */
+
+.recompensas-vista-barra {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: var(--esp-15);
+}
+
+/* Sobre el lienzo navy, como las pestanas: dorado para la vista elegida. */
+.selector-vista {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--sobre-navy-linea);
+  border-radius: var(--radio-pildora);
+}
+
+.selector-vista-opcion {
+  min-height: 36px;
+  padding: 0 var(--esp-2);
+  border: 0;
+  border-radius: var(--radio-pildora);
+  background: transparent;
+  color: var(--sobre-navy-texto);
+  font: 600 var(--texto-sm) / 1 var(--fuente-texto);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-corta) var(--ease-out),
+    color var(--dur-corta) var(--ease-out);
+}
+
+.selector-vista-opcion[aria-pressed='true'] {
+  background: var(--gold);
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.selector-vista-opcion:focus-visible {
+  outline: 2px solid var(--sobre-lienzo);
+  outline-offset: 2px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .selector-vista-opcion[aria-pressed='false']:hover {
+    background: var(--sobre-navy-hover);
+    color: var(--sobre-lienzo);
+  }
+}
+
+/* --- Tablon: cada recompensa, un mini cartel clavado ------------------ */
+
+.tablon {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: var(--esp-3) var(--esp-2);
+  margin: 0 0 var(--esp-3);
+  padding: 0;
+  list-style: none;
+}
+
+.tablon-cartel {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--esp-1);
+  padding: var(--esp-2) var(--esp-15) var(--esp-15);
+  border-radius: var(--radio-sm);
+  background-color: var(--cartel-papel);
+  background-image: radial-gradient(ellipse at 18% 12%, var(--cartel-mancha), transparent 45%);
+  box-shadow: var(--sombra-clavado);
+  color: var(--cartel-tinta);
+  text-align: center;
+}
+
+/* La chincheta: el cartel esta clavado al tablon, no flotando. */
+.tablon-cartel::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cartel-sello);
+  box-shadow: 0 1px 2px rgba(3, 8, 18, 0.6);
+  transform: translateX(-50%);
+}
+
+.tablon-nombre {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  color: var(--cartel-tinta);
+  font: 700 var(--texto-md) / 1.2 var(--cartel-fuente);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.tablon-nombre--ausente {
+  font-style: italic;
+  font-weight: 400;
+}
+
+a.tablon-nombre:focus-visible {
+  outline: 2px solid var(--cartel-tinta);
+  outline-offset: 2px;
+  border-radius: var(--radio-sm);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.tablon-nombre:hover {
+    text-decoration: underline;
+  }
+}
+
+.tablon-cartel .monto {
+  color: var(--cartel-tinta);
+  font: 700 var(--texto-lg) / 1.1 var(--cartel-fuente);
+}
+
+.tablon-cartel--cerrado .monto {
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.tablon-hueso {
+  aspect-ratio: 5 / 6;
+  height: auto;
+}
+
+@media (max-width: 480px) {
+  .tablon {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--esp-2) var(--esp-15);
+  }
+}
