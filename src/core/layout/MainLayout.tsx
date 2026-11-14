@@ -11,7 +11,7 @@ import { useUsuario } from '../session/session.store';
 import { detenerSincronizacion, iniciarSincronizacion } from '../sync/sincronizacion';
 import { Avisos } from './Avisos';
 import { BienvenidaAbordo } from './BienvenidaAbordo';
-import { tomarBienvenida } from './bienvenida';
+import { hayBienvenida, olvidarBienvenida } from './bienvenida';
 import { EmblemaGaviota } from './emblemas/EmblemaGaviota';
 import { IconoCerrar, IconoMenu, IconoSalir } from './iconos-shell';
 import { IndicadorSincronizacion } from './IndicadorSincronizacion';
@@ -38,8 +38,9 @@ export function MainLayout(): React.ReactElement {
   const usuario = useUsuario();
   const reducir = useReducedMotion() ?? false;
   // Recien llegado del login: bienvenida a bordo y la pantalla entra despues.
-  const [conBienvenida] = useState(tomarBienvenida);
+  const [conBienvenida] = useState(hayBienvenida);
   const [bienvenida, setBienvenida] = useState(conBienvenida);
+  useEffect(() => olvidarBienvenida(), []);
 
   useEffect(() => {
     iniciarSincronizacion();

@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BienvenidaAbordo } from './BienvenidaAbordo';
-import { marcarBienvenida, tomarBienvenida } from './bienvenida';
+import { hayBienvenida, marcarBienvenida, olvidarBienvenida } from './bienvenida';
 
 describe('BienvenidaAbordo', () => {
   afterEach(() => {
@@ -9,11 +9,13 @@ describe('BienvenidaAbordo', () => {
     sessionStorage.clear();
   });
 
-  it('tomarBienvenida solo devuelve true una vez', () => {
+  it('la marca se puede leer varias veces hasta olvidarla', () => {
     marcarBienvenida();
 
-    expect(tomarBienvenida()).toBe(true);
-    expect(tomarBienvenida()).toBe(false);
+    expect(hayBienvenida()).toBe(true);
+    expect(hayBienvenida()).toBe(true);
+    olvidarBienvenida();
+    expect(hayBienvenida()).toBe(false);
   });
 
   it('saluda con rango y nombre', () => {

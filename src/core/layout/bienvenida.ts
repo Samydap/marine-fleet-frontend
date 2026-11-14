@@ -12,12 +12,20 @@ export function marcarBienvenida(): void {
   }
 }
 
-export function tomarBienvenida(): boolean {
+/** Solo lee: el modo estricto de React llama dos veces al inicializador. */
+export function hayBienvenida(): boolean {
   try {
-    const pendiente = sessionStorage.getItem(CLAVE) === '1';
-    sessionStorage.removeItem(CLAVE);
-    return pendiente;
+    return sessionStorage.getItem(CLAVE) === '1';
   } catch {
     return false;
+  }
+}
+
+/** La bienvenida ya se mostro: recargar no la repite. */
+export function olvidarBienvenida(): void {
+  try {
+    sessionStorage.removeItem(CLAVE);
+  } catch {
+    // Sin almacenamiento no hubo marca que borrar.
   }
 }
