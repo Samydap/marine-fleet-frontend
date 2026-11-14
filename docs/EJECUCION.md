@@ -44,11 +44,15 @@ git clone https://github.com/Samydap/marine-fleet-frontend.git
 
 1. Crea un proyecto en [supabase.com](https://supabase.com) y guarda la contraseña de la base que
    te pide.
-2. En el proyecto pulsa **Connect** y elige **Session pooler**. Ahí están los datos que van en
-   el `.env` del paso 4.2: host (`aws-...pooler.supabase.com`), puerto `5432`, usuario
-   (`postgres.<id-del-proyecto>`) y base `postgres`.
+2. En el proyecto pulsa **Connect** (arriba), pestaña **Connection String**, método
+   **Session pooler**, y copia la cadena. Se ve así:
+   `postgresql://postgres.<id-del-proyecto>:[YOUR-PASSWORD]@aws-0-<region>.pooler.supabase.com:5432/postgres`.
+   Va en el `.env` del paso 4.2.
 
 Usa el **Session pooler** y no la conexión directa: la directa solo funciona por IPv6.
+
+> Las **API keys** de Supabase (`anon`, `service_role`) no sirven aquí: son para la API REST de
+> Supabase. El backend se conecta directo a la base con la cadena de conexión.
 
 **Opción B — PostgreSQL en tu equipo.** Crea una base vacía, por ejemplo desde `psql`:
 
@@ -90,9 +94,13 @@ Copy-Item .env.example .env
 
 Abre el archivo `.env` y ajusta dos cosas:
 
-- **La base de datos** (`DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`):
-  - Con Supabase, los datos del Session pooler del paso 3 y además `DB_SSL=true`.
-  - Con PostgreSQL local, tu usuario y contraseña, la base que creaste y `DB_SSL=false`.
+- **La base de datos:**
+  - Con Supabase, pega en `DATABASE_URL` la cadena del paso 3 y cambia `[YOUR-PASSWORD]` por
+    la contraseña de la base. Si la contraseña tiene símbolos como `@`, `#` o `/`, cámbiala
+    en Supabase por una de solo letras y números, o la cadena no se entiende. El SSL se activa
+    solo.
+  - Con PostgreSQL local, deja `DATABASE_URL` comentada y usa `DB_HOST`, `DB_PORT`,
+    `DB_USER`, `DB_PASSWORD` y `DB_NAME`.
 - **`JWT_SECRET` y `JWT_REFRESH_SECRET`**: cambia el texto de ejemplo por cualquier cadena de
   **mínimo 32 caracteres**. Si son más cortas, la aplicación no arranca.
 
@@ -204,19 +212,23 @@ npm install && npm run migration:run
 
 ## 8. Problemas frecuentes
 
+**`"DATABASE_URL" with value ... fails to match the cadena de conexion de PostgreSQL pattern`**
+Pegaste otra cosa en `DATABASE_URL`, por ejemplo una API key. Debe empezar por
+`postgresql://`: cópiala de **Connect → Connection String → Session pooler**.
+
 **`ECONNREFUSED` o el backend no arranca y menciona la base de datos**
 Con PostgreSQL local, el servicio no está encendido o `DB_HOST`/`DB_PORT` no coinciden. Con
-Supabase, revisa que el host sea el del Session pooler.
+Supabase, revisa que la cadena sea la del Session pooler.
 
 **`ENOTFOUND` o `ENETUNREACH` con un host `db.<id>.supabase.co`**
-Esa es la conexión directa, que solo funciona por IPv6. Usa los datos del **Session pooler**.
+Esa es la conexión directa, que solo funciona por IPv6. Copia la del **Session pooler**.
 
 **`password authentication failed for user ...`**
-El usuario o la contraseña de `.env` no coinciden. En Supabase el usuario es
-`postgres.<id-del-proyecto>`, no solo `postgres`.
+La contraseña de la cadena no es la de la base, o quedó `[YOUR-PASSWORD]` sin cambiar. Si no
+la recuerdas, cámbiala en **Project Settings → Database → Reset database password**.
 
 **`no pg_hba.conf entry ... no encryption` o `SSL required`**
-Supabase exige conexión cifrada: pon `DB_SSL=true` en el `.env`.
+La conexión no va cifrada. Quita `DB_SSL=false` del `.env` si lo pusiste.
 
 **`database "marina" does not exist`**
 Falta el paso 3: crea la base vacía (en Supabase la base se llama `postgres`).
