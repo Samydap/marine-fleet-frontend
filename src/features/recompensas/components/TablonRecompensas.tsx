@@ -38,10 +38,10 @@ export function TablonRecompensas({
 
   if (cargando && recompensas.length === 0) {
     return (
-      <div className="tablon" role="status" aria-busy="true">
+      <div className="tablero-recompensas" role="status" aria-busy="true">
         <span className="sr-only">Cargando recompensas…</span>
         {Array.from({ length: 8 }, (_, i) => (
-          <Skeleton key={i} forma="bloque" className="tablon-hueso" />
+          <Skeleton key={i} forma="bloque" className="tablero-recompensas-hueso" />
         ))}
       </div>
     );
@@ -54,14 +54,14 @@ export function TablonRecompensas({
   if (recompensas.length === 0) return <>{vacio}</>;
 
   return (
-    <ul className="tablon" aria-label="Tablón de recompensas" aria-busy={cargando}>
+    <ul className="tablero-recompensas" aria-label="Tablón de recompensas" aria-busy={cargando}>
       {recompensas.map((r, i) => {
         const cerrada = r.estado === 'HISTORICA' || r.estado === 'RECHAZADA';
         const retraso = Math.min(i, MAX_ESCALONADOS) * 0.05;
         return (
           <motion.li
             key={r.id}
-            className={`tablon-cartel${cerrada ? ' tablon-cartel--cerrado' : ''}`}
+            className={`recompensa-cartel${cerrada ? ' recompensa-cartel--cerrado' : ''}`}
             initial={reducir ? false : { opacity: 0, y: 12, rotate: -1.5 }}
             animate={{ opacity: cerrada ? 0.72 : 1, y: 0, rotate: 0 }}
             transition={{ duration: 0.35, delay: retraso, ease: 'easeOut' }}
@@ -73,9 +73,11 @@ export function TablonRecompensas({
               marco="cartel"
             />
             {r.criminalNombre === null ? (
-              <span className="tablon-nombre tablon-nombre--ausente">Criminal no disponible</span>
+              <span className="recompensa-cartel-nombre recompensa-cartel-nombre--ausente">
+                Criminal no disponible
+              </span>
             ) : (
-              <Link className="tablon-nombre" to={`/criminales/${r.criminalId}`}>
+              <Link className="recompensa-cartel-nombre" to={`/criminales/${r.criminalId}`}>
                 {r.criminalNombre ?? 'Ver criminal'}
               </Link>
             )}

@@ -380,7 +380,7 @@
 
 /* --- Tablon: cada recompensa, un mini cartel clavado ------------------ */
 
-.tablon {
+.tablero-recompensas {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
   gap: var(--esp-3) var(--esp-2);
@@ -389,7 +389,7 @@
   list-style: none;
 }
 
-.tablon-cartel {
+.recompensa-cartel {
   position: relative;
   display: grid;
   justify-items: center;
@@ -405,7 +405,7 @@
 }
 
 /* La chincheta: el cartel esta clavado al tablon, no flotando. */
-.tablon-cartel::before {
+.recompensa-cartel::before {
   content: '';
   position: absolute;
   top: -5px;
@@ -418,7 +418,7 @@
   transform: translateX(-50%);
 }
 
-.tablon-nombre {
+.recompensa-cartel-nombre {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
@@ -429,40 +429,40 @@
   overflow-wrap: anywhere;
 }
 
-.tablon-nombre--ausente {
+.recompensa-cartel-nombre--ausente {
   font-style: italic;
   font-weight: 400;
 }
 
-a.tablon-nombre:focus-visible {
+a.recompensa-cartel-nombre:focus-visible {
   outline: 2px solid var(--cartel-tinta);
   outline-offset: 2px;
   border-radius: var(--radio-sm);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  a.tablon-nombre:hover {
+  a.recompensa-cartel-nombre:hover {
     text-decoration: underline;
   }
 }
 
-.tablon-cartel .monto {
+.recompensa-cartel .monto {
   color: var(--cartel-tinta);
   font: 700 var(--texto-lg) / 1.1 var(--cartel-fuente);
 }
 
-.tablon-cartel--cerrado .monto {
+.recompensa-cartel--cerrado .monto {
   font-weight: 400;
   text-decoration: line-through;
 }
 
-.tablon-hueso {
+.tablero-recompensas-hueso {
   aspect-ratio: 5 / 6;
   height: auto;
 }
 
 @media (max-width: 480px) {
-  .tablon {
+  .tablero-recompensas {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--esp-2) var(--esp-15);
   }
