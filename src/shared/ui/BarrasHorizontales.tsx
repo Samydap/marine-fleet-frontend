@@ -1,3 +1,4 @@
+import { motion, useReducedMotion } from 'motion/react';
 import type { ReactNode } from 'react';
 
 export interface BarraDato {
@@ -37,13 +38,14 @@ export function BarrasHorizontales({
   anchoEtiqueta = 'normal',
 }: Props): React.ReactElement {
   const maximo = Math.max(0, ...datos.map((d) => d.valor));
+  const reducir = useReducedMotion() ?? false;
 
   return (
     <ul
       className={`barras-h${anchoEtiqueta === 'amplio' ? ' barras-h--amplio' : ''}`}
       aria-label={titulo}
     >
-      {datos.map((d) => {
+      {datos.map((d, i) => {
         const ancho = maximo > 0 ? (d.valor / maximo) * 100 : 0;
         return (
           <li
@@ -54,9 +56,13 @@ export function BarrasHorizontales({
             <span className="barras-h-etiqueta">{d.etiqueta}</span>
             <span className="barras-h-pista" aria-hidden="true">
               {ancho > 0 && (
-                <span
+                <motion.span
                   className={`barras-h-barra${d.nivel ? ` barras-h-barra--${d.nivel}` : ''}`}
-                  style={{ width: `${ancho}%` }}
+                  // Crecen una tras otra desde la base. MotionConfig solo frena
+                  // transformaciones, no el ancho: "reducir movimiento" se mira aqui.
+                  initial={reducir ? false : { width: 0 }}
+                  animate={{ width: `${ancho}%` }}
+                  transition={{ duration: 0.45, delay: Math.min(i, 11) * 0.06, ease: 'easeOut' }}
                 />
               )}
             </span>
