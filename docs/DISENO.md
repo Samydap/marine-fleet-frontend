@@ -434,6 +434,35 @@ Motion de herramienta: rápido, con propósito y nunca en bucle sin motivo.
 - Hover con movimiento solo dentro de `@media (hover: hover) and (pointer:
 fine)`.
 
+### Momentos con carácter (librería `motion`)
+
+Tres momentos tienen animación propia, hecha con `motion` (`motion/react`,
+versión fija). Fuera de ellos sigue valiendo lo de arriba.
+
+- **Bienvenida a bordo** (`core/layout/BienvenidaAbordo`): tras el login (o
+  el segundo factor), velo navy con el sello que se despliega (resorte) y
+  «Bienvenido a bordo · <rango> <nombre>». Dura 1,2 s, se salta con un clic o
+  cualquier tecla y luego el contenido entra (16px, 350ms). Una sola vez por
+  inicio de sesión: la marca vive en `sessionStorage` y recargar no la repite.
+- **Cartel** (`features/carteles/components/EscenarioCartel`): cae sobre el
+  tablón con giro leve (resorte), «WANTED» se estampa (escala 1,6 → 1, 300ms)
+  y con mouse el papel se inclina hasta 6° hacia el puntero. Si la versión
+  anterior tenía otra recompensa, el lateral muestra el monto viejo tachado y
+  el nuevo estampado (`CambioMonto`). Al imprimir no hay transformación.
+- **Recompensas**: `MontoAnimado` cuenta de 0 al valor (700ms) en el tablón y
+  en el total del reporte por mar; las barras por mar crecen escalonadas
+  (450ms, 60ms entre barras); el tablón entra escalonado (50ms por cartel,
+  máximo 12 escalonados).
+
+Reglas de estos momentos:
+
+- Entradas entre 200 y 450ms; nada bloquea más de 1,2 s y todo se interrumpe.
+- `MotionConfig reducedMotion="user"` solo frena transformaciones, no el
+  ancho ni la opacidad: cada componente mira `useReducedMotion()` y con
+  «reducir movimiento» pinta el estado final directo (sin bienvenida).
+- Los lectores de pantalla oyen siempre el valor final: la cuenta del monto es
+  `aria-hidden` y el monto real va en `.sr-only`.
+
 ## Componentes
 
 Todos viven en `src/shared/ui/` (salvo el shell y los emblemas, en
